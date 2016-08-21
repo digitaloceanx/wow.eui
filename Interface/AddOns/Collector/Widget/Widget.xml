@@ -1,0 +1,14 @@
+<Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+  <Include file="Template.xml" />
+  <Script file="TabFeed.lua" />
+  <Script file="TabSummary.lua" />
+  <Script file="TabMap.lua" />
+  <Script file="PlanItem.lua" />
+  <Script file="Blip.lua" />
+  <Script file="FeedItem.lua" />
+  <Script file="Map.lua" />
+  <Script file="RecommendItem.lua" />
+  <Script file="PlanMap.lua" />
+  <Script file="Card.lua" />
+</Ui>

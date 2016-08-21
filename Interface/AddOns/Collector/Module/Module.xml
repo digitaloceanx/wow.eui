@@ -1,0 +1,14 @@
+<Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+  <Script file="MountFilter.lua" />
+  <Script file="PetFilter.lua" />
+  <Script file="MountPanel.lua" />
+  <Script file="PetPanel.lua" />
+  <Script file="PlanPanel.lua" />
+  <Script file="WorldMap.lua" />
+  <Script file="FriendFeed.lua" />
+  <Script file="Misc.lua" />
+  <Script file="Objectives.lua" />
+  <Script file="Option.lua" />
+  <Script file="DataLoader.lua" />
+</Ui>

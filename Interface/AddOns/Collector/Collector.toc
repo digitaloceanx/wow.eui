@@ -1,0 +1,9 @@
+## Interface: 70000
+## Title: Collector
+## Title-zhCN: |cffff565e[网易]|r 魔兽达人
+## Notes-zhCN: 可以让你离开要塞的插件
+## Version: 70000.01
+## SavedVariables: COLLECTOR_DB
+## X-WoWBox-Ver: 1
+
+Load.xml

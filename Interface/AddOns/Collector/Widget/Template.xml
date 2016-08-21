@@ -1,0 +1,38 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+  <Frame virtual="true" name="CollectorCardFanfareBox">
+    <Frames>
+      <PlayerModel useParentLevel="true" parentKey="WrappedModelFrame" inherits="CollectionsWrappedModelFrame" setAllPoints="true" frameStrata="DIALOG">
+        <Scripts>
+          <OnMouseUp>local parent = self:GetParent()
+                        if parent.UnwrapAnim:IsPlaying() then
+                            return
+                        end
+
+                        parent.WrappedModelFrame:SetAnimation(148)
+                        parent.UnwrapAnim:Play()
+                        PlaySound(&quot;UI_Store_Unwrap&quot;)
+
+                        C_Timer.After(0.8, function()
+                            parent.ModelFrame:ApplySpellVisualKit(73393, true)
+                        end)</OnMouseUp>
+        </Scripts>
+      </PlayerModel>
+      <PlayerModel useParentLevel="true" parentKey="ModelFrame" setAllPoints="true" inherits="ModelTemplate">
+        <Scripts>
+          <OnLoad>Model_OnLoad(self)
+                        self.defaultRotation = -MODELFRAME_DEFAULT_ROTATION
+                        self.rotation = -MODELFRAME_DEFAULT_ROTATION</OnLoad>
+        </Scripts>
+      </PlayerModel>
+    </Frames>
+    <Animations>
+      <AnimationGroup setToFinalAlpha="true" parentKey="UnwrapAnim">
+        <Alpha startDelay="1.2" fromAlpha="1" toAlpha="0" order="1" duration=".3" childKey="WrappedModelFrame" />
+        <Alpha startDelay="1.2" fromAlpha="0" toAlpha="1" order="1" duration=".3" childKey="ModelFrame" />
+        <Scripts>
+          <OnFinished>self:GetParent().WrappedModelFrame:Hide()</OnFinished>
+        </Scripts>
+      </AnimationGroup>
+    </Animations>
+  </Frame>
+</Ui>

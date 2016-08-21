@@ -1,0 +1,17 @@
+<Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+  <Script file="Object.lua" />
+  <Script file="BaseObject.lua" />
+  <Script file="Plan.lua" />
+  <Script file="Mount.lua" />
+  <Script file="Pet.lua" />
+  <Script file="GameObject.lua" />
+  <Script file="Npc.lua" />
+  <Script file="Area.lua" />
+  <Script file="Quest.lua" />
+  <Script file="Achievement.lua" />
+  <Script file="Reputation.lua" />
+  <Script file="Friend.lua" />
+  <Script file="Collect.lua" />
+  <Script file="Filter.lua" />
+</Ui>

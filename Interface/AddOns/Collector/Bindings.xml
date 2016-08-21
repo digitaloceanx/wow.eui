@@ -1,0 +1,5 @@
+<Bindings>
+    <Binding name="COLLECTOR_TOGGLE" category="BINDING_HEADER_NETEASE" header="COLLECTOR">
+        LibStub('AceAddon-3.0'):GetAddon('Collector'):Toggle()
+    </Binding>
+</Bindings>
