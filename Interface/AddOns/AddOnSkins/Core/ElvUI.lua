@@ -11,15 +11,15 @@ function AS:CheckOption(optionName, ...)
 		if not IsAddOnLoaded(addon) then return false end
 	end
 
-	return E.global.addonskins[optionName]
+	return E.private.addonskins[optionName]
 end
 
 function AS:SetOption(optionName, value)
-	E.global.addonskins[optionName] = value
+	E.private.addonskins[optionName] = value
 end
 
 function AS:ToggleOption(optionName)
-	E.global.addonskins[optionName] = not E.global.addonskins[optionName]
+	E.private.addonskins[optionName] = not E.private.addonskins[optionName]
 end
 
 function AS:DisableOption(optionName)
@@ -47,7 +47,7 @@ end
 function AS:InjectProfile()
 	E, L, V, P, G = unpack(ElvUI)
 
-	G['addonskins'] = {
+	V['addonskins'] = {
 	-- Embeds
 		['EmbedOoC'] = false, 
 		['EmbedOoCDelay'] = 10,
@@ -70,7 +70,7 @@ function AS:InjectProfile()
 		['DetailsBackdrop'] = true,
 		['MiscFixes'] = true,
 		['DBMSkinHalf'] = false,
-		['DBMFont'] = 'EUI',
+		['DBMFont'] = 'ElvUI Norm',
 		['DBMFontSize'] = 12,
 		['DBMFontFlag'] = 'OUTLINE',
 		['WeakAuraAuraBar'] = false,
@@ -86,15 +86,15 @@ function AS:InjectProfile()
 
 	do
 		for k, _ in pairs(AS.register) do
-			if not G['addonskins'][k] then
+			if not V['addonskins'][k] then
 				if strfind(k, 'Blizzard_') then
-					G['addonskins'][k] = false
+					V['addonskins'][k] = false
 				else
-					G['addonskins'][k] = true
+					V['addonskins'][k] = true
 				end
 			end
 		end
-		G['addonskins']['ParchmentRemover'] = false
+		V['addonskins']['ParchmentRemover'] = false
 	end
 end
 
@@ -255,7 +255,6 @@ function AS:CreateDataText()
 	DT = E:GetModule('DataTexts')
 
 	local function OnClick(self, button)
-		if not EmbedSystem_MainWindow then return; end --by eui.cc
 		if EmbedSystem_MainWindow:IsShown() then
 			EmbedSystem_MainWindow:Hide()
 		else

@@ -1,5 +1,5 @@
 ﻿--------------------------
--- Version: 7.0.3 r7
+-- Version: 7.0.3 r804
 -- Title: DejaCharacterStats
 -- Authors: Dejablue 
 -- Modify by eui.cc
@@ -190,110 +190,51 @@ PAPERDOLL_STATINFO = {
 };
 
 --------------------------
--- Relevant Stats Array --
---------------------------
-
-local function DCS_RelevantStats()
-	-- primary: only show the 1 for the player's current spec
-	-- roles: only show if the player's current spec is one of the roles
-	-- hideAt: only show if it's not this value
-
-	PAPERDOLL_STATCATEGORIES= {
-		[1] = {
-			categoryFrame = "AttributesCategory",
-			stats = {
-				[1] = { stat = "ARMOR" },
-				[2] = { stat = "STRENGTH", primary = LE_UNIT_STAT_STRENGTH },
-				[3] = { stat = "AGILITY", primary = LE_UNIT_STAT_AGILITY },
-				[4] = { stat = "INTELLECT", primary = LE_UNIT_STAT_INTELLECT },
-				[5] = { stat = "STAMINA" },
-				[6] = { stat = "ATTACK_DAMAGE", primary = LE_UNIT_STAT_STRENGTH, roles =  { "TANK", "DAMAGER" } },
-				[7] = { stat = "ATTACK_AP", hideAt = 0, primary = LE_UNIT_STAT_STRENGTH, roles =  { "TANK", "DAMAGER" } },
-				[8] = { stat = "ATTACK_ATTACKSPEED", primary = LE_UNIT_STAT_STRENGTH, roles =  { "TANK", "DAMAGER" } },
-				[9] = { stat = "ATTACK_DAMAGE", primary = LE_UNIT_STAT_AGILITY, roles =  { "TANK", "DAMAGER" } },
-				[10] = { stat = "ATTACK_AP", hideAt = 0, primary = LE_UNIT_STAT_AGILITY, roles =  { "TANK", "DAMAGER" } },
-				[11] = { stat = "ATTACK_ATTACKSPEED", primary = LE_UNIT_STAT_AGILITY, roles =  { "TANK", "DAMAGER" } },
-				[12] = { stat = "SPELLPOWER", hideAt = 0, primary = LE_UNIT_STAT_INTELLECT },
-				[13] = { stat = "MANAREGEN", hideAt = 0, primary = LE_UNIT_STAT_INTELLECT },
-				[14] = { stat = "ENERGY_REGEN", hideAt = 0, primary = LE_UNIT_STAT_AGILITY },
-				[15] = { stat = "RUNE_REGEN", hideAt = 0, primary = LE_UNIT_STAT_STRENGTH },
-				[16] = { stat = "FOCUS_REGEN", hideAt = 0, primary = LE_UNIT_STAT_AGILITY },
-				[17] = { stat = "MOVESPEED" },
-			},
-		},
-		[2] = {
-			categoryFrame = "EnhancementsCategory",
-			stats = {
-				[1] = { stat = "CRITCHANCE", hideAt = 0 },
-				[2] = { stat = "HASTE", hideAt = 0 },
-				[3] = { stat = "VERSATILITY", hideAt = 0 },
-				[4] = { stat = "MASTERY", hideAt = 0 },
-				[5] = { stat = "LIFESTEAL", hideAt = 0 },
-				[6] = { stat = "AVOIDANCE", hideAt = 0 },
-				[7] = { stat = "DODGE", hideAt = 0, roles =  { "TANK" } },
-				[8] = { stat = "PARRY", hideAt = 0, roles =  { "TANK" } },
-				[9] = { stat = "BLOCK", hideAt = 0, roles =  { "TANK" } },
-	--			[10] = { stat = "HEALTH", },
-	--			[11] = { stat = "POWER", },
-			},
-		},
-	};
-	
-
-		table.insert(PAPERDOLL_STATCATEGORIES[1].stats, { stat = "DURABILITY" })
-		PaperDollFrame_UpdateStats();
-
-		table.insert(PAPERDOLL_STATCATEGORIES[1].stats, { stat = "REPAIRTOTAL" })
-		PaperDollFrame_UpdateStats();
-
-	PaperDollFrame_UpdateStats();
-end
-
---------------------------
 -- Show All Stats Array --
 --------------------------
+local PAPERDOLL_AttributesIndexDefaultStats = {"HEALTH", "POWER", "ARMOR", "STRENGTH", "AGILITY", "INTELLECT", "STAMINA", "ATTACK_DAMAGE", "ATTACK_AP", "ATTACK_ATTACKSPEED", "SPELLPOWER", "MANAREGEN", "ENERGY_REGEN", "RUNE_REGEN", "FOCUS_REGEN", "MOVESPEED", "DURABILITY", "REPAIRTOTAL"}
+local PAPERDOLL_EnhancementsIndexDefaultStats = {"CRITCHANCE", "HASTE", "VERSATILITY", "MASTERY", "LIFESTEAL", "AVOIDANCE", "DODGE", "PARRY", "BLOCK"}
+local PAPERDOLL_HideAT = {
+	["MANAREGEN"] = true, 
+	["ENERGY_REGEN"] = true, 
+	["RUNE_REGEN"] = true, 
+	["FOCUS_REGEN"] = true,
+}
+
 local function DCS_AllStats()
 	if not E.db.euiscript.CharacterStats then return; end
 
+	PAPERDOLL_STATCATEGORIES = nil
+
 	PAPERDOLL_STATCATEGORIES= {
 		[1] = {
 			categoryFrame = "AttributesCategory",
 			stats = {
-				[1] = { stat = "HEALTH" },
-				[2] = { stat = "POWER" },
-				[3] = { stat = "ARMOR" },
-				[4] = { stat = "STRENGTH" },
-				[5] = { stat = "AGILITY" },
-				[6] = { stat = "INTELLECT" },
-				[7] = { stat = "STAMINA" },
-				[8] = { stat = "ATTACK_DAMAGE" },
-				[9] = { stat = "ATTACK_AP" },
-				[10] = { stat = "ATTACK_ATTACKSPEED" },
-				[11] = { stat = "SPELLPOWER" },
-				[12] = { stat = "MANAREGEN", hideAt = 0 },
-				[13] = { stat = "ENERGY_REGEN", hideAt = 0 },
-				[14] = { stat = "RUNE_REGEN", hideAt = 0 },
-				[15] = { stat = "FOCUS_REGEN", hideAt = 0 },
-				[16] = { stat = "MOVESPEED" },
-				[17] = { stat = "DURABILITY" },
-				[18] = { stat = "REPAIRTOTAL" },
 			},
 		},
 		[2] = {
 			categoryFrame = "EnhancementsCategory",
 			stats = {
-				[1] = { stat = "CRITCHANCE" },
-				[2] = { stat = "HASTE" },
-				[3] = { stat = "VERSATILITY" },
-				[4] = { stat = "MASTERY" },
-				[5] = { stat = "LIFESTEAL" },
-				[6] = { stat = "AVOIDANCE" },
-				[7] = { stat = "DODGE" },
-				[8] = { stat = "PARRY" },
-				[9] = { stat = "BLOCK" },
 			},
 		},
-	};
+	}
+	
+	for i = 1, #PAPERDOLL_AttributesIndexDefaultStats do
+		local value = PAPERDOLL_AttributesIndexDefaultStats[i]
+		if E.db.euiscript.CharacterStatsList[value] then
+			if PAPERDOLL_HideAT[value] then
+				table.insert(PAPERDOLL_STATCATEGORIES[1].stats, { stat = value, hideAt = 0 })
+			else
+				table.insert(PAPERDOLL_STATCATEGORIES[1].stats, { stat = value})
+			end
+		end
+	end
+	for i = 1, #PAPERDOLL_EnhancementsIndexDefaultStats do
+		if E.db.euiscript.CharacterStatsList[PAPERDOLL_EnhancementsIndexDefaultStats[i]] then
+			table.insert(PAPERDOLL_STATCATEGORIES[2].stats, { stat = PAPERDOLL_EnhancementsIndexDefaultStats[i] })
+		end
+	end
+
 	PaperDollFrame_UpdateStats();
 end
 
@@ -418,11 +359,9 @@ end
 --DCSScrollframe.lua
 -- Scroll Frame	
 -- Scrollframe Parent Frame
-	local DCS_ScrollframeParentFrame = CreateFrame("Frame", nil, CharacterFrameInsetRight)
+	local DCS_ScrollframeParentFrame = CreateFrame("Frame", "DCS_ScrollframeParentFrame", CharacterFrameInsetRight)
 		DCS_ScrollframeParentFrame:SetSize(198, 352)
 		DCS_ScrollframeParentFrame:SetPoint("TOP", CharacterFrameInsetRight, "TOP", 0, -4)
-
-
 
  -- Scrollframe 
 	local DCS_ScrollFrame = CreateFrame("ScrollFrame", nil, DCS_ScrollframeParentFrame)
@@ -431,7 +370,6 @@ end
 
 -- DCS_Scrollbar 
 	local DCS_Scrollbar = CreateFrame("Slider", nil, DCS_ScrollFrame, "UIPanelScrollBarTemplate") 
-		DCS_Scrollbar:RegisterEvent("PLAYER_LOGIN")
 		DCS_Scrollbar:SetPoint("TOPLEFT", CharacterFrameInsetRight, "TOPRIGHT", -18, -20) 
 		DCS_Scrollbar:SetPoint("BOTTOMLEFT", CharacterFrameInsetRight, "BOTTOMRIGHT", -18, 18) 
 		DCS_Scrollbar:SetValueStep(1) 
@@ -513,7 +451,7 @@ end
 			self:SetPoint(
 				"TOP", CharacterStatsPane.ItemLevelFrame, "BOTTOM", 0, -2, "CharacterStatsPane")
 			-- Reset DCS_Scrollbar when the CharacterStatsPane is closed and reopened.
-			DCS_Scrollbar:SetValue(0) 
+		--	DCS_Scrollbar:SetValue(0) --会导致属性自动滚到顶 by eui.cc
 		end
 	end)
 
@@ -543,6 +481,10 @@ end
 	end)
 	
 	PaperDollSidebarTab2:HookScript("OnClick", function(self,event) 
+		DCS_ScrollframeParentFrame:Hide()
+	end)
+
+	PaperDollSidebarTab3:HookScript("OnClick", function(self,event) 
 		DCS_ScrollframeParentFrame:Hide()
 	end)
 
@@ -589,6 +531,7 @@ local function DCS_Mean_DurabilityCalc()
 		
 		duraTotal = duraTotal + durCur
 		duraMaxTotal = duraMaxTotal + durMax
+		if duraMaxTotal == 0 then duraMaxTotal = 1 	end
 		duraMean = ((duraTotal/duraMaxTotal)*100)
 	end
 end		

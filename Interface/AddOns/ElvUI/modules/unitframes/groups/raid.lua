@@ -109,7 +109,7 @@ function UF:RaidSmartVisibility(event)
 
 			UnregisterStateDriver(self, "visibility")
 
-			if(maxPlayers < 40) then
+			if(maxPlayers < 41) then
 				self:Show()
 				self.isInstanceForced = true
 				self.blockVisibilityChanges = false

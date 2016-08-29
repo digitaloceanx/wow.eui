@@ -1272,7 +1272,7 @@ local function GetOptionsTable_Name(updateFunc, groupName, numUnits)
 	return config
 end
 
-local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits)
+local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits, hasDetatchOption)
 	local config = {
 		order = 400,
 		type = 'group',
@@ -1337,6 +1337,44 @@ local function GetOptionsTable_Portrait(updateFunc, groupName, numUnits)
 			},
 		},
 	}
+	if hasDetatchOption then
+			config.args.detachFromFrame = {
+				type = 'toggle',
+				order = 11,
+				name = L["Detach From Frame"],
+			}
+			config.args.detachedWidth = {
+				type = 'range',
+				order = 12,
+				name = L["Detached Width"],
+				disabled = function() return not E.db.unitframe.units[groupName].portrait.detachFromFrame end,
+				min = 15, max = 450, step = 1,
+			}
+			config.args.detachedHeight = {
+				type = 'range',
+				order = 13,
+				name = L["Detached Height"],
+				disabled = function() return not E.db.unitframe.units[groupName].portrait.detachFromFrame end,
+				min = 15, max = 450, step = 1,
+			}
+			config.args.detachHideBackdrop = {
+				type = 'toggle',
+				order = 14,
+				name = L["Hide Backdrop"],
+				disabled = function() return not E.db.unitframe.units[groupName].portrait.detachFromFrame end,
+			}
+			config.args.parent = {
+				type = 'select',
+				order = 15,
+				name = L["Parent"],
+				desc = L["Choose UIPARENT to prevent it from hiding with the unitframe."],
+				disabled = function() return not E.db.unitframe.units[groupName].portrait.detachFromFrame end,
+				values = {
+					["FRAME"] = "FRAME",
+					["UIPARENT"] = "UIPARENT",
+				},
+			}
+	end
 
 	return config
 end
@@ -2688,7 +2726,7 @@ E.Options.args.unitframe.args.player = {
 		infoPanel = GetOptionsTable_InformationPanel(UF.CreateAndUpdateUF, 'player'),
 		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'player', nil, true),
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'player'),
-		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'player'),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'player', nil, true),
 		buffs = GetOptionsTable_Auras(true, 'buffs', false, UF.CreateAndUpdateUF, 'player'),
 		debuffs = GetOptionsTable_Auras(true, 'debuffs', false, UF.CreateAndUpdateUF, 'player'),
 		castbar = GetOptionsTable_Castbar(true, UF.CreateAndUpdateUF, 'player'),
@@ -2979,7 +3017,7 @@ E.Options.args.unitframe.args.target = {
 		infoPanel = GetOptionsTable_InformationPanel(UF.CreateAndUpdateUF, 'target'),
 		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'target', nil, true),
 		name = GetOptionsTable_Name(UF.CreateAndUpdateUF, 'target'),
-		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'target'),
+		portrait = GetOptionsTable_Portrait(UF.CreateAndUpdateUF, 'target', nil, true),
 		buffs = GetOptionsTable_Auras(false, 'buffs', false, UF.CreateAndUpdateUF, 'target'),
 		debuffs = GetOptionsTable_Auras(false, 'debuffs', false, UF.CreateAndUpdateUF, 'target'),
 		castbar = GetOptionsTable_Castbar(false, UF.CreateAndUpdateUF, 'target'),
@@ -3888,7 +3926,7 @@ E.Options.args.unitframe.args.boss = {
 		targetGlow = {
 			order = 15,
 			type = "toggle",
-			name = L["Target Glow"],
+			name = L["Use Target Glow"],
 		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, 'boss', MAX_BOSS_FRAMES),
@@ -4084,6 +4122,66 @@ E.Options.args.unitframe.args.arena = {
 				},
 			},
 		},
+		arenaTargetIcon = {
+			order = 17,
+			type = 'group',
+			name = L["Target Class Icon"],
+			get = function(info) return E.db.unitframe.units['arena']['arenaTargetIcon'][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units['arena']['arenaTargetIcon'][ info[#info] ] = value; UF:CreateAndUpdateUFGroup('arena', 5) end,
+			args = {
+				enable = {
+					type = 'toggle',
+					order = 1,
+					name = L["Enable"],
+				},
+				position = {
+					type = 'select',
+					order = 2,
+					name = L["Position"],
+					values = {
+						['LEFT'] = L["Left"],
+						['RIGHT'] = L["Right"],
+					},
+				},
+				size = {
+					order = 3,
+					type = 'range',
+					name = L["Size"],
+					min = 10, max = 160, step = 1,
+				},
+				xOffset = {
+					order = 4,
+					type = 'range',
+					name = L["xOffset"],
+					min = -600, max = 600, step = 1,
+				},
+				yOffset = {
+					order = 5,
+					type = 'range',
+					name = L["yOffset"],
+					min = -600, max = 600, step = 1,
+				},
+				Name = {
+					type = 'toggle',
+					order = 6,
+					name = L["Name"],
+				},
+				NamexOffset = {
+					order = 7,
+					type = 'range',
+					name = L["Name"]..L["xOffset"],
+					disabled = function() return not E.db.unitframe.units['arena']['arenaTargetIcon'].Name; end,
+					min = -160, max = 160, step = 1,
+				},
+				NameyOffset = {
+					order = 8,
+					type = 'range',
+					name = L["Name"]..L["yOffset"],
+					disabled = function() return not E.db.unitframe.units['arena']['arenaTargetIcon'].Name; end,
+					min = -160, max = 160, step = 1,
+				},
+			},
+		},
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUFGroup, 'arena', 5),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUFGroup, 'arena', 5),
 		infoPanel = GetOptionsTable_InformationPanel(UF.CreateAndUpdateUFGroup, 'arena', 5),
@@ -4133,7 +4231,7 @@ E.Options.args.unitframe.args.party = {
 			desc = L["Select a unit to copy settings from."],
 			values = {
 				['raid'] = L["Raid Frames"],
-				['raid40'] = L["Raid40 Frames"],
+			--	['raid40'] = L["Raid40 Frames"],
 			},
 			set = function(info, value) UF:MergeUnitSettings(value, 'party', true); end,
 		},
@@ -4746,7 +4844,7 @@ E.Options.args.unitframe.args['raid'] = {
 			desc = L["Select a unit to copy settings from."],
 			values = {
 				['party'] = L["Party Frames"],
-				['raid40'] = L["Raid40 Frames"],
+			--	['raid40'] = L["Raid40 Frames"],
 			},
 			set = function(info, value) UF:MergeUnitSettings(value, 'raid', true); end,
 		},
@@ -5127,7 +5225,7 @@ E.Options.args.unitframe.args['raid'] = {
 	},
 }
 
---Raid-40 Frames
+--[[Raid-40 Frames
 E.Options.args.unitframe.args['raid40'] = {
 	name = L["Raid-40 Frames"],
 	type = 'group',
@@ -5536,7 +5634,7 @@ E.Options.args.unitframe.args['raid40'] = {
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'raid40'),
 		GPSArrow = GetOptionsTable_GPS('raid40'),
 	},
-}
+}]]
 
 --Raid Pet Frames
 E.Options.args.unitframe.args.raidpet = {

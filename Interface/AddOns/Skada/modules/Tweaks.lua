@@ -1,5 +1,5 @@
 -- Various silly tweaks needed to keep up with Blizzard's shenanigans. Not added to core because they may not be needed forever.
-Skada:AddLoadableModule("Tweaks", function(Skada, L)
+Skada:AddLoadableModule("Tweaks", "Various tweaks to get around deficiences and problems in the game's combat logs. Carries a small performance penalty.", function(Skada, L)
 	if Skada.db.profile.modulesBlocked.Tweaks then return end
 
     local boms = {}
@@ -16,19 +16,32 @@ Skada:AddLoadableModule("Tweaks", function(Skada, L)
             if firstArg == 205729 and eventtype == 'SPELL_DAMAGE' then
                 --Skada:Print('Ooh, caught a GBOM!')
                 if not boms[srcGUID] then
-                    local _, _, _, _, _, _, _, caster, _, _, _ = UnitBuff(select(2, ...))
-                    if caster then
-                        boms[dstGUID] = {
-                            id = UnitGUID(caster),
-                            name = UnitName(caster)
+                    local spellname = select(2, ...)
+                    
+                    -- Had no luck without iterating, sadly.
+                    local i = 1
+                    local buffname, _, _, _, _, _, _, caster, _, _, _ = UnitBuff(srcName, i)
+                    local bomSource = nil
+                    while buffname do
+                        if buffname == spellname then
+                            bomSource = caster
+                        end
+                        i = i + 1;
+                        buffname, _, _, _, _, _, _, caster, _, _, _ = UnitBuff(srcName, i)
+                    end
+                    
+                    if bomSource then
+                        boms[srcGUID] = {
+                            id = UnitGUID(bomSource),
+                            name = UnitName(bomSource)
                         }
                     end
                 end
 
-                if boms[srcGUID] then
-                    --Skada:Print("added BOM source")
-                    srcGUID = boms[srcGUID].id
-                    srcName = boms[srcGUID].name
+                local source = boms[srcGUID]
+                if source then
+                    srcGUID = source.id
+                    srcName = source.name
                 end
             end
 

@@ -33,20 +33,34 @@ E.Options.args.tooltip = {
 					name = L["Cursor Anchor"],
 					desc = L["Should tooltip be anchored to mouse cursor"],
 				},
-				targetInfo = {
+				offsetX = {
 					order = 2,
+					type = 'range',
+					name = L['X Offset'],
+					min = -500, max = 500, step = 1,
+					disabled = function() return not (E.db.tooltip.cursorAnchor) end,
+				},
+				offsetY = {
+					order = 3,
+					type = 'range',
+					name = L['Y Offset'],
+					min = -500, max = 500, step = 1,
+					disabled = function() return not (E.db.tooltip.cursorAnchor) end,
+				},
+				targetInfo = {
+					order = 4,
 					type = 'toggle',
 					name = L["Target Info"],
 					desc = L["When in a raid group display if anyone in your raid is targeting the current tooltip unit."],
 				},
 				playerTitles = {
-					order = 3,
+					order = 5,
 					type = 'toggle',
 					name = L["Player Titles"],
 					desc = L["Display player titles."],
 				},
 				guildRanks = {
-					order = 4,
+					order = 6,
 					type = 'toggle',
 					name = L["Guild Ranks"],
 					desc = L["Display guild ranks if a unit is guilded."],

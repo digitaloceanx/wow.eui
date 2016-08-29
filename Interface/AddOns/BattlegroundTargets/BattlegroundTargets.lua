@@ -316,15 +316,15 @@ DATA.TargetFCountNum = {}     -- key = unitName | value (number) = target count 
 DATA.TargetECountNum = {}     -- key = unitName | value (number) = target count enemy
 
 DATA.PvPTrinketEndTime = {}   -- key = unitName | value (number) = endtime: when the trinket is ready for use again
+DATA.PvPTrinketId = {}        -- key = unitName | value (number) = spellId of trinket
+
 local pvptrinketIDs = {
    [7744] =  30, -- Will of the Forsaken (Undead)
   [42292] = 120, --trinket
   [59752] =  30,  -- human
   
   [195710] = 180,  -- 180 PvP talent Trinket
-  [208683] = 120,  -- 1/2 120 PvP talent Trinket
-  [214027] = 60   -- 1/2 PvP talent Trinket
-  
+  [208683] = 120  -- 120 PvP talent Trinket
 }
 
 DATA.TransName = {}           -- key = unitName | value (string) = transliteration name
@@ -547,6 +547,8 @@ for classID = 1, MAX_CLASSES do
 	local numTabs = GetNumSpecializationsForClassID(classID)
 	--print(numTabs, classID, "#", GetNumSpecializationsForClassID(classID))
 	classes[classTag].spec = {}
+	classes[classTag].fixname = {}
+	classes[classTag].fix = false
 	for i = 1, numTabs do
 		local id, name, _, icon, _, role = GetSpecializationInfoForClassID(classID, i)
 		--print(role, id, classID, i, name, icon, "#", GetSpecializationInfoForClassID(classID, i))
@@ -554,6 +556,12 @@ for classID = 1, MAX_CLASSES do
 		elseif role == "HEALER"  then classes[classTag].spec[i] = {role = 1, specID = id, specName = name, icon = icon} tinsert(classROLES.HEALER,  {classTag = classTag, specIndex = i}) -- HEALER : total =  6
 		elseif role == "TANK"    then classes[classTag].spec[i] = {role = 2, specID = id, specName = name, icon = icon} tinsert(classROLES.TANK,    {classTag = classTag, specIndex = i}) -- TANK   : total =  5
 		end
+		--locale fix
+		local _ , fname = GetSpecializationInfoForClassID(classID, i, 3)
+		if name ~= fname then
+			classes[classTag].fixname[fname] = name
+			classes[classTag].fix = true
+		end		
 	end
 end
 
@@ -1466,7 +1474,7 @@ function BattlegroundTargets:CreateFrames()
 
 				button.PVPTrinketTexture = button:CreateTexture(nil, "BORDER")
 				button.PVPTrinketTexture:SetPoint("RIGHT", button, "LEFT", -2, 0)
-				button.PVPTrinketTexture:SetTexture("Interface\\Icons\\INV_Jewelry_TrinketPVP_01")
+				button.PVPTrinketTexture:SetTexture( 1322720)				--old   ("Interface\\Icons\\INV_Jewelry_TrinketPVP_01")
 				--button.PVPTrinketTexture:SetTexCoord(0.07812501, 0.92187499, 0.07812501, 0.92187499)--(5/64, 59/64, 5/64, 59/64)
 				button.PVPTrinketTxt = button:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 				button.PVPTrinketTxt:SetWidth(50)
@@ -5100,7 +5108,7 @@ function BattlegroundTargets:SetupButtonTextures(side) -- BG_Faction_Dependent
 
 	if BattlegroundTargets_Options[side].ButtonPvPTrinketToggle[currentSize] then -- pvp_trinket_
 		local trinketTexture
-		if side == "Friend" then
+		--[[if side == "Friend" then				---OLD
 			if playerFactionDEF == 0 then
 				trinketTexture = "Interface\\Icons\\INV_Jewelry_TrinketPVP_02" -- Horde
 			else
@@ -5113,6 +5121,13 @@ function BattlegroundTargets:SetupButtonTextures(side) -- BG_Faction_Dependent
 				trinketTexture = "Interface\\Icons\\INV_Jewelry_TrinketPVP_01" -- Alliance
 			end
 		end
+		--]]
+		if isLowLevel then 
+			trinketTexture = 338784   --lowlevelpvptrinket3m
+		else
+			trinketTexture = 1322720  --newpvptalenttrinket2m
+		end
+		
 		local button = GVAR[side.."Button"]
 		for i = 1, currentSize do
 			button[i].PVPTrinketTexture:SetTexture(trinketTexture)
@@ -6814,6 +6829,23 @@ function BattlegroundTargets:BattlefieldScoreUpdate()
 		local name, _, _, _, _, faction, _, _, classToken, _, _, _, _, _, _, talentSpec = GetBattlefieldScore(index)
 		--print("INPUT_NAME_CHECK: _score_", index, name, faction, classToken, talentSpec, "#", GetBattlefieldScore(index))
 
+		
+
+					--bad locale fix
+					
+		if classes[classToken].fix then
+			if classes[classToken].fixname[talentSpec] ~= nill then
+			--	print ("fixed: ".. talentSpec .. " to ".. classes[classToken].fixname[talentSpec])
+				talentSpec = classes[classToken].fixname[talentSpec]
+			end
+		end
+
+			--rus
+			--if talentSpec == "Повелительница зверей" then talentSpec = "Повелитель зверей" end
+
+
+		
+
 		if not name then
 			if not BattlegroundTargets.UnknownNameIndex then
 				BattlegroundTargets.UnknownNameIndex = 1
@@ -6848,10 +6880,10 @@ function BattlegroundTargets:BattlefieldScoreUpdate()
 			if not specicon then
 				if not testData.specTest then testData.specTest = {} end
 				if not testData.specTest[class] then testData.specTest[class] = {} end
-				if not talentSpec then talentSpec = "talentSpec_is_unknown" end
+				if not talentSpec then talentSpec = "talentSpec_is_unknown!" end
 				if not testData.specTest[class][talentSpec] then
-					testData.specTest[class][talentSpec] = {locale=locale, faction=faction, classToken=classToken, talentSpec=talentSpec}
-					Print("ERROR unknown spec:", locale, faction, classToken, talentSpec)
+					testData.specTest[class][talentSpec] = {locale=locale, faction=faction, classToken=classToken, talentSpec=talentSpec, name=name}
+					Print("ERROR#1 unknown spec:", locale, faction, classToken, talentSpec)
 				end
 			end
 
@@ -6883,6 +6915,8 @@ function BattlegroundTargets:BattlefieldScoreUpdate()
 					class = classToken
 				end
 			end
+			--bad hotfix for ru locale
+						
 
 			if not specicon then
 				if not testData.specTest then testData.specTest = {} end
@@ -6890,7 +6924,7 @@ function BattlegroundTargets:BattlefieldScoreUpdate()
 				if not talentSpec then talentSpec = "talentSpec_is_unknown" end
 				if not testData.specTest[class][talentSpec] then
 					testData.specTest[class][talentSpec] = {locale=locale, faction=faction, classToken=classToken, talentSpec=talentSpec}
-					Print("ERROR unknown spec:", locale, faction, classToken, talentSpec)
+					--Print("ERROR#2 unknown spec:", locale, faction, classToken, talentSpec)
 				end
 			end
 
@@ -7309,11 +7343,13 @@ function BattlegroundTargets:IsNotBattleground()
 	end
 
 	if testData.specTest then
-		for k, v in pairs(testData.specTest) do
-			for k2, v2 in pairs(v) do
-				Print("ERROR unknown spec:", v2.locale, v2.faction, v2.classToken, v2.talentSpec)
-			end
-		end
+		---debug( wait for next update
+		--for k, v in pairs(testData.specTest) do
+--			for k2, v2 in pairs(v) do
+				--Print("ERROR#3 unknown spec:", v2.locale, v2.faction, v2.classToken, v2.talentSpec)
+			--end
+		
+		--end
 		testData.specTest = nil
 	end
 
@@ -8127,7 +8163,7 @@ function BattlegroundTargets:CheckUnitTarget(unitID, unitName, isEvent)
 	end
 
 	-- level
-	if isLowLevel then -- LVLCHK
+	if isLowLevel and playerLevel ~= 100 then -- LVLCHK
 		local level = UnitLevel(targetID) or 0
 		if level > 0 then
 			DATA[side].Name2Level[targetName] = level
@@ -8989,15 +9025,35 @@ function BattlegroundTargets:UpdatePvPTrinket(button, unitName, curTime) -- pvp_
 	if DATA.PvPTrinketEndTime[unitName] then
 		local trinketTime = floor(DATA.PvPTrinketEndTime[unitName] - curTime)
 		if trinketTime > 0 then
+
+		--icon change
+				--print (button, unitName, curTime ,DATA.PvPTrinketId[unitName] )
+			local id = DATA.PvPTrinketId[unitName]
+			if not isLowLevel then
+				if id == 195710 or				--lowlevel
+				   id == 208683 then        	--pvptrinkettalent
+				   button.PVPTrinketTexture:SetTexture( GetSpellTexture(id) )
+				end
+			end
+			
+			
 			button.PVPTrinketTexture:SetAlpha(1)
 			button.PVPTrinketTxt:SetText(trinketTime)
 		else
 			DATA.PvPTrinketEndTime[unitName] = nil
+			if DATA.PvPTrinketId[unitName] == 214027 then 
+				button.PVPTrinketTexture:SetAlpha(0.3)
+			else
 			button.PVPTrinketTexture:SetAlpha(0)
+			end
 			button.PVPTrinketTxt:SetText("")
 		end
 	else
+		if DATA.PvPTrinketId[unitName] == 214027 then 
+			button.PVPTrinketTexture:SetAlpha(0.3)
+		else
 		button.PVPTrinketTexture:SetAlpha(0)
+		end
 		button.PVPTrinketTxt:SetText("")
 	end
 end
@@ -9016,6 +9072,7 @@ local function CombatLogPVPTrinketCheck(clEvent, spellId, sourceName) -- pvp_tri
 			then
 				local curTime = GetTime()
 				DATA.PvPTrinketEndTime[sourceName] = floor(curTime + pvptrinketIDs[spellId])
+				DATA.PvPTrinketId[sourceName] = spellId
 				BattlegroundTargets:UpdatePvPTrinket(enemyButton, sourceName, curTime)
 			end
 			return
@@ -9029,6 +9086,7 @@ local function CombatLogPVPTrinketCheck(clEvent, spellId, sourceName) -- pvp_tri
 			then
 				local curTime = GetTime()
 				DATA.PvPTrinketEndTime[sourceName] = floor(curTime + pvptrinketIDs[spellId])
+				DATA.PvPTrinketId[sourceName] = spellId
 				BattlegroundTargets:UpdatePvPTrinket(friendButton, sourceName, curTime)
 			end
 		end

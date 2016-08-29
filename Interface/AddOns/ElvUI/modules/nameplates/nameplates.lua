@@ -74,7 +74,7 @@ function mod:CheckArenaHealers()
 	local numOpps = GetNumArenaOpponentSpecs()
 	if not (numOpps > 1) then return end
 
-	for i=1, 5 do
+	for i=1, 3 do
 		local name = UnitName(format('arena%d', i))
 		if name and name ~= UNKNOWN then
 			local s = GetArenaOpponentSpec(i)
@@ -221,6 +221,7 @@ function mod:SetTargetFrame(frame)
 		frame.isTarget = true
 		if(self.db.units[frame.UnitType].healthbar.enable ~= true) then
 			frame.Name:ClearAllPoints()
+			frame.NPCTitle:ClearAllPoints()
 			frame.Level:ClearAllPoints()
 			frame.HealthBar.r, frame.HealthBar.g, frame.HealthBar.b = nil, nil, nil
 			frame.CastBar:Hide()
@@ -267,7 +268,7 @@ function mod:SetTargetFrame(frame)
 	--WoW shows nameplates for any unit which is in combat with you, even when nameplateShowAll is set to 0
 	if frame.isTarget then
 		frame:Show()
-	elseif self.db.onlyShowTarget then
+	elseif self.db.onlyShowTarget and frame.UnitType ~= "PLAYER" then
 		frame:Hide()
 	end
 end
@@ -370,7 +371,7 @@ function mod:NAME_PLATE_UNIT_ADDED(event, unit, frame)
 	self:UpdateElement_All(frame.UnitFrame, unit)
 
 	-- WoW shows nameplates for all units that are in combat with you, even if nameplateShowAll is set to 0.
-	if ((self.db.onlyShowTarget and frame.UnitFrame.isTarget) or not self.db.onlyShowTarget) then
+	if ((self.db.onlyShowTarget and frame.UnitFrame.isTarget) or not self.db.onlyShowTarget) or (frame.UnitFrame.UnitType == "PLAYER") then
 		frame.UnitFrame:Show()
 	else
 		frame.UnitFrame:Hide()
@@ -405,6 +406,8 @@ function mod:NAME_PLATE_UNIT_REMOVED(event, unit, frame, ...)
 	frame.UnitFrame.Name:ClearAllPoints()
 	frame.UnitFrame.Level:ClearAllPoints()
 	frame.UnitFrame.Level:SetText("")
+	frame.UnitFrame.NPCTitle:ClearAllPoints()
+	frame.UnitFrame.NPCTitle:SetText("")
 	frame.UnitFrame.Name:SetText("")
 	frame.UnitFrame:Hide()
 	frame.UnitFrame.isTarget = nil

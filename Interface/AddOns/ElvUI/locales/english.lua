@@ -5,7 +5,6 @@ local L = AceLocale:NewLocale("ElvUI", "enUS", true, true);
 if not L then return; end
 
 L["ElvUI needs to perform database optimizations please be patient."] = true;
-L["A taint has occured that is preventing you from using the queue system. Please reload your user interface and try again."] = true;
 L["Do you enjoy the new ElvUI?"] = true;
 L["Yes, Keep Changes!"] = true;
 L["No, Revert Changes!"] = true;
@@ -15,17 +14,24 @@ L["Bonus Reward Position"] = true;
 L["Position of bonus quest reward frame relative to the objective tracker."] = true;
 L["Auto"] = true;
 L['ElvUI'] = 'EUI';
-
+L["Animate Config"] = true
 L["Select the type of aura system you want to use with ElvUI's unitframes. The integrated system utilizes both aura-bars and aura-icons. The icons only system will display only icons and aurabars won't be used. The classic system will configure your auras to how they were pre-v4."] = true;
 L["If you have an icon or aurabar that you don't want to display simply hold down shift and right click the icon for it to disapear."] = true;
 L["Aura Watch module"] = true;
 L["|cffff0000Error -- Addon 'ElvUI_Config' not found or is disabled.|r"] = true;
 	L["It appears one of your AddOns have disabled the AddOn Blizzard_CompactRaidFrames. This can cause errors and other issues. The AddOn will now be re-enabled."] = true;
 L["DataBars"] = true;
+L["Artifact"] = true;
+L["Artifact Bar"] = true;
+L["Hide At Max Level"] = true;
+
+L["DATABAR_DESC"] = true;
 L["Thin Border Theme"] = true;
 L["The Thin Border Theme option will change the overall apperance of your UI. Using Thin Border Theme is a slight performance increase over the traditional layout."] = true;
 L["Statusbar Fill Orientation"] = true;
-
+L["Disable Tutorial Buttons"] = true;
+L["Talking Head Scale"] = true;
+L["Hide In Vehicle"] = true;
 L["Export Profile"] = true;
 L["Import Profile"] = true;
 L["Choose What To Export"] = true;
@@ -51,6 +57,7 @@ L["Plugin"] = true;
 L["Shadow"] = true;
 L["Shadow Width"] = true;
 L["Shadow Alpha"] = true;
+L["Lowest Allowed UI Scale"] = true;
 
 --Minimap
 L['Always Display'] = true;
@@ -190,6 +197,13 @@ L["Height Multiplier"] = true;
 L["Hours"] = true;
 L["Key"] = true;
 L["Keybind Mode"] = true;
+L["Show Empty Buttons"] = true;
+L["Backdrop Spacing"] = true;
+L["Inherit Global Fade"] = true;
+L["Inherit the global fade, mousing over, targetting, setting focus, losing health, entering combat will set the remove transparency. Otherwise it will use the transparency level in the general actionbar settings for global fade alpha."] = true;
+L["Global Fade Transparency"] = true;
+L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."] = true;
+L['Macro Text'] = "宏名字";
 L["Keybind Text"] = true;
 L['Key Down'] = true;
 L["KEY_ALT"] = "A"
@@ -422,6 +436,8 @@ L["Tab Font Outline"] = true;
 L['Combat to hide backdrop'] = true;
 L['Tab Panel Transparency'] = true;
 L['Embed to Left Chat Window'] = true;
+L["Tab Panel"] = true;
+L["Toggle the chat tab panel backdrop."] = true;
 L['Send to Screen'] = true;
 L['Chat EditBox Position'] = true;
 L['Position of the Chat EditBox, if datatexts are disabled this will be forced to be above chat.'] = true;
@@ -528,7 +544,12 @@ L["Layout"] = true;
 L["Lock"] = true;
 L['Low Resolution'] = true;
 L["low"] = true;
-L["Movers unlocked. Move them now and click Lock when you are done."] = true;
+L["DESC_MOVERCONFIG"] = [=[Movers unlocked. Move them now and click Lock when you are done.
+
+Options:
+  Shift + RightClick - Hides mover temporarily.
+  Ctrl + RightClick - Resets mover position to default.
+]=]
 L["Physical DPS"] = true;
 L["Please click the button below so you can setup variables and ReloadUI."] = true;
 L["Please click the button below to setup your CVars."] = true;
@@ -858,6 +879,10 @@ L["Experience Bar"] = true;
 L["Reputation Bar"] = true;
 
 --NamePlates
+L["Show NPC Titles"] = true;
+L["Display Minions"] = true;
+L["Display Minor Units"] = true;
+L["Display NPC Titles whenever healthbars arent displayed and names are."] = true;	
 L["Use Target Glow"] = true;
 L["Hide Spell Name"] = true;
 L["Hide Time"] = true;
@@ -1028,6 +1053,11 @@ L["Use this filter."] = true;
 L["You can't remove a default name from the filter, disabling the name."] = true;
 
 --Skins
+L["Non-Raid Frame"] = true;
+L["BG Map"] = true;
+L["LF Guild Frame"] = true;
+L["Stable"] = true;
+L["TalkingHead"] = true;
 L["AddOn Manager"] = true;
 L["Mirror Timers"] = true;
 L["Death Recap"] = true;
@@ -1213,6 +1243,14 @@ L['You can use the /resetui command to reset all of your movers. You can also us
 L['ABOVE_THREAT_FORMAT'] = '%s: %.0f%% [%.0f%% above |cff%02x%02x%02x%s|r]'
 
 --UnitFrames
+L["Attach Text To"] = true;
+L["Target Class Icon"] = true;
+L["Player Portrait"] = true;
+L["Target Portrait"] = true;
+L["Information Panel"] = true;
+L["Raid Icon"] = true;
+L["Frame Orientation"] = true;
+L["Middle"] = true;
 L['GCD Bar'] = true;
 L["Icon Inside Castbar"] = true
 L["Display the castbar icon inside the castbar."] = true
@@ -1317,6 +1355,8 @@ L['Player Powerbar'] = true;
 L['Auto-Hide'] = true;
 L['Detach From Frame'] = true;
 L['Detached Width'] = true;
+L['Detached Height'] = true;
+L["Hide Backdrop"] = true;
 L['Class Color Override'] = true;
 L['Override the default class color setting.'] = true;
 L['Use Default'] = true;
@@ -1552,6 +1592,7 @@ L["Delete Filter"] = true;
 L["Direction the health bar moves when gaining/losing health."] = true;
 L['Disabled'] = true;
 L["Disabled Blizzard Frames"] = true;
+L["Disabled Blizzard"] = true
 L["Disables the focus and target of focus unitframes."] = true;
 L["Disables the player and pet unitframes."] = true;
 L["Disables the target and target of target unitframes."] = true;
@@ -1966,17 +2007,43 @@ end
 
 --Sequences
 do
-	L["Your current role of the macro is full, please manually delete to continue."] = true;
-	L["Macro List"] = true;
 	L["Sequences"] = 'a key output macro';
-	L["Sequences description"] = 'create a key output of the macro, for use by the user; in the following macro list conforms to the current role specialization macros, click Create hand drag the macro to action bar can be';
+	L["Sequences description"] = "Click Create macro button, drag and drop in the macro window corresponding to the action bar, pay attention to see the chat box appears in the talent configuration tips.";
 	L["Create Macro"] = true;
-	L["You can manually placed a key output of the macro to on your actionbar."] = true;
+	L["Macro Editor"] = true;
 end
 
 --euiscript
 do
 	L["Character Stats Enhance"] = true;
+	L["CharacterStats List"] = true;
+	L["HEALTH"] = true;
+	L["POWER"] = true;
+	L["ARMOR"] = true;
+	L["STRENGTH"] = true;
+	L["AGILITY"] = true;
+	L["INTELLECT"] = true;
+	L["STAMINA"] = true;
+	L["ATTACK_DAMAGE"] = true;
+	L["ATTACK_AP"] = true;
+	L["ATTACK_ATTACKSPEED"] = true;
+	L["SPELLPOWER"] = true;
+	L["MANAREGEN"] = true;
+	L["ENERGY_REGEN"] = true;
+	L["RUNE_REGEN"] = true;
+	L["FOCUS_REGEN"] = true;
+	L["MOVESPEED"] = true;
+	L["DURABILITY"] = true;
+	L["REPAIRTOTAL"] = true;
+	L["CRITCHANCE"] = true;
+	L["HASTE"] = true;
+	L["VERSATILITY"] = true;
+	L["MASTERY"] = true;
+	L["LIFESTEAL"] = true;
+	L["AVOIDANCE"] = true;
+	L["DODGE"] = true;
+	L["PARRY"] = true;
+	L["BLOCK"] = true;
 	L["Average equipped item durability percentage."] = true;
 	L["Durability %s"] = true;
 	L["Durability"] = true;

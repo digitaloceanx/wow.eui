@@ -878,6 +878,10 @@ P['unitframe'] = {
 			['portrait'] = {
 				['enable'] = false,
 				['width'] = 45,
+				['detachedWidth'] = 48,
+				['detachedHeight'] = 48,
+				["parent"] = "FRAME",
+				['detachFromFrame'] = false,
 				['overlay'] = false,
 				['camDistanceScale'] = 2,
 				['rotation'] = 0,
@@ -1047,6 +1051,10 @@ P['unitframe'] = {
 			['portrait'] = {
 				['enable'] = false,
 				['width'] = 45,
+				['detachedWidth'] = 48,
+				['detachedHeight'] = 48,
+				['detachFromFrame'] = false,
+				["parent"] = "FRAME",
 				['overlay'] = false,
 				['rotation'] = 0,
 				['camDistanceScale'] = 2,
@@ -2017,6 +2025,20 @@ P['unitframe'] = {
 				['size'] = 46,
 				['xOffset'] = 1,
 				['yOffset'] = 0,
+			},
+			['targetsGroup'] = {
+				['enable'] = true,
+				['width'] = 100,
+				['height'] = 22,
+				['anchorPoint'] = 'TOPRIGHT',
+				['xOffset'] = -1,
+				['yOffset'] = 0,
+				['name'] = {
+					['position'] = 'CENTER',
+					['text_format'] = '[namecolor][name:short]',
+					['yOffset'] = 0,
+					['xOffset'] = 0,
+				},
 			},
 		},
 		['party'] = {

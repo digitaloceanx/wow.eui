@@ -48,7 +48,43 @@ function UF:Configure_Portrait(frame, dontHide)
 
 		portrait:ClearAllPoints()
 		portrait.backdrop:ClearAllPoints()
-		if frame.USE_PORTRAIT_OVERLAY then
+		if db.portrait.detachFromFrame then
+			portrait:Width(db.portrait.detachedWidth - ((frame.BORDER + frame.SPACING)*2))
+			portrait:Height(db.portrait.detachedHeight - ((frame.BORDER + frame.SPACING)*2))
+			if not portrait.Holder or (portrait.Holder and not portrait.Holder.mover) then
+				portrait.Holder = CreateFrame("Frame", nil, portrait)
+				portrait.Holder:Size(db.portrait.detachedWidth, db.portrait.detachedHeight)
+				portrait.Holder:Point("BOTTOMRIGHT", frame, "BOTTOMLEFT", -10, 0)
+				portrait:ClearAllPoints()
+				portrait:Point("BOTTOMLEFT", portrait.Holder, "BOTTOMLEFT", frame.BORDER+frame.SPACING, frame.BORDER+frame.SPACING)
+				--Currently only Player and Target can detach portrait
+				if frame.unitframeType and frame.unitframeType == "player" then
+					E:CreateMover(portrait.Holder, 'PlayerPortraitMover', L["Player Portrait"], nil, nil, nil, 'ALL,SOLO')
+				elseif frame.unitframeType and frame.unitframeType == "target" then
+					E:CreateMover(portrait.Holder, 'TargetPortraitMover', L["Target Portrait"], nil, nil, nil, 'ALL,SOLO')
+				end
+			else
+				portrait.Holder:Size(db.portrait.detachedWidth, db.portrait.detachedHeight)
+				portrait:ClearAllPoints()
+				portrait:Point("BOTTOMLEFT", portrait.Holder, "BOTTOMLEFT", frame.BORDER+frame.SPACING, frame.BORDER+frame.SPACING)
+				portrait.Holder.mover:SetScale(1)
+				portrait.Holder.mover:SetAlpha(1)
+			end
+			portrait.backdrop:Point("BOTTOMLEFT", portrait.Holder, "BOTTOMLEFT", -frame.BORDER - frame.SPACING, 0)
+			portrait.backdrop:Point("TOPRIGHT", portrait.Holder, "TOPRIGHT", frame.BORDER + frame.SPACING, 0)
+			portrait:SetFrameStrata("MEDIUM")
+			portrait:SetFrameLevel(frame:GetFrameLevel() + 3)
+			portrait:SetAlpha(1)
+			if not dontHide then
+				portrait:Show()
+			end
+			if db.portrait.detachHideBackdrop then
+				portrait.backdrop:Hide()
+			else
+				portrait.backdrop:Show()
+			end
+			portrait:SetInside(portrait.backdrop, frame.BORDER)
+		elseif frame.USE_PORTRAIT_OVERLAY then
 			if db.portrait.style == '3D' then
 				portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1)
 			end
@@ -87,8 +123,15 @@ function UF:Configure_Portrait(frame, dontHide)
 				end
 			end
 
-
 			portrait:SetInside(portrait.backdrop, frame.BORDER)
+		end
+
+		if db.portrait.detachFromFrame and db.portrait.parent == "UIPARENT" then
+			E.FrameLocks[portrait] = true
+			portrait:SetParent(E.UIParent)
+		else
+			E.FrameLocks[portrait] = nil
+			portrait:SetParent(frame)
 		end
 	else
 		if frame:IsElementEnabled('Portrait') then
@@ -104,7 +147,7 @@ function UF:PortraitUpdate(unit)
 	if not db then return end
 
 	local portrait = db.portrait
-	if portrait.enable and self:GetParent().USE_PORTRAIT_OVERLAY then
+	if portrait.enable and self:GetParent().USE_PORTRAIT_OVERLAY and not db.portrait.detachFromFrame then
 		self:SetAlpha(0);
 		self:SetAlpha(0.35);
 	else

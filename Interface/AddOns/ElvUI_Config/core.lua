@@ -176,8 +176,16 @@ E.Options.args.general = {
 					get = function(info) return E.global.general.autoScale end,
 					set = function(info, value) E.global.general[ info[#info] ] = value; E:StaticPopup_Show("GLOBAL_RL") end
 				},
-				uiscale = {
+				minUiScale = {
 					order = 11,
+					type = "range",
+					name = L["Lowest Allowed UI Scale"],
+					min = 0.32, max = 0.64, step = 0.01,
+					get = function(info) return E.global.general.minUiScale end,
+					set = function(info, value) E.global.general.minUiScale = value; E:StaticPopup_Show("GLOBAL_RL") end
+				},
+				uiscale = {
+					order = 12,
 					name = L["UI Scale"],
 					desc = L["Controls the scaling of the entire User Interface"],
 					disabled = function(info) return E.global.general.autoScale end,
@@ -188,7 +196,7 @@ E.Options.args.general = {
 					get = function() return tonumber(format('%.2f', GetCVar('uiScale'))) end,
 				},
 				eyefinity = {
-					order = 12,
+					order = 13,
 					name = L["Multi-Monitor Support"],
 					desc = L["Attempt to support eyefinity/nvidia surround."],
 					type = "toggle",
@@ -196,19 +204,19 @@ E.Options.args.general = {
 					set = function(info, value) E.global.general[ info[#info] ] = value; E:StaticPopup_Show("GLOBAL_RL") end
 				},
 				hideErrorFrame = {
-					order = 13,
+					order = 14,
 					name = L["Hide Error Text"],
 					desc = L["Hides the red error text at the top of the screen while in combat."],
 					type = "toggle"
 				},
 				taintLog = {
-					order = 14,
+					order = 15,
 					type = "toggle",
 					name = L["Log Taints"],
 					desc = L["Send ADDON_ACTION_BLOCKED errors to the Lua Error frame. These errors are less important in most cases and will not effect your game performance. Also a lot of these errors cannot be fixed. Please only report these errors if you notice a Defect in gameplay."],
 				},
 				bottomPanel = {
-					order = 15,
+					order = 16,
 					type = 'toggle',
 					name = L["Bottom Panel"],
 					desc = L["Display a panel across the bottom of the screen. This is for cosmetic only."],

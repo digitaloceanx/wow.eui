@@ -40,7 +40,7 @@
 	<Script file='EuiThreat.lua'/>
 	<!--Script file='vengeance.lua'/-->
 	<!--Script file='GemPlus.lua'/-->
-	<Script file='BanditsGuile.lua'/>
+	<!--Script file='BanditsGuile.lua'/-->
 	<Script file='FriendGroups.lua'/>
 	
 	<Script file='encounters\Pandaria.lua'/>
@@ -55,8 +55,8 @@
 	<Script file='InfoFilter.lua'/>
 	<Script file='PMFilter.lua'/>	
 	<Script file='ResurrectCD.lua'/>
-	<Script file='Sequences.lua'/>
-	<Script file='AchievementSearch.lua'/>
+	<!--Script file='Sequences.lua'/-->
+
 	<!--Script file="BodyGuardAway.lua"/-->
 	<Script file="WormholeCentrifuge.lua"/>
 	

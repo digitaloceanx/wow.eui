@@ -1,13 +1,17 @@
-﻿## Interface: 70000
+## Interface: 70000
 ## Title: BattlegroundTargets
 ## Notes: A Friend-Enemy-Unit-Frame for battlegrounds.
 ## Notes-deDE: Eine Freund-Feind-Anzeige für Schlachtfelder.
-## Author: kunda. upd Groster
-## Version: 70000-2
+## Author: kunda
+## Version: 70000-1
 ## SavedVariables: BattlegroundTargets_Options
-## X-Curse-Packaged-Version: 70000-2
-## X-Curse-Project-Name: BattlegroundTargets_Legion
-## X-Curse-Project-ID: battlegroundtargets_legion
+## X-Curse-Packaged-Version: 70000-6
+## X-Curse-Project-Name: BattlegroundTargets
+## X-Curse-Project-ID: battlegroundtargets
+## X-Curse-Packaged-Version: 70000-1
+## X-Curse-Project-Name: BattlegroundTargets
+## X-Curse-Project-ID: battlegroundtargets
+## X-Curse-Repository-ID: wow/battlegroundtargets/mainline
 
 BattlegroundTargets-localized-carrier.lua
 BattlegroundTargets-localized-racenames.lua

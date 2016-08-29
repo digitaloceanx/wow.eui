@@ -1,0 +1,31 @@
+﻿## Interface: 70000
+## Title: |cffC495DDEUI|r|cffff0000GS-E:|r |cFF00D1FFSequence Editor|r
+## Title-zhCN: |cffC495DDEUI|r |cFF00D1FF一键宏增强版|r 编辑器
+## Title-zhTW: |cffC495DDEUI|r |cFF00D1FF一鍵宏增強版|r 編輯器
+## Notes: This addon allows you to edit GnomeSequenced-Enhanced sequences in game.
+## Author: Draik
+## Version: v1.3.1 - Legion
+## RequiredDeps: GS-Core
+## OptionalDeps: GS-SequenceTranslator
+## X-Curse-Packaged-Version: r20160827000424
+## X-Curse-Project-Name: GnomeSequencer - Enhanced
+## X-Curse-Project-ID: gnomesequencer-enhanced
+## X-Curse-Repository-ID: wow/gnomesequencer-enhanced/mainline
+
+#libs
+embeds.xml
+# languages
+langs\GSSE_enUS.lua
+langs\GSSE_zhCN.lua
+
+#startup
+editor-startup.lua
+
+#Translator
+translator-core.lua
+
+#Editor
+editor-core.lua
+
+#OptionsGUI
+GSE-options.lua

@@ -4,7 +4,7 @@
 ## Title-zhTW: |cffC495DDEUI|r要塞增強包
 ## Author: eui.cc
 ## X-Category: ElvUI
-## Version: 2016731A
+## Version: 20160824A
 ## RequiredDeps: ElvUI
 ## LoadOnDemand: 1 
 ## LoadWith: Blizzard_GarrisonUI

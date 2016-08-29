@@ -12,5 +12,6 @@
 	<Script file='oUF_TankShield\oUF_TankShield.lua'/>	
 	<Script file="oUF_ClickSet\oUF_ClickSet.lua"/>
 	<Script file="oUF_Swing\oUF_Swing.lua"/>
-	<Script file="oUF_GCD\oUF_GCD.lua"/>	
+	<Script file="oUF_GCD\oUF_GCD.lua"/>
+	<Script file="oUF_ArenaTarget\oUF_ArenaTarget.lua"/>
 </Ui>

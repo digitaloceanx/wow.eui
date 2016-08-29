@@ -497,7 +497,7 @@ local function UpdateFilterGroup()
 							UpdateFilterGroup();
 
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 							UF:UpdateAuraWatchFromHeader('raidpet', true)
 							selectedSpell = nil;
@@ -528,7 +528,7 @@ local function UpdateFilterGroup()
 						selectedSpell = nil;
 						UpdateFilterGroup();
 						UF:UpdateAuraWatchFromHeader('raid')
-						UF:UpdateAuraWatchFromHeader('raid40')
+						-- UF:UpdateAuraWatchFromHeader('raid40')
 						UF:UpdateAuraWatchFromHeader('party')
 						UF:UpdateAuraWatchFromHeader('raidpet', true)
 					end,
@@ -566,7 +566,7 @@ local function UpdateFilterGroup()
 					E.global.unitframe.buffwatch[E.myclass][selectedSpell][ info[#info] ] = value;
 
 					UF:UpdateAuraWatchFromHeader('raid')
-					UF:UpdateAuraWatchFromHeader('raid40')
+					-- UF:UpdateAuraWatchFromHeader('raid40')
 					UF:UpdateAuraWatchFromHeader('party')
 					UF:UpdateAuraWatchFromHeader('raidpet', true)
 				end,
@@ -626,7 +626,7 @@ local function UpdateFilterGroup()
 							local t = E.global.unitframe.buffwatch[E.myclass][selectedSpell][ info[#info] ]
 							t.r, t.g, t.b = r, g, b
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 							UF:UpdateAuraWatchFromHeader('raidpet', true)
 						end,
@@ -653,7 +653,7 @@ local function UpdateFilterGroup()
 							local t = E.global.unitframe.buffwatch[E.myclass][selectedSpell][ info[#info] ]
 							t.r, t.g, t.b = r, g, b
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 							UF:UpdateAuraWatchFromHeader('raidpet', true)
 						end,
@@ -728,7 +728,7 @@ local function UpdateFilterGroup()
 							UpdateFilterGroup();
 							
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 							UF:UpdateAuraWatchFromHeader('raidpet', true)
 							selectedSpell = nil;
@@ -776,7 +776,7 @@ local function UpdateFilterGroup()
 						selectedSpell = nil;
 						UpdateFilterGroup();
 						UF:UpdateAuraWatchFromHeader('raid')
-						UF:UpdateAuraWatchFromHeader('raid40')
+						-- UF:UpdateAuraWatchFromHeader('raid40')
 						UF:UpdateAuraWatchFromHeader('party')
 						UF:UpdateAuraWatchFromHeader('raidpet', true)
 					end,				
@@ -825,7 +825,7 @@ local function UpdateFilterGroup()
 				set = function(info, value) 
 					E.global.unitframe.buffwatch['ALL'][selectedSpell][ info[#info] ] = value;
 					UF:UpdateAuraWatchFromHeader('raid')
-					UF:UpdateAuraWatchFromHeader('raid40')
+					-- UF:UpdateAuraWatchFromHeader('raid40')
 					UF:UpdateAuraWatchFromHeader('party')
 					UF:UpdateAuraWatchFromHeader('raidpet', true)
 				end,
@@ -885,7 +885,7 @@ local function UpdateFilterGroup()
 							local t = E.global.unitframe.buffwatch['ALL'][selectedSpell][ info[#info] ]
 							t.r, t.g, t.b = r, g, b
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 							UF:UpdateAuraWatchFromHeader('raidpet', true)
 						end,						
@@ -912,7 +912,7 @@ local function UpdateFilterGroup()
 							local t = E.global.unitframe.buffwatch['ALL'][selectedSpell][ info[#info] ]
 							t.r, t.g, t.b = r, g, b
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 							UF:UpdateAuraWatchFromHeader('raidpet', true)
 						end,						
@@ -994,7 +994,7 @@ local function UpdateFilterGroup()
 							UpdateFilterGroup();
 							
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 							UF:UpdateAuraWatchFromHeader('raidpet', true)
 							selectedSpell = nil;
@@ -1042,7 +1042,7 @@ local function UpdateFilterGroup()
 						selectedSpell = nil;
 						UpdateFilterGroup();
 						UF:UpdateAuraWatchFromHeader('raid')
-						UF:UpdateAuraWatchFromHeader('raid40')
+						-- UF:UpdateAuraWatchFromHeader('raid40')
 						UF:UpdateAuraWatchFromHeader('party')
 						UF:UpdateAuraWatchFromHeader('raidpet', true)
 					end,				
@@ -1090,7 +1090,7 @@ local function UpdateFilterGroup()
 				set = function(info, value) 
 					E.global.unitframe.buffwatch['CHAR'][selectedSpell][ info[#info] ] = value;
 					UF:UpdateAuraWatchFromHeader('raid')
-					UF:UpdateAuraWatchFromHeader('raid40')
+					-- UF:UpdateAuraWatchFromHeader('raid40')
 					UF:UpdateAuraWatchFromHeader('party')
 					UF:UpdateAuraWatchFromHeader('raidpet', true)
 				end,
@@ -1150,7 +1150,7 @@ local function UpdateFilterGroup()
 							local t = E.global.unitframe.buffwatch['CHAR'][selectedSpell][ info[#info] ]
 							t.r, t.g, t.b = r, g, b
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 							UF:UpdateAuraWatchFromHeader('raidpet', true)
 						end,						
@@ -1177,7 +1177,7 @@ local function UpdateFilterGroup()
 							local t = E.global.unitframe.buffwatch['CHAR'][selectedSpell][ info[#info] ]
 							t.r, t.g, t.b = r, g, b
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 							UF:UpdateAuraWatchFromHeader('raidpet', true)
 						end,						
@@ -1247,7 +1247,7 @@ local function UpdateFilterGroup()
 							UpdateFilterGroup();
 
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 							selectedSpell = nil;
 						end
@@ -1277,7 +1277,7 @@ local function UpdateFilterGroup()
 						selectedSpell = nil;
 						UpdateFilterGroup();
 						UF:UpdateAuraWatchFromHeader('raid')
-						UF:UpdateAuraWatchFromHeader('raid40')
+						-- UF:UpdateAuraWatchFromHeader('raid40')
 						UF:UpdateAuraWatchFromHeader('party')
 					end,
 				},
@@ -1319,7 +1319,7 @@ local function UpdateFilterGroup()
 					E.db.unitframe.filters.buffwatch[selectedSpell][ info[#info] ] = value;
 
 					UF:UpdateAuraWatchFromHeader('raid')
-					UF:UpdateAuraWatchFromHeader('raid40')
+					-- UF:UpdateAuraWatchFromHeader('raid40')
 					UF:UpdateAuraWatchFromHeader('party')
 				end,
 				order = -10,
@@ -1380,7 +1380,7 @@ local function UpdateFilterGroup()
 							local t = E.db.unitframe.filters.buffwatch[selectedSpell][ info[#info] ]
 							t.r, t.g, t.b = r, g, b
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 						end,
 					},
@@ -1408,7 +1408,7 @@ local function UpdateFilterGroup()
 							local t = E.db.unitframe.filters.buffwatch[selectedSpell][ info[#info] ]
 							t.r, t.g, t.b = r, g, b
 							UF:UpdateAuraWatchFromHeader('raid')
-							UF:UpdateAuraWatchFromHeader('raid40')
+							-- UF:UpdateAuraWatchFromHeader('raid40')
 							UF:UpdateAuraWatchFromHeader('party')
 						end,
 					},

@@ -770,6 +770,15 @@ E.Options.args.euiscript = {
 								end
 							end,
 						},
+						CharacterStatsList = {
+							type = 'multiselect',
+							order = 35,
+							name = L["CharacterStats List"],
+							disabled = function() return not E.db.euiscript.CharacterStats; end,
+							set = function(info, k, v) E.db.euiscript.CharacterStatsList[k] = v; E:ToggleCharacterStats(true); end,
+							get = function(info, k) return E.db.euiscript.CharacterStatsList[k]; end,
+							values = {},
+						},
 					},
 				},
 				questGroup = {
@@ -1704,38 +1713,6 @@ E.Options.args.euiscript = {
 				},
 			},
 		},	
-		vbutton = {
-			order = 11,
-			type = 'group',
-			name = GetSpellInfo(158300) or '?',
-			get = function(info) return E.db.euiscript.vbutton[ info[#info] ] end,
-			set = function(info, value) E.db.euiscript.vbutton[ info[#info] ] = value; E:GetModule('vengeance'):Toggle() end,
-			args = {
-				enable = {
-					order = 1,
-					type = 'toggle',
-					name = L['Enable'],
-				},
-				size = {
-					order = 2,
-					type = 'range',
-					name = L['Size'],
-					min = 10, max = 100, step = 1,
-				},
-				fontsize = {
-					order = 3,
-					type = 'range',
-					name = L["Font Size"],
-					type = "range",
-					min = 4, max = 50, step = 1,
-				},
-				combat = {
-					order = 4,
-					type = 'toggle',
-					name = L["Combat Toggle"],
-				},
-			},
-		},	
 		threat = {
 			order = 12,
 			type = 'group',
@@ -1798,33 +1775,6 @@ E.Options.args.euiscript = {
 				},				
 				font_size = {
 					order = 8,
-					type = 'range',
-					name = L["Font Size"],
-					type = "range",
-					min = 4, max = 50, step = 1,
-				},
-			},
-		},	
-		bg = {
-			order = 13,
-			type = 'group',
-			name = GetSpellInfo(84745) or '?',
-			get = function(info) return E.db.euiscript.bg[ info[#info] ] end,
-			set = function(info, value) E.db.euiscript.bg[ info[#info] ] = value; E:GetModule('BanditsGuile'):Toggle() end,
-			args = {
-				enable = {
-					order = 1,
-					type = 'toggle',
-					name = L['Enable'],
-				},
-				size = {
-					order = 2,
-					type = 'range',
-					name = L['Size'],
-					min = 10, max = 100, step = 1,
-				},
-				fontsize = {
-					order = 3,
 					type = 'range',
 					name = L["Font Size"],
 					type = "range",
@@ -2565,6 +2515,10 @@ for k, v in pairs(E.db.euiscript.autobuylist) do
 	end
 end
 
+for k, v in pairs(P.euiscript.CharacterStatsList) do
+	E.Options.args.euiscript.args.euiscript_general.args.uiGroup.args.CharacterStatsList.values[k] = L[k]
+end
+
 if class ~= 'MONK' then E.Options.args.euiscript.args.wsbutton = nil; end
 if class ~= 'MAGE' then
 	E.Options.args.euiscript.args.fsbutton = nil;
@@ -3081,60 +3035,29 @@ local SequencesMacroName, SequencesMacroText
 E.Options.args.Sequences = {
 	type = "group",
 	name = '|cee880303'.. L['Sequences']..'|r',
-	get = function(info) return E.db.Sequences[ info[#info] ] end,
-	set = function(info, value) E.db.Sequences[ info[#info] ] = value end,
-	disabled = function() return (GetLocale() ~= 'zhCN'); end,
+	disabled = function() return not E:IsConfigurableAddOn('GS-Core'); end,
 	args = {
 		desc = {
 			order = 0,
 			type = "description",
 			name = L["Sequences description"],
 		},
-		enable = {
-			order = 1,
-			type = 'toggle',
-			name = L['Enable'],
-			set = function(info, value)
-				E.db.Sequences.enable = value;
-				E:StaticPopup_Show('CONFIG_RL');
-			end,
-		},
-		MacroList = {
-			order = 2,
-			type = "select",
-			name = L["Macro List"],
-			disabled = function() return not E.db.Sequences.enable; end,
-			values = {},
-			get = function(info) return (SequencesMacroName or ''); end,
-			set = function(info, value)
-				SequencesMacroName = value;
-				SequencesMacroText = table.concat(E.SequencesmacroList[value], "\n")
-			end,
-		},
 		CreateMacroButton = {
 			order = 3,
 			type = 'execute',
 			name = L["Create Macro"],
-			disabled = function() return ((not SequencesMacroName) or (not E.db.Sequences.enable)); end,
 			func = function()
-				if GetMacroInfo(SequencesMacroName) then DeleteMacro(SequencesMacroName) end;
-				if select(2, GetNumMacros()) > 35 then
-					E:Print(L["Your current role of the macro is full, please manually delete to continue."])
-					return;
-				end
-				PickupMacro(CreateMacro(SequencesMacroName, "INV_MISC_QUESTIONMARK", "Sequences", 1))
-				E:Print(L["You can manually placed a key output of the macro to on your actionbar."]);
+				SlashCmdList["GNOME"]("");
 			end,
 		},
 		MacroText = {
 			order = 4,
-			type = 'input',
-			width = 'full',
-			name = L["Macro content, modification is invalid"],
-			disabled = function() return not E.db.Sequences.enable; end,
-			multiline = true,
-			set = function(info, value) end,
-			get = function(info) return SequencesMacroText; end,
+			type = 'execute',
+			name = L["Macro Editor"],
+			func = function()
+				LibStub("AceAddon-3.0"):GetAddon("GSSE"):GSSlash("");
+				E:ToggleConfig();
+			end,
 		},
 	},
 }	

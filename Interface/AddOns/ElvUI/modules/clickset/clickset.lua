@@ -117,7 +117,7 @@ function CLICKSET:updateClickset()
 	if not E.private.unitframe.enable then return; end
 
 	UF:CreateAndUpdateHeaderGroup('raid');
-	UF:CreateAndUpdateHeaderGroup('raid40');
+--	UF:CreateAndUpdateHeaderGroup('raid40');
 	UF:CreateAndUpdateHeaderGroup('party')
 	UF:CreateAndUpdateHeaderGroup('tank')
 	UF:CreateAndUpdateHeaderGroup('assist')

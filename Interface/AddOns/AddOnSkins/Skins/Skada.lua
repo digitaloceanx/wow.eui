@@ -33,6 +33,7 @@ function AS:Skada()
 		end
 		if not skada.Backdrop then
 			AS:SkinBackdropFrame(skada)
+			if skada.borderFrame then skada.borderFrame:SetBackdrop(nil) end --by eui.cc del skada's broder
 		end
 		if skada.Backdrop then
 			skada.Backdrop:ClearAllPoints()

@@ -19,7 +19,8 @@ function S:SetOriginalBackdrop()
 end
 
 function S:HandleButton(f, strip)
-	assert(f, "doesn't exist!")
+	if not f then return; end
+
 	if f.Left then f.Left:SetAlpha(0) end
 	if f.Middle then f.Middle:SetAlpha(0) end
 	if f.Right then f.Right:SetAlpha(0) end
@@ -331,7 +332,8 @@ function S:HandleDropDownBox(frame, width)
 end
 
 function S:HandleCheckBox(frame, noBackdrop, noReplaceTextures)
-	assert(frame, 'does not exist.')
+	if not frame then return; end
+
 	frame:StripTextures()
 	if noBackdrop then
 		frame:SetTemplate("Default")
@@ -458,7 +460,8 @@ function S:HandleCloseButton(f, point, text)
 end
 
 function S:HandleSliderFrame(frame)
-	assert(frame)
+	if not frame then return; end
+
 	local orientation = frame:GetOrientation()
 	local SIZE = 12
 	frame:StripTextures()

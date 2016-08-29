@@ -252,13 +252,7 @@ if not mop then
 end
 
 function E:PetJournalParentMove()
-	if not CollectionsJournal then return; end
-    CollectionsJournal:EnableMouse(true)
-    CollectionsJournal:SetMovable(true)
-    CollectionsJournal:SetClampedToScreen(false)
-    addon:HookScript(CollectionsJournal, "OnMouseDown", MouseDownHandler)
-    addon:HookScript(CollectionsJournal, "OnMouseUp", MouseUpHandler)
-    hooked["CollectionsJournal"] = true
+
 end
 
 function E:RematchJournalMove()

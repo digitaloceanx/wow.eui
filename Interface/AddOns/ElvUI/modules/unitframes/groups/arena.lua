@@ -76,6 +76,8 @@ function UF:Construct_ArenaFrames(frame)
 		frame.Trinket = self:Construct_Trinket(frame)
 		frame.PVPSpecIcon = self:Construct_PVPSpecIcon(frame)
 		frame.Range = UF:Construct_Range(frame)
+		frame.ArenaTargetIcon = UF:Construct_ArenaTargetIcon(frame)
+
 		frame:SetAttribute("type2", "focus")
 
 		frame.TargetGlow = UF:Construct_TargetGlow(frame)
@@ -203,6 +205,9 @@ function UF:Update_ArenaFrames(frame, db)
 	--Trinket
 	UF:Configure_Trinket(frame)
 
+	--TargetIcon
+	UF:Configure_ArenaTargetIcon(frame)
+	
 	--Range
 	UF:Configure_Range(frame)
 
@@ -246,4 +251,4 @@ function UF:Update_ArenaFrames(frame, db)
 	frame:UpdateAllElements()
 end
 
-UF['unitgroupstoload']['arena'] = {5, 'ELVUI_UNITTARGET'}
+UF['unitgroupstoload']['arena'] = {3, 'ELVUI_UNITTARGET'}

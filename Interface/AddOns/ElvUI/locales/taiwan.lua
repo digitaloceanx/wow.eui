@@ -22,7 +22,6 @@ do
 	L["Type /aprilfools to revert to old settings."] = "鍵入/aprilfools 恢復到老的設置.";
 	L["You have changed your UIScale, however you still have the AutoScale option enabled in ElvUI. Press accept if you would like to disable the Auto Scale option."] = '你改變了UI縮放比率,但是你仍啟用了EUI的自動縮放, 點確定將禁用自動縮放並重載界面.';
 	L["One or more of the changes you have made require a ReloadUI."] = "一個或更多的改變,需要重載插件";
-	L["A taint has occured that is preventing you from using the queue system. Please reload your user interface and try again."] = "壹個戰鬥汙染發生在你查看隊列系統時, 你可以輸入/rl 重載界面.";
 	L['Oh lord, you have got ElvUI and Tukui both enabled at the same time. Select an addon to disable.'] = 'Tukui不能與EUI同時使用,請禁用Tukui';
 	L["Are you sure you want to reset all the settings on this profile?"] = '你確認想重設你的配置麼?';
 	L["It appears one of your AddOns have disabled the AddOn Blizzard_CompactRaidFrames. This can cause errors and other issues. The AddOn will now be re-enabled."] = "Blizzard_CompactRaidFrames 插件被禁用. 這將會引起一些錯誤。此插件將被重新啟用."
@@ -34,9 +33,19 @@ L["Aura Watch module"] = "'技能監視' 模式將禁用光環條模組,啟用�
 L["|cffff0000Error -- Addon 'ElvUI_Config' not found or is disabled.|r"] = "|cffff0000錯誤 -- 插件EUI設置界面沒有發現或被禁用.|r"
 
 L["DataBars"] = "聲望經驗條"
+L["Artifact"] = "神器"
+L["Artifact Bar"] = "神器條"
+L["Hide At Max Level"] = "在最高等級時隱藏"
+L["Animate Config"] = "動畫設置"
+L["DATABAR_DESC"] = "設置聲望、經驗等資料條"
+
 L["Thin Border Theme"] = "瘦邊框主題"
 L["The Thin Border Theme option will change the overall apperance of your UI. Using Thin Border Theme is a slight performance increase over the traditional layout."] = true;
 L["Statusbar Fill Orientation"] = "狀態條填充方向";
+L["Lowest Allowed UI Scale"] = "最低允許的UI縮放比例";
+L["Disable Tutorial Buttons"] = "禁用教程按鈕"
+L["Talking Head Scale"] = "特寫框體縮放"
+L["Hide In Vehicle"] = "載具時隱藏"
 
 --Minimap
 L['Always Display'] = '總是顯示';
@@ -228,7 +237,12 @@ do
 	L['Panels'] = "面板(聊天框)";
 	L['Announce Interrupts'] = "打斷通告";
 	L['Announce when you interrupt a spell to the specified chat channel.'] = "在指定頻道通報技能打斷資訊";	
-	L["Movers unlocked. Move them now and click Lock when you are done."] = "移動鎖定. 現在可以移動它們移好了點擊鎖定.";
+	L["DESC_MOVERCONFIG"] = [=[解除框架移動鎖定. 現在可以移動它們, 移好後請點擊「鎖定」.
+
+	選項:
+	  Shift + 右擊 - 臨時隱藏移動框.
+	  Ctrl + 右擊 - 重置為默認位置.
+	]=]
 	L['Lock'] = "鎖定";	
 	L["This can't be right, you must of broke something! Please turn on lua errors and report the issue to Elv http://www.tukui.org/forums/forum.php?id=146"] = "請到介面幫助裏打開顯示LUA錯誤,並把錯誤報告給我 http://www.eui.cc";
 	
@@ -422,6 +436,10 @@ end
 
 --NamePlate Config
 do
+	L["Show NPC Titles"] = "顯示NPC頭銜"
+	L["Display Minions"] = "顯示守護者"
+	L["Display Minor Units"] = "顯示守護者單位"
+	L["Display NPC Titles whenever healthbars arent displayed and names are."] = "無論是否顯示NPC的名字和血條都顯示NPC的頭銜"	
 	L["Use Target Glow"] = "使用目標泛光";
 	L["Hide Spell Name"] = "隱藏技能名";
 	L["Hide Time"] = "隱藏時間";
@@ -712,7 +730,12 @@ do
 	--CONFIG
 	L["ActionBars"] = "動作條";
 		L["Keybind Mode"] = "快捷鍵綁定模式";
-		
+	L["Show Empty Buttons"] = "顯示空按鈕"
+	L["Backdrop Spacing"] = "背景空隙"
+	L["Inherit Global Fade"] = "繼承全域漸隱"
+	L["Inherit the global fade, mousing over, targetting, setting focus, losing health, entering combat will set the remove transparency. Otherwise it will use the transparency level in the general actionbar settings for global fade alpha."] = "繼承全域漸隱，滑鼠懸浮、目標、焦點、損失血量、進入戰鬥會減低不透明度。否則會為全域透明度使用一般動作條的設置。"
+	L["Global Fade Transparency"] = "全域透明淡化"
+	L["Transparency level when not in combat, no target exists, full health, not casting, and no focus target exists."] = "在非戰鬥，無目標存在，滿血，未施法，無焦點目標存在時的不透明度"
 	L['Macro Text'] = "宏名字";
 		L['Display macro names on action buttons.'] = "在動作條按鈕上顯示宏名字";
 	L['Keybind Text'] = "快捷鍵";
@@ -777,6 +800,14 @@ L['ABOVE_THREAT_FORMAT'] = '%s: %.0f%% [%.0f%% above |cff%02x%02x%02x%s|r]'
 
 --UNITFRAMES
 do
+	L["Attach Text To"] = "文字附著於"
+	L["Target Class Icon"] = "目標职业圖示";
+	L["Player Portrait"] = "玩家頭像";
+	L["Target Portrait"] = "目標頭像";
+	L["Information Panel"] = "信息面板"
+	L["Raid Icon"] = "团队图标"
+	L["Frame Orientation"] = "框架方向"
+	L["Middle"] = "中"
 	L['GCD Bar'] = "公共CD條"
 	L["Icon Inside Castbar"] = "顯示圖示在施法條裡"
 	L["Display the castbar icon inside the castbar."] = "在施法條內顯示施法條圖示"
@@ -868,6 +899,8 @@ do
 	L['Auto-Hide'] = '自動隱藏';
 	L['Detach From Frame'] = '脫離框架';
 	L['Detached Width'] = '獨立寬度';
+	L['Detached Height'] = '獨立高度';
+	L["Hide Backdrop"] = '隱藏背景';
 	L['Class Color Override'] = '職業色改寫';
 	L['Override the default class color setting.'] = '覆蓋默認的職業色設置.';
 	L['Use Default'] = '使用默認';
@@ -1067,6 +1100,7 @@ do
 	L['Debuff Highlighting'] = "Debuff 高亮";
 		L['Color the unit healthbar if there is a debuff that can be dispelled by you.'] = "高亮顯示單元,如果DEBUFF能被你驅散";
 	L["Disabled Blizzard Frames"] = '禁用暴雪框體';
+	L["Disabled Blizzard"] = "禁用暴雪框架"
 	L["Disables the focus and target of focus unitframes."] = '禁用焦點和焦點目標框體';
 	L["Disables the player and pet unitframes."] = '禁用玩家和寵物框體';
 	L["Disables the target and target of target unitframes."] = '禁用目標和目標的目標框體';
@@ -1654,6 +1688,8 @@ do
 	L["Tab Font Outline"] = '標籤字體描邊';
 	L['Combat to hide backdrop'] = '戰鬥時隱藏聊天框背景';
 	L['Tab Panel Transparency'] = "標籤面板透明";
+	L["Tab Panel"] = "標籤面板"
+	L["Toggle the chat tab panel backdrop."] = "顯示/隱藏聊天框架標籤面板背景."
 	L['Embed to Left Chat Window'] = '嵌入到左聊天框';
 	L['Send to Screen'] = '轉發至屏幕';
 	L['Chat EditBox Position'] = '聊天編輯框位置';
@@ -1714,6 +1750,11 @@ end
 
 --Skins
 do
+	L["Non-Raid Frame"] = "非團隊框架"
+	L["BG Map"] = "戰場地圖"
+	L["LF Guild Frame"] = "尋求公會"
+	L["Stable"] = "獸欄"
+	L["TalkingHead"] = "特寫框體"
 	L["AddOn Manager"] = "挿件管理";
 	L["Mirror Timers"] = "鏡像時間";
 	L["Death Recap"] = '死亡摘要';
@@ -1736,7 +1777,6 @@ do
 	L["Reforge Frame"] = "重鑄";
 	L["Calendar Frame"] = "日曆";
 	L["Achievement Frame"] = "成就";
-	L["LF Guild Frame"] = true;
 	L["Inspect Frame"] = "觀察";
 	L["KeyBinding Frame"] = "快捷鍵";
 	L["Guild Bank"] = "公會銀行";
@@ -1768,12 +1808,11 @@ do
 	L["Petition Frame"] = "簽名";
 	L["Dressing Room"] = "試衣間";
 	L["PvP Frames"] = "PvP窗口";
-	L["Non-Raid Frame"] = true;
 	L["Friends"] = "好友";
 	L["Spellbook"] = "技能書";
 	L["Character Frame"] = "角色";
-	L["LFG Frame"] = true;
-	L["Misc Frames"] = true;
+	L["LFG Frame"] = "地下城"
+	L["Misc Frames"] = "其它框體";
 	L["Tabard Frame"] = "戰袍";
 	L["Guild Registrar"] = "公會註冊";
 	L["Time Manager"] = "時間管理";	
@@ -2158,17 +2197,43 @@ end
 
 --Sequences
 do
-	L["Your current role of the macro is full, please manually delete to continue."] = '你當前角色的宏已滿,請手工刪除後繼續.'
-	L["Macro List"] = '宏清單';
 	L["Sequences"] = '一鍵輸出宏';
-	L["Sequences description"] = '創建一個一鍵輸出宏,供使用者使用;可在下面的宏清單中選擇符合當前角色專精的宏,點擊創建,手工拖動宏到動作條上即可.\n目前僅支持國服.';
+	L["Sequences description"] = '點擊創建巨集按鈕, 在巨集視窗拖放對應的巨集至動作條,注意看聊天框中出現的天賦配置提示.';
 	L["Create Macro"] = '創建宏';
-	L["You can manually placed a key output of the macro to on your actionbar."] = '你能手動放置一鍵輸齣宏到你的動作條上.';
+	L["Macro Editor"] = "宏編輯器";
 end
 
 --euiscript
 do
 	L["Character Stats Enhance"] = "角色面板屬性增強";
+	L["CharacterStats List"] = "屬性清單";
+	L["HEALTH"] = "生命";
+	L["POWER"] = "能量";
+	L["ARMOR"] = "護甲";
+	L["STRENGTH"] = "力量";
+	L["AGILITY"] = "敏捷";
+	L["INTELLECT"] = "智力";
+	L["STAMINA"] = "耐力";
+	L["ATTACK_DAMAGE"] = "傷害";
+	L["ATTACK_AP"] = "攻擊強度";
+	L["ATTACK_ATTACKSPEED"] = "攻擊速度";
+	L["SPELLPOWER"] = "法術強度";
+	L["MANAREGEN"] = "法力回復";
+	L["ENERGY_REGEN"] = "能量回復";
+	L["RUNE_REGEN"] = "符文回復";
+	L["FOCUS_REGEN"] = "集中值回復";
+	L["MOVESPEED"] = "移動速度";
+	L["DURABILITY"] = "耐久度";
+	L["REPAIRTOTAL"] = "總修理費";
+	L["CRITCHANCE"] = "爆擊";
+	L["HASTE"] = "急速";
+	L["VERSATILITY"] = "全能";
+	L["MASTERY"] = "精通";
+	L["LIFESTEAL"] = "吸血";
+	L["AVOIDANCE"] = "閃避";
+	L["DODGE"] = "躲閃";
+	L["PARRY"] = "招架";
+	L["BLOCK"] = "格擋";
 	L["Average equipped item durability percentage."] = "裝備平均耐久百分比顯示.";
 	L["Durability %s"] = "耐久 %s";
 	L["Durability"] = "耐久";
