@@ -59,6 +59,9 @@ local function preparePostMacro(postmacro)
   if GSMasterOptions.use2 then
     postmacro = postmacro .. "\n/use [combat] 2"
   end
+  if GSMasterOptions.use6 then
+    postmacro = postmacro .. "\n/use [combat] 6"
+  end
   if GSMasterOptions.hideSoundErrors then
     -- potentially change this to SetCVar("Sound_EnableSFX", 1)
     postmacro = postmacro .. "\n/console Sound_EnableErrorSpeech 1"
@@ -139,9 +142,45 @@ function GSReloadSequences()
   end
 end
 
+local function deleteMacroStub(sequenceName)
+  local mname, _, mbody = GetMacroInfo(sequenceName)
+  if mname == sequenceName then
+    trimmedmbody = mbody:gsub("[^%w ]", "")
+    compar = '#showtooltip\n/click ' .. mname
+    trimmedcompar = compar:gsub("[^%w ]", "")
+    if string.lower(trimmedmbody) == string.lower(trimmedcompar) then
+      GSPrint(L[" Deleted Orphaned Macro "] .. mname, GNOME)
+      DeleteMacro(sequenceName)
+    end
+  end
+end
+
+function GSToggleDisabledSequence(SequenceName)
+  if GSMasterOptions.DisabledSequences[SequenceName] then
+    -- Sequence has potentially been Disabled
+    if GSMasterOptions.DisabledSequences[SequenceName] == true then
+      -- Definately disabled - enabling
+      GSMasterOptions.DisabledSequences[SequenceName] = nil
+      GSCheckMacroCreated(SequenceName)
+      GSPrint(GSMasterOptions.EmphasisColour .. SequenceName .. "|r " .. L["has been enabled.  The Macro stub is now available in your Macro interface."], GNOME)
+    else
+      -- Disabling
+      GSMasterOptions.DisabledSequences[SequenceName] = true
+      deleteMacroStub(SequenceName)
+      GSPrint(GSMasterOptions.EmphasisColour .. SequenceName .. "|r " .. L["has been disabled.  The Macro stub for this sequence will be deleted and will not be recreated until you re-enable this sequence.  It will also not appear in the /gs list until it is recreated."], GNOME)
+    end
+  else
+    -- disabliong
+    GSMasterOptions.DisabledSequences[SequenceName] = true
+    deleteMacroStub(SequenceName)
+    GSPrint(GSMasterOptions.EmphasisColour .. SequenceName .. "|r " .. L["has been disabled.  The Macro stub for this sequence will be deleted and will not be recreated until you re-enable this sequence.  It will also not appear in the /gs list until it is recreated."], GNOME)
+  end
+  GSReloadSequences()
+end
 
 local function cleanOrphanSequences()
   local maxmacros = MAX_ACCOUNT_MACROS + MAX_CHARACTER_MACROS + 2
+  local todelete = {}
   for macid = 1, maxmacros do
     local found = false
     local mname, mtexture, mbody = GetMacroInfo(macid)
@@ -153,15 +192,12 @@ local function cleanOrphanSequences()
       end
       if not found then
         -- check if body is a gs one and delete the orphan
-        trimmedmbody = mbody:gsub("[^%w ]", "")
-        compar = '#showtooltip\n/click ' .. mname
-        trimmedcompar = compar:gsub("[^%w ]", "")
-        if string.lower(trimmedmbody) == string.lower(trimmedcompar) then
-          print(GSMasterOptions.TitleColour .. GNOME .. ':|r' .. L[" Deleted Orphaned Macro "] .. mname)
-          DeleteMacro(macid)
-        end
+        todelete[mname] = true
       end
     end
+  end
+  for k,_ in pairs(todelete) do
+    deleteMacroStub(k)
   end
 end
 
@@ -169,12 +205,25 @@ local function CleanMacroLibrary(logout)
   -- clean out the sequences database except for the current version
   local tempTable = {}
   for name, versiontable in pairs(GSMasterOptions.SequenceLibrary) do
+    GSPrintDebugMessage(L["Testing "] .. name )
+    GSPrintDebugMessage(L["Active Version "] .. GSMasterOptions.ActiveSequenceVersions[name])
 
     for version, sequence in ipairs(versiontable) do
-      if GSMasterOptions.SequenceLibrary[name][version].source == GSStaticSourceLocal or (GSMasterOptions.ActiveSequenceVersions[name] == version and not logout ) then
+      GSPrintDebugMessage(L["Cycle Version "] .. version )
+      GSPrintDebugMessage(L["Source "] .. sequence.source)
+      if sequence.source == GSStaticSourceLocal then
         -- Save user created entries.  If they are in a mod dont save them as they will be reloaded next load.
-        tempTable[name] = {}
-        tempTable[name][version] = GSMasterOptions.SequenceLibrary[name][version]
+        GSPrintDebugMessage("sequence.source == GSStaticSourceLocal")
+        if GSisEmpty(tempTable[name]) then
+          tempTable[name] = {}
+        end
+        tempTable[name][version] = GSTRUnEscapeSequence(sequence)
+      elseif GSMasterOptions.ActiveSequenceVersions[name] == version and not logout  then
+        GSPrintDebugMessage("GSMasterOptions.ActiveSequenceVersions[name] == version and not logout")
+        if GSisEmpty(tempTable[name]) then
+          tempTable[name] = {}
+        end
+        tempTable[name][version] = GSTRUnEscapeSequence(sequence)
       else
         GSPrintDebugMessage(L["Removing "] .. name .. ":" .. version)
       end
@@ -228,6 +277,7 @@ f:SetScript('OnEvent', function(self, event, addon)
             GSMasterOptions.ActiveSequenceVersions[name] = nil
           end
         end
+        GSReloadSequences()
       end
       IgnoreMacroUpdates = false
     else
@@ -245,7 +295,21 @@ f:SetScript('OnEvent', function(self, event, addon)
     if GSMasterOptions.deleteOrphansOnLogout then
       cleanOrphanSequences()
     end
-    -- clean out the sequences database except for the local version prior to saving
+
+  elseif event == 'PLAYER_ENTERING_WORLD' then
+    GSPrintAvailable = true
+    GSPerformPrint()
+    -- check macro stubs
+    for k,v in pairs(GSMasterOptions.ActiveSequenceVersions) do
+      sequence = GSMasterOptions.SequenceLibrary[k][v]
+      if sequence.specID == GSGetCurrentSpecID() or sequence.specID == GSGetCurrentClassID() then
+        if GSMasterOptions.DisabledSequences[k] == true then
+          deleteMacroStub(k)
+        else
+          GSCheckMacroCreated(k)
+        end
+      end
+    end
   elseif event == 'ADDON_LOADED' and addon == "GS-Core" then
     if not GSisEmpty(GnomeOptions) then
       -- save temporary values the AddinPacks gets wiped from persisited memory
@@ -274,6 +338,7 @@ f:SetScript('OnEvent', function(self, event, addon)
           GSMasterOptions[k] = v
         end
       end
+      -- Add Macro Stubs for all current spec'd macros.
       for k,v in pairs(GSMasterOptions.ActiveSequenceVersions) do
         if GSisEmpty(GSMasterOptions.SequenceLibrary[k]) then
           GSMasterOptions.ActiveSequenceVersions[k] = nil
@@ -288,7 +353,7 @@ f:RegisterEvent('UPDATE_MACROS')
 f:RegisterEvent('PLAYER_LOGIN')
 f:RegisterEvent('ADDON_LOADED')
 f:RegisterEvent('PLAYER_LOGOUT')
-
+f:RegisterEvent('PLAYER_ENTERING_WORLD')
 
 ----------------------------
 -- Draik's Mods
@@ -304,6 +369,10 @@ end
 
 function GSExportSequencebySeq(sequence, sequenceName)
   GSPrintDebugMessage("GSExportSequencebySeq Sequence Name: " .. sequenceName)
+  local disabledseq = ""
+  if GSMasterOptions.DisabledSequences[sequenceName] then
+    disabledseq = GSMasterOptions.UNKNOWN .. "-- " .. L["This Sequence is currently Disabled Locally."] .. GSStaticStringRESET .. "\n"
+  end
   local helptext = "helpTxt = \"" .. GSMasterOptions.INDENT .. (GSisEmpty(sequence.helpTxt) and "No Help Information" or sequence.helpTxt) .. GSStaticStringRESET .. "\",\n"
   local specversion = "version=" .. GSMasterOptions.NUMBER  ..(GSisEmpty(sequence.version) and "1" or sequence.version ) .. GSStaticStringRESET ..",\n"
   local source = "source = \"" .. GSMasterOptions.INDENT .. (GSisEmpty(sequence.source) and "Unknown Source" or sequence.source) .. GSStaticStringRESET .. "\",\n"
@@ -319,7 +388,7 @@ function GSExportSequencebySeq(sequence, sequenceName)
     end
   end
   --local returnVal = ("Sequences['" .. sequenceName .. "'] = {\n" .."author=\"".. sequence.author .."\",\n" .."specID="..sequence.specID ..",\n" .. helptext .. steps )
-  local returnVal = ("Sequences['" .. GSMasterOptions.EmphasisColour .. sequenceName .. GSStaticStringRESET .. "'] = {\nauthor=\"" .. GSMasterOptions.AuthorColour .. (GSisEmpty(sequence.author) and "Unknown Author" or sequence.author) .. GSStaticStringRESET .. "\",\n" .. (GSisEmpty(sequence.specID) and "-- Unknown specID.  This could be a GS sequence and not a GS-E one.  Care will need to be taken. \n" or "specID=" .. GSMasterOptions.NUMBER  .. sequence.specID .. GSStaticStringRESET ..",\n") .. specversion .. source .. helptext .. steps )
+  local returnVal = (disabledseq .. "Sequences['" .. GSMasterOptions.EmphasisColour .. sequenceName .. GSStaticStringRESET .. "'] = {\nauthor=\"" .. GSMasterOptions.AuthorColour .. (GSisEmpty(sequence.author) and "Unknown Author" or sequence.author) .. GSStaticStringRESET .. "\",\n" .. (GSisEmpty(sequence.specID) and "-- Unknown specID.  This could be a GS sequence and not a GS-E one.  Care will need to be taken. \n" or "specID=" .. GSMasterOptions.NUMBER  .. sequence.specID .. GSStaticStringRESET ..",\n") .. specversion .. source .. helptext .. steps )
   if not GSisEmpty(sequence.icon) then
      returnVal = returnVal .. "icon=" .. GSMasterOptions.CONCAT .. (tonumber(sequence.icon) and sequence.icon or "'".. sequence.icon .. "'") .. GSStaticStringRESET ..",\n"
   end
@@ -331,56 +400,29 @@ function GSExportSequencebySeq(sequence, sequenceName)
   return returnVal
 end
 
-function GSsetMacroLocation()
-  local numAccountMacros, numCharacterMacros = GetNumMacros()
-  local returnval = 1
-  if numCharacterMacros >= MAX_CHARACTER_MACROS - 1 and GSMasterOptions.overflowPersonalMacros then
-   returnval = nil
-  end
-  return returnval
-end
-
-local function GSregisterSequence(sequenceName, icon)
-  local sequenceIndex = GetMacroIndexByName(sequenceName)
-  local numAccountMacros, numCharacterMacros = GetNumMacros()
-  if sequenceIndex > 0 then
-    -- Sequence exists do nothing
-    GSPrintDebugMessage(L["Moving on - "] .. sequenceName .. L[" already exists."], GNOME)
-  else
-    -- Create Sequence as a player sequence
-    if numCharacterMacros >= MAX_CHARACTER_MACROS - 1 and not GSMasterOptions.overflowPersonalMacros then
-      print(GSMasterOptions.TitleColour .. GNOME .. ':|r ' .. GSMasterOptions.AuthorColour .. L["Close to Maximum Personal Macros.|r  You can have a maximum of "].. MAX_CHARACTER_MACROS .. L[" macros per character.  You currently have "] .. GSMasterOptions.EmphasisColour .. numCharacterMacros .. L["|r.  As a result this macro was not created.  Please delete some macros and reenter "] .. GSMasterOptions.CommandColour .. L["/gs|r again."])
-    elseif numAccountMacros >= MAX_ACCOUNT_MACROS - 1 and GSMasterOptions.overflowPersonalMacros then
-      print(GSMasterOptions.TitleColour .. GNOME .. ':|r ' .. GSMasterOptions.AuthorColour .. L["Close to Maximum Macros.|r  You can have a maximum of "].. MAX_CHARACTER_MACROS .. L[" macros per character.  You currently have "] .. GSMasterOptions.EmphasisColour .. numCharacterMacros .. L["|r.  You can also have a  maximum of "] .. MAX_ACCOUNT_MACROS .. L[" macros per Account.  You currently have "] .. GSMasterOptions.EmphasisColour .. numAccountMacros .. L["|r. As a result this macro was not created.  Please delete some macros and reenter "] .. GSMasterOptions.CommandColour .. L["/gs|r again."])
-    else
-      sequenceid = CreateMacro(sequenceName, (GSMasterOptions.setDefaultIconQuestionMark and "INV_MISC_QUESTIONMARK" or icon), '#showtooltip\n/click ' .. sequenceName, GSsetMacroLocation() )
-      GSModifiedSequences[sequenceName] = true
-    end
-  end
-end
-
-
 local function ListSequences(txt)
   local currentSpec = GetSpecialization()
 
   local currentSpecID = currentSpec and select(1, GetSpecializationInfo(currentSpec)) or "None"
   for name, sequence in pairs(GSMasterOptions.SequenceLibrary) do
-    if not GSisEmpty(sequence[GSGetActiveSequenceVersion(name)].specID) then
+    if GSMasterOptions.DisabledSequences[name] then
+      GSPrint(GSMasterOptions.CommandColour .. name ..'|r ' .. L["is currently disabled from use."], GNOME)
+    elseif not GSisEmpty(sequence[GSGetActiveSequenceVersion(name)].specID) then
       local sid, specname, specdescription, specicon, sbackground, specrole, specclass = GetSpecializationInfoByID(sequence[GSGetActiveSequenceVersion(name)].specID)
       GSPrintDebugMessage(L["Sequence Name: "] .. name)
       sid, specname, specdescription, specicon, sbackground, specrole, specclass = GetSpecializationInfoByID(currentSpecID)
       GSPrintDebugMessage(L["No Specialisation information for sequence "] .. name .. L[". Overriding with information for current spec "] .. specname)
       if sequence[GSGetActiveSequenceVersion(name)].specID == currentSpecID or string.upper(txt) == specclass then
-        print(GSMasterOptions.TitleColour .. GNOME .. ':|r ' .. GSMasterOptions.CommandColour .. name ..'|r ' .. L["Version="] .. sequence[GSGetActiveSequenceVersion(name)].version  .. " " .. GSMasterOptions.INDENT .. sequence[GSGetActiveSequenceVersion(name)].helpTxt .. GSStaticStringRESET .. ' ' .. GSMasterOptions.EmphasisColour .. specclass .. '|r ' .. specname .. ' ' .. GSMasterOptions.AuthorColour .. L["Contributed by: "] .. sequence[GSGetActiveSequenceVersion(name)].author ..'|r ' )
+        GSPrint(GSMasterOptions.CommandColour .. name ..'|r ' .. L["Version="] .. sequence[GSGetActiveSequenceVersion(name)].version  .. " " .. GSMasterOptions.INDENT .. sequence[GSGetActiveSequenceVersion(name)].helpTxt .. GSStaticStringRESET .. ' ' .. GSMasterOptions.EmphasisColour .. specclass .. '|r ' .. specname .. ' ' .. GSMasterOptions.AuthorColour .. L["Contributed by: "] .. sequence[GSGetActiveSequenceVersion(name)].author ..'|r ', GNOME)
         GSregisterSequence(name, (GSisEmpty(sequence[GSGetActiveSequenceVersion(name)].icon) and strsub(specicon, 17) or sequence[GSGetActiveSequenceVersion(name)].icon))
       elseif txt == "all" or sequence[GSGetActiveSequenceVersion(name)].specID == 0  then
-        print(GSMasterOptions.TitleColour .. GNOME .. ':|r ' .. GSMasterOptions.CommandColour .. name ..'|r ' .. L["Version="] .. sequence[GSGetActiveSequenceVersion(name)].version  .. " " .. sequence[GSGetActiveSequenceVersion(name)].helpTxt or L["No Help Information "] .. GSMasterOptions.AuthorColour .. L["Contributed by: "] .. sequence[GSGetActiveSequenceVersion(name)].author ..'|r ' )
+        GSPrint(GSMasterOptions.CommandColour .. name ..'|r ' .. L["Version="] .. sequence[GSGetActiveSequenceVersion(name)].version  .. " " .. sequence[GSGetActiveSequenceVersion(name)].helpTxt or L["No Help Information "] .. GSMasterOptions.AuthorColour .. L["Contributed by: "] .. sequence[GSGetActiveSequenceVersion(name)].author ..'|r ', GNOME)
       elseif sequence[GSGetActiveSequenceVersion(name)].specID == currentclassId then
-        print(GSMasterOptions.TitleColour .. GNOME .. ':|r ' .. GSMasterOptions.CommandColour .. name ..'|r ' .. L["Version="] .. sequence[GSGetActiveSequenceVersion(name)].version  .. " " .. sequence[GSGetActiveSequenceVersion(name)].helpTxt .. ' ' .. GSMasterOptions.AuthorColour .. L["Contributed by: "] .. sequence[GSGetActiveSequenceVersion(name)].author ..'|r ' )
+        GSPrint(GSMasterOptions.CommandColour .. name ..'|r ' .. L["Version="] .. sequence[GSGetActiveSequenceVersion(name)].version  .. " " .. sequence[GSGetActiveSequenceVersion(name)].helpTxt .. ' ' .. GSMasterOptions.AuthorColour .. L["Contributed by: "] .. sequence[GSGetActiveSequenceVersion(name)].author ..'|r ', GNOME )
         GSregisterSequence(name, (GSisEmpty(sequence[GSGetActiveSequenceVersion(name)].icon) and strsub(specicon, 17) or sequence[GSGetActiveSequenceVersion(name)].icon))
       end
     else
-      print(GSMasterOptions.TitleColour .. GNOME .. ':|r ' .. GSMasterOptions.CommandColour .. name .. L["|r Incomplete Sequence Definition - This sequence has no further information "] .. GSMasterOptions.AuthorColour .. L["Unknown Author|r "] )
+      GSPrint(GSMasterOptions.CommandColour .. name .. L["|r Incomplete Sequence Definition - This sequence has no further information "] .. GSMasterOptions.AuthorColour .. L["Unknown Author|r "], GNOME )
     end
   end
   ShowMacroFrame()
@@ -401,7 +443,7 @@ function GSUpdateSequence(name,sequence)
     local button = _G[name]
     -- only translate a sequence if the option to use the translator is on, there is a translator available and the sequence matches the current class
     if GSTranslatorAvailable and checkCurrentClass(sequence.specID) then
-      sequence = GSTranslateSequence(sequence)
+      sequence = GSTranslateSequence(sequence, name)
     end
     if GSisEmpty(_G[name]) then
       createButton(name, sequence)
@@ -427,15 +469,15 @@ function GSUpdateSequence(name,sequence)
 end
 
 local function PrintGnomeHelp()
-  print(GSMasterOptions.TitleColour .. GNOME .. L[":|r GnomeSequencer was originally written by semlar of wowinterface.com."])
-  print(GSMasterOptions.TitleColour .. GNOME .. L[":|r This is a small addon that allows you create a sequence of macros to be executed at the push of a button."])
-  print(GSMasterOptions.TitleColour .. GNOME .. L[":|r Like a /castsequence macro, it cycles through a series of commands when the button is pushed. However, unlike castsequence, it uses macro text for the commands instead of spells, and it advances every time the button is pushed instead of stopping when it can't cast something."])
-  print(GSMasterOptions.TitleColour .. GNOME .. L[":|r This version has been modified by TimothyLuke to make the power of GnomeSequencer avaialble to people who are not comfortable with lua programming."])
-  print(GSMasterOptions.TitleColour .. GNOME .. L[":|r To get started "] .. GSMasterOptions.CommandColour .. L["/gs|r will list any macros available to your spec.  This will also add any macros available for your current spec to the macro interface."])
-  print(GSMasterOptions.TitleColour .. GNOME .. ':|r ' .. GSMasterOptions.CommandColour .. L["/gs listall|r will produce a list of all available macros with some help information."])
-  print(GSMasterOptions.TitleColour .. GNOME .. L[":|r To use a macro, open the macros interface and create a macro with the exact same name as one from the list.  A new macro with two lines will be created and place this on your action bar."])
-  print(GSMasterOptions.TitleColour .. GNOME .. L[":|r The command "] .. GSMasterOptions.CommandColour .. L["/gs showspec|r will show your current Specialisation and the SPECID needed to tag any existing macros."])
-  print(GSMasterOptions.TitleColour .. GNOME .. L[":|r The command "] .. GSMasterOptions.CommandColour .. L["/gs cleanorphans|r will loop through your macros and delete any left over GS-E macros that no longer have a sequence to match them."])
+  GSPrint(L["GnomeSequencer was originally written by semlar of wowinterface.com."], GNOME)
+  GSPrint(L["This is a small addon that allows you create a sequence of macros to be executed at the push of a button."], GNOME)
+  GSPrint(L["Like a /castsequence macro, it cycles through a series of commands when the button is pushed. However, unlike castsequence, it uses macro text for the commands instead of spells, and it advances every time the button is pushed instead of stopping when it can't cast something."], GNOME)
+  GSPrint(L["This version has been modified by TimothyLuke to make the power of GnomeSequencer avaialble to people who are not comfortable with lua programming."], GNOME)
+  GSPrint(L["To get started "] .. GSMasterOptions.CommandColour .. L["/gs|r will list any macros available to your spec.  This will also add any macros available for your current spec to the macro interface."], GNOME)
+  GSPrint(GSMasterOptions.CommandColour .. L["/gs listall|r will produce a list of all available macros with some help information."], GNOME)
+  GSPrint(L["To use a macro, open the macros interface and create a macro with the exact same name as one from the list.  A new macro with two lines will be created and place this on your action bar."], GNOME)
+  GSPrint(L["The command "] .. GSMasterOptions.CommandColour .. L["/gs showspec|r will show your current Specialisation and the SPECID needed to tag any existing macros."], GNOME)
+  GSPrint(L["The command "] .. GSMasterOptions.CommandColour .. L["/gs cleanorphans|r will loop through your macros and delete any left over GS-E macros that no longer have a sequence to match them."], GNOME)
 end
 
 SLASH_GNOME1, SLASH_GNOME2, SLASH_GNOME3 = "/gnome", "/gs", "/gnomesequencer"
@@ -449,7 +491,7 @@ SlashCmdList["GNOME"] = function (msg, editbox)
     local currentSpec = GetSpecialization()
     local currentSpecID = currentSpec and select(1, GetSpecializationInfo(currentSpec)) or "None"
     local _, specname, specdescription, specicon, _, specrole, specclass = GetSpecializationInfoByID(currentSpecID)
-    print(GSMasterOptions.TitleColour .. GNOME .. L[":|r Your current Specialisation is "] .. currentSpecID, ':', specname, L["  The Alternative ClassID is "] , currentclassId)
+    GSPrint(L["Your current Specialisation is "] .. currentSpecID .. ':' .. specname .. L["  The Alternative ClassID is "] .. currentclassId, GNOME)
   elseif string.lower(msg) == "help" then
     PrintGnomeHelp()
   elseif string.lower(msg) == "cleanorphans" or string.lower(msg) == "clean" then
@@ -458,7 +500,7 @@ SlashCmdList["GNOME"] = function (msg, editbox)
     cleanOrphanSequences()
     CleanMacroLibrary(true)
   elseif string.lower(string.sub(msg,1,6)) == "export" then
-    print(GSExportSequence(string.sub(msg,8)))
+    GSPrint(GSExportSequence(string.sub(msg,8)))
   elseif string.lower(msg) == "showdebugoutput" then
     StaticPopup_Show ("GS-DebugOutput")
   else
@@ -466,4 +508,4 @@ SlashCmdList["GNOME"] = function (msg, editbox)
   end
 end
 
-print(GSMasterOptions.TitleColour .. GNOME .. ':|r ' .. GSMasterOptions.AuthorColour .. L["GnomeSequencer-Enhanced loaded.|r  Type "] .. GSMasterOptions.CommandColour .. L["/gs help|r to get started."])
+GSPrint(GSMasterOptions.AuthorColour .. L["GnomeSequencer-Enhanced loaded.|r  Type "] .. GSMasterOptions.CommandColour .. L["/gs help|r to get started."], GNOME)

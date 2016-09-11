@@ -8,6 +8,8 @@
 ## Author: Nevcairiel
 ## SavedVariables: MapsterDB
 ## X-Category: Map
+## Dependencies: ElvUI
+## X-Revision: ElvUI
 ## Version: 1.7.2
 ## X-License: All rights reserved.
 ## X-Curse-Packaged-Version: 1.7.2

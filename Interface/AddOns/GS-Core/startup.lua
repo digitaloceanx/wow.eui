@@ -8,6 +8,8 @@ GSTRUnfoundSpells = {}
 GSModifiedSequences = {} -- [sequenceName] = true if we've already modified this sequence
 
 GSStaticCastCmds = { use = true, cast = true, spell = true, cancelaura = true }
+GSStaticSourceLocal = "Local"
+GSStaticSourceTransmission = "Transmission"
 
 GSStaticCleanStrings = {}
 GSStaticCleanStrings = {
@@ -50,6 +52,8 @@ GSStaticCleanStrings = {
   [46] = "/use [combat]14\n",
   [47] = "/use [combat]2\n",
   [48] = "/use [combat] 2\n",
+  [49] = "/use [combat]5\n",
+  [50] = "/use [combat] 5\n",
 
   [101] = "\n\n",
 }
@@ -72,9 +76,10 @@ GSMasterOptions.debug = false
 GSMasterOptions.debugSequence = true
 GSMasterOptions.sendDebugOutputToChat = true
 GSMasterOptions.sendDebugOutputGSDebugOutput = false
-GSMasterOptions.useTranslator = true --by eui.cc
+GSMasterOptions.useTranslator = false
 GSMasterOptions.requireTarget = false
 GSMasterOptions.use2 = false
+GSMasterOptions.use6 = false
 GSMasterOptions.use11 = false
 GSMasterOptions.use12 = false
 GSMasterOptions.use13 = true
@@ -99,15 +104,19 @@ GSMasterOptions.WOWSHORTCUTS = "|cffddaaff"
 GSMasterOptions.RealtimeParse = false
 GSMasterOptions.SequenceLibrary = {}
 GSMasterOptions.ActiveSequenceVersions = {}
+GSMasterOptions.DisabledSequences = {}
 GSMasterOptions.DebugModules = {}
 GSMasterOptions.DebugModules["GS-Core"] = true
 GSMasterOptions.DebugModules["GS-SequenceTranslator"] = false
 GSMasterOptions.DebugModules["GS-SequenceEditor"] = false
+GSMasterOptions.DebugModules[GSStaticSourceTransmission] = false
 GSMasterOptions.filterList = {}
 GSMasterOptions.filterList["Spec"] = true
 GSMasterOptions.filterList["Class"] = true
 GSMasterOptions.filterList["All"] = false
 
+GSOutput = {}
+GSPrintAvailable = false
 GSSpecIDList = {
   [0] = "All",
   [1] = "Warrior",
@@ -134,7 +143,7 @@ GSSpecIDList = {
   [102] = "Balance",
   [103] = "Feral",
   [104] = "Guardian",
-  [105] = "Restoration",
+  [105] = "Restoration - Druid",
   [250] = "Blood",
   [251] = "Frost - DK",
   [252] = "Unholy",
@@ -149,7 +158,7 @@ GSSpecIDList = {
   [261] = "Subtlety",
   [262] = "Elemental",
   [263] = "Enhancement",
-  [264] = "Restoration",
+  [264] = "Restoration - Shaman",
   [265] = "Affliction",
   [266] = "Demonology",
   [267] = "Destruction",
@@ -165,15 +174,43 @@ for k,v in pairs(GSSpecIDList) do
   GSSpecIDHashList[v] = k
 end
 
+function GSCompareSequence(seq1,seq2)
+  local match = false
+  local steps1 = table.concat(seq1, "")
+  local steps2 = table.concat(seq2, "")
 
-GSStaticSourceLocal = "Local"
+  if seq1.PostMacro == seq2.PostMacro and seq1.PreMacro == seq2.PreMacro and seq1.specID == seq2.specID and seq1.StepFunction == seq2.StepFunction and steps1 == steps2 then
+    -- we have a match
+    match = true
+  end
+  return match
+end
+
+function GSPerformPrint()
+  for k,v in ipairs(GSOutput) do
+    print(v)
+    GSOutput[k] = nil
+  end
+end
+
+function GSPrint(message, title)
+  -- stroe this for later on.
+  if not GSisEmpty(title) then
+    message = GSMasterOptions.TitleColour .. title .. GSStaticStringRESET .." " .. message
+  end
+  table.insert(GSOutput, message)
+  if GSPrintAvailable then
+    GSPerformPrint()
+  end
+end
+
 
 local function determinationOutputDestination(message)
   if GSMasterOptions.sendDebugOutputGSDebugOutput then
     GSDebugOutput = GSDebugOutput .. message .. "\n"
 	end
 	if GSMasterOptions.sendDebugOutputToChat then
-    print(message)
+    GSPrint(message)
 	end
 end
 
@@ -189,23 +226,9 @@ function GSPrintDebugMessage(message, module)
 end
 
 
-
-
 GSDebugOutput = ""
 
 GSStaticSequenceDebug = "SEQUENCEDEBUG"
-
-
-
--- -- Seed a first instance just to be sure an instance is loaded if we need to.
--- if GSMasterOptions.seedInitialMacro then
--- 	GSMasterSequences["Draik01"] = {
--- 	specID = 0,
--- 	author = "Draik",
--- 	helpTxt = "Sample GS Hellow World Macro.",
--- 	'/run print("Hellow World!")',
--- 	}
--- end
 
 -------------------------------------------------------------------------------------
 -- GSStaticPriority is a static step function that goes 1121231234123451234561234567
@@ -280,7 +303,7 @@ function GSDeleteSequenceVersion(sequenceName, version)
     local _, selectedversion = GSGetKnownSequenceVersions(sequenceName)
     local sequence = GSMasterOptions.SequenceLibrary[sequenceName][version]
     if sequence.source ~= GSStaticSourceLocal then
-      print(GSMasterOptions.TitleColour ..  GNOME .. L[":|r You cannot delete this version of a sequence.  This version will be reloaded as it is contained in "] .. GSMasterOptions.NUMBER .. sequence.source .. GSStaticStringRESET)
+      GSPrint(L["You cannot delete this version of a sequence.  This version will be reloaded as it is contained in "] .. GSMasterOptions.NUMBER .. sequence.source .. GSStaticStringRESET, GNOME)
     elseif not GSisEmpty(GSMasterOptions.SequenceLibrary[sequenceName][version]) then
       GSMasterOptions.SequenceLibrary[sequenceName][version] = nil
     end
@@ -305,6 +328,66 @@ function GSGetCurrentSpecID()
   return currentSpec and select(1, GetSpecializationInfo(currentSpec)) or 0
 end
 
+function GSGetCurrentClassID()
+  local _, _, currentclassId = UnitClass("player")
+  return currentclassId
+end
+
+function GSsetMacroLocation()
+  local numAccountMacros, numCharacterMacros = GetNumMacros()
+  local returnval = 1
+  if numCharacterMacros >= MAX_CHARACTER_MACROS - 1 and GSMasterOptions.overflowPersonalMacros then
+   returnval = nil
+  end
+  return returnval
+end
+
+
+function GSregisterSequence(sequenceName, icon)
+  local sequenceIndex = GetMacroIndexByName(sequenceName)
+  local numAccountMacros, numCharacterMacros = GetNumMacros()
+  if sequenceIndex > 0 then
+    -- Sequence exists do nothing
+    GSPrintDebugMessage(L["Moving on - "] .. sequenceName .. L[" already exists."], GNOME)
+  else
+    -- Create Sequence as a player sequence
+    if numCharacterMacros >= MAX_CHARACTER_MACROS - 1 and not GSMasterOptions.overflowPersonalMacros then
+      GSPrint(GSMasterOptions.AuthorColour .. L["Close to Maximum Personal Macros.|r  You can have a maximum of "].. MAX_CHARACTER_MACROS .. L[" macros per character.  You currently have "] .. GSMasterOptions.EmphasisColour .. numCharacterMacros .. L["|r.  As a result this macro was not created.  Please delete some macros and reenter "] .. GSMasterOptions.CommandColour .. L["/gs|r again."], GNOME)
+    elseif numAccountMacros >= MAX_ACCOUNT_MACROS - 1 and GSMasterOptions.overflowPersonalMacros then
+      GSPrint(L["Close to Maximum Macros.|r  You can have a maximum of "].. MAX_CHARACTER_MACROS .. L[" macros per character.  You currently have "] .. GSMasterOptions.EmphasisColour .. numCharacterMacros .. L["|r.  You can also have a  maximum of "] .. MAX_ACCOUNT_MACROS .. L[" macros per Account.  You currently have "] .. GSMasterOptions.EmphasisColour .. numAccountMacros .. L["|r. As a result this macro was not created.  Please delete some macros and reenter "] .. GSMasterOptions.CommandColour .. L["/gs|r again."], GNOME)
+    else
+      sequenceid = CreateMacro(sequenceName, (GSMasterOptions.setDefaultIconQuestionMark and "INV_MISC_QUESTIONMARK" or icon), '#showtooltip\n/click ' .. sequenceName, GSsetMacroLocation() )
+      GSModifiedSequences[sequenceName] = true
+    end
+  end
+end
+
+
+function GSCheckMacroCreated(SequenceName)
+  local macroIndex = GetMacroIndexByName(SequenceName)
+  if macroIndex and macroIndex ~= 0 then
+    if not GSModifiedSequences[SequenceName] then
+      GSModifiedSequences[SequenceName] = true
+      EditMacro(macroIndex, nil, nil, '#showtooltip\n/click ' .. SequenceName)
+    end
+  else
+    icon = GSMasterOptions.SequenceLibrary[SequenceName][GSGetActiveSequenceVersion(SequenceName)].icon
+    GSregisterSequence(SequenceName, icon)
+  end
+
+end
+
+function GSDisableSequence(SequenceName)
+  GSMasterOptions.DisabledSequences[SequenceName] = true
+  deleteMacroStub(SequenceName)
+end
+
+function GSEnableSequence(SequenceName)
+  GSMasterOptions.DisabledSequences[SequenceName] = nil
+  GSCheckMacroCreated(SequenceName)
+end
+
+
 function GSAddSequenceToCollection(sequenceName, sequence, version)
   local confirmationtext = ""
   --Perform some validation checks on the Sequence.
@@ -313,6 +396,7 @@ function GSAddSequenceToCollection(sequenceName, sequence, version)
     sequence.specID = GSGetCurrentSpecID()
     confirmationtext = " " .. L["Sequence specID set to current spec of "] .. sequence.specID .. "."
   end
+  sequence.specID = sequence.specID + 0 -- force to a number.
   if GSisEmpty(sequence.author) then
     -- set to unknown author
     sequence.author = "Unknown Author"
@@ -337,13 +421,13 @@ function GSAddSequenceToCollection(sequenceName, sequence, version)
       -- different source.  if local Ignore
       if sequence.source == GSStaticSourceLocal then
         -- local version - add as new version
-        print (GSMasterOptions.TitleColour ..  GNOME .. L["|rA sequence collision has occured.  Your local version of "] .. sequenceName .. L[" has been added as a new version and set to active.  Please review if this is as expected."])
+        GSPrint (L["A sequence collision has occured.  Your local version of "] .. sequenceName .. L[" has been added as a new version and set to active.  Please review if this is as expected."], GNOME)
         GSAddSequenceToCollection(sequenceName, sequence, GSGetNextSequenceVersion(sequenceName))
       else
         if GSisEmpty(sequence.source) then
-          print(GSMasterOptions.TitleColour ..  GNOME .. L["|rA sequence colision has occured. "] .. L["Two sequences with unknown sources found."] .. " " .. sequenceName)
+          GSPrint(L["A sequence colision has occured. "] .. L["Two sequences with unknown sources found."] .. " " .. sequenceName, GNOME)
         else
-          print (GSMasterOptions.TitleColour ..  GNOME .. L["|rA sequence colision has occured. "] .. sequence.source .. L[" tried to overwrite the version already loaded from "] .. GSMasterOptions.SequenceLibrary[sequenceName][version].source .. L[". This version was not loaded."])
+          GSPrint (L["A sequence colision has occured. "] .. sequence.source .. L[" tried to overwrite the version already loaded from "] .. GSMasterOptions.SequenceLibrary[sequenceName][version].source .. L[". This version was not loaded."], Gnome)
         end
       end
     end
@@ -360,13 +444,21 @@ function GSAddSequenceToCollection(sequenceName, sequence, version)
     end
     -- evaluate version
     if version ~= GSMasterOptions.ActiveSequenceVersions[sequenceName] then
+
       GSSetActiveSequenceVersion(sequenceName, version)
     end
 
     GSMasterOptions.SequenceLibrary[sequenceName][version] = sequence
+    if sequence.specID == GSGetCurrentSpecID() or sequence.specID == GSGetCurrentClassID() then
+      if GSMasterOptions.DisabledSequences[sequenceName] == true then
+        deleteMacroStub(sequenceName)
+      else
+        GSCheckMacroCreated(sequenceName)
+      end
+    end
   end
   if not GSisEmpty(confirmationtext) then
-    print(GSMasterOptions.TitleColour ..  GNOME .. "|r " .. GSMasterOptions.EmphasisColour .. sequenceName .. "|r" .. L[" was imported with the following errors."] .. " " .. confirmationtext)
+    GSPrint(GSMasterOptions.EmphasisColour .. sequenceName .. "|r" .. L[" was imported with the following errors."] .. " " .. confirmationtext, GNOME)
   end
 end
 
@@ -422,6 +514,12 @@ function GSTRUnEscapeSequence(sequence)
     sequence[i] = GSTRUnEscapeString(v)
     i = i + 1
   end
+  if not GSisEmpty(sequence.PreMacro) then
+    sequence.PreMacro = GSTRUnEscapeString(sequence.PreMacro)
+  end
+  if not GSisEmpty(sequence.PostMacro) then
+    sequence.PostMacro = GSTRUnEscapeString(sequence.PostMacro)
+  end
   return sequence
 end
 
@@ -452,18 +550,4 @@ if GetLocale() ~= "enUS" then
       i = i + 1
     end
   end
-end
-
-function GSCheckMacroCreated(SequenceName)
-  local macroIndex = GetMacroIndexByName(SequenceName)
-  if macroIndex and macroIndex ~= 0 then
-    if not GSModifiedSequences[SequenceName] then
-      GSModifiedSequences[SequenceName] = true
-      EditMacro(macroIndex, nil, nil, '#showtooltip\n/click ' .. SequenceName)
-    end
-  else
-    CreateMacro(SequenceName, (GSMasterOptions.setDefaultIconQuestionMark and "INV_MISC_QUESTIONMARK" or icon), '#showtooltip\n/click ' .. SequenceName, GSsetMacroLocation() )
-    GSModifiedSequences[SequenceName] = true
-  end
-
 end

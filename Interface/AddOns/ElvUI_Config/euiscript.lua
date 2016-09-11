@@ -1328,6 +1328,7 @@ E.Options.args.euiscript = {
 			order = 5,
 			type = "group",
 			name = GetSpellInfo(34433) or '?',
+			hidden = function() return class ~= "PRIEST" end,
 			get = function(info) return E.db.euiscript[ info[#info] ] end,
 			set = function(info, value) E.db.euiscript[ info[#info] ] = value; E:StaticPopup_Show("CONFIG_RL") end,
 			args = {
@@ -1544,6 +1545,7 @@ E.Options.args.euiscript = {
 			order = 7,
 			type = 'group',
 			name = GetSpellInfo(119611) or '?',
+			hidden = function() return class ~= 'MONK' end,
 			get = function(info) return E.db.euiscript.wsbutton[ info[#info] ] end,
 			set = function(info, value) E.db.euiscript.wsbutton[ info[#info] ] = value; E:GetModule('WS'):Toggle() end,
 			args = {
@@ -1615,6 +1617,7 @@ E.Options.args.euiscript = {
 			order = 8,
 			type = 'group',
 			name = GetSpellInfo(12654) or '?',
+			hidden = function() return class ~= "MAGE" end,
 			get = function(info) return E.db.euiscript.fsbutton[ info[#info] ] end,
 			set = function(info, value) E.db.euiscript.fsbutton[ info[#info] ] = value; E:GetModule('FireMage'):Toggle() end,
 			args = {
@@ -2519,14 +2522,6 @@ for k, v in pairs(P.euiscript.CharacterStatsList) do
 	E.Options.args.euiscript.args.euiscript_general.args.uiGroup.args.CharacterStatsList.values[k] = L[k]
 end
 
-if class ~= 'MONK' then E.Options.args.euiscript.args.wsbutton = nil; end
-if class ~= 'MAGE' then
-	E.Options.args.euiscript.args.fsbutton = nil;
---	E.Options.args.euiscript.args.shenxian = nil;
-end
-if class ~= 'PRIEST' then E.Options.args.euiscript.args.euiscript_priestpet = nil; end
-if class ~= 'ROGUE' then E.Options.args.euiscript.args.bg = nil; end
-
 UpdateRaidCD_Spell();
 
 local positionValues = {
@@ -3031,7 +3026,6 @@ for k, v in pairs(E.global.InfoFilter.blackList) do
 	E.Options.args.InfoFilter.args.blackList.args.List.values[k] = k
 end
 
-local SequencesMacroName, SequencesMacroText
 E.Options.args.Sequences = {
 	type = "group",
 	name = '|cee880303'.. L['Sequences']..'|r',
@@ -3060,12 +3054,7 @@ E.Options.args.Sequences = {
 			end,
 		},
 	},
-}	
-if E.SequencesmacroList then
-	for name, _ in pairs(E.SequencesmacroList) do
-		E.Options.args.Sequences.args.MacroList.values[name] = name;
-	end
-end
+}
 
 if E.zhlocale then
 	local QASTRING = ''

@@ -60,20 +60,19 @@ end
 
 local time_texture = "|TInterface\\Icons\\spell_holy_borrowedtime:0|t"
 
+local salvage_item = {
+   bag       = 139593,
+   crate     = 114119, -- outdated
+   big_crate = 140590,
+}
+
 local hardcoded_salvage_textures = {
-   [114116] = "Interface\\ICONS\\INV_Misc_Bag_12.blp",
-   [114119] = "Interface\\ICONS\\INV_Crate_01.blp",
-   [114120] = "Interface\\ICONS\\INV_Eng_Crate2.blp",
+   [salvage_item.bag      ] = "Interface\\ICONS\\inv_misc_bag_10_red.blp",
+   [salvage_item.crate    ] = "Interface\\ICONS\\INV_Crate_01.blp",
+   [salvage_item.big_crate] = "Interface\\ICONS\\inv_crate_05.blp",
 }
 local salvage_textures = setmetatable({}, { __index = function(t, key)
-   local item_id
-   if key == "bag" then
-      item_id = 114116
-   elseif key == "crate" then
-      item_id = 114119
-   elseif key == "big_crate" then
-      item_id = 114120
-   end
+   local item_id = salvage_item[key]
 
    if item_id then
       local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(item_id)
@@ -93,10 +92,9 @@ local top_for_mission = {}
 addon_env.top_for_mission = top_for_mission
 addon_env.top_for_mission_dirty = true
 
-local filtered_followers = {
-   [LE_FOLLOWER_TYPE_GARRISON_6_0] = {},
-   [LE_FOLLOWER_TYPE_SHIPYARD_6_2] = {},
-}
+local supported_follower_types = { LE_FOLLOWER_TYPE_GARRISON_6_0, LE_FOLLOWER_TYPE_SHIPYARD_6_2, LE_FOLLOWER_TYPE_GARRISON_7_0 }
+local filtered_followers = {}
+for _, type in pairs(supported_follower_types) do filtered_followers[type] = {} end
 local filtered_followers_dirty = true
 local follower_xp_cap = {}
 
@@ -189,6 +187,8 @@ function event_handlers:ADDON_LOADED(event, addon_loaded)
          ingored_followers = SVPC_GarrisonMissionManager.ingored_followers
       end
       event_frame:UnregisterEvent("ADDON_LOADED")
+   elseif addon_loaded == "Blizzard_OrderHallUI" and addon_env.OrderHallInitUI then
+      addon_env.OrderHallInitUI()
    end
 end
 local loaded, finished = IsAddOnLoaded(addon_name)
@@ -197,6 +197,11 @@ if finished then
 else
    event_frame:RegisterEvent("ADDON_LOADED")
 end
+
+function event_handlers:GARRISON_MISSION_NPC_OPENED()
+   if addon_env.OrderHallInitUI then addon_env.OrderHallInitUI() end
+end
+event_frame:RegisterEvent("GARRISON_MISSION_NPC_OPENED")
 
 local gmm_buttons = {}
 addon_env.gmm_buttons = gmm_buttons
@@ -235,67 +240,69 @@ local function SortFollowersByLevel(a, b)
    return a.iLevel > b.iLevel
 end
 
-local function ParseFollowerData(type_id)
-   local followers = C_Garrison.GetFollowers(type_id)
-
-   local container = filtered_followers[type_id]
-   wipe(container)
-   container.count = 0
-   container.free = 0
-   container.all_maxed = true
-
-   for idx = 1, #followers do
-      local follower = followers[idx]
-      repeat
-         if not follower.isCollected then break end
-
-         if ingored_followers[follower.followerID] then break end
-
-         local type_id = follower.followerTypeID
-
-         local count = container.count count = count + 1 container.count = count
-         container[count] = follower
-
-         local xp_to_level = follower.levelXP
-
-         local status = follower.status
-         if status and status ~= GARRISON_FOLLOWER_IN_PARTY then
-            follower.is_busy_for_mission = true
-         else
-            if xp_to_level ~= 0 then container.all_maxed = nil end
-            container.free = container.free + 1
-         end
-
-         -- How much extra XP follower can gain before becoming maxed out?
-         local xp_cap
-         if xp_to_level == 0 then
-            -- already maxed
-            xp_cap = 0
-         else
-            local quality = follower.quality
-            local level = follower.level
-
-            if quality == 4 and level == GARRISON_FOLLOWER_MAX_LEVEL - 1 then
-               xp_cap = xp_to_level
-            elseif quality == 3 and level == GARRISON_FOLLOWER_MAX_LEVEL then
-               xp_cap = xp_to_level
-            else
-               -- Treat as uncapped. Not exactly true for lv. 98 and lower epics, but will do.
-               xp_cap = 999999
-            end
-         end
-         follower_xp_cap[follower.followerID] = xp_cap
-
-      until true
-   end
-
-   tsort(filtered_followers[type_id], SortFollowersByLevel)
-end
-
 local function GetFilteredFollowers(type_id)
    if filtered_followers_dirty then
-      ParseFollowerData(LE_FOLLOWER_TYPE_GARRISON_6_0)
-      ParseFollowerData(LE_FOLLOWER_TYPE_SHIPYARD_6_2)
+
+      for follower_type_idx = 1, #supported_follower_types do
+         local follower_type = supported_follower_types[follower_type_idx]
+
+         local followers = C_Garrison.GetFollowers(follower_type)
+
+         local container = filtered_followers[follower_type]
+         wipe(container)
+         local count = 0
+         local free = 0
+         local all_maxed = true
+
+         for idx = 1, followers and #followers or 0 do
+            local follower = followers[idx]
+            repeat
+               if not follower.isCollected then break end
+
+               if ingored_followers[follower.followerID] then break end
+
+               count = count + 1
+               container[count] = follower
+
+               local xp_to_level = follower.levelXP
+
+               local status = follower.status
+               if status and status ~= GARRISON_FOLLOWER_IN_PARTY then
+                  follower.is_busy_for_mission = true
+               else
+                  if xp_to_level ~= 0 then all_maxed = nil end
+                  free = free + 1
+               end
+
+               -- How much extra XP follower can gain before becoming maxed out?
+               local xp_cap
+               if xp_to_level == 0 then
+                  -- already maxed
+                  xp_cap = 0
+               else
+                  local quality = follower.quality
+                  local level = follower.level
+
+                  if quality == 4 and level == GARRISON_FOLLOWER_MAX_LEVEL - 1 then
+                     xp_cap = xp_to_level
+                  elseif quality == 3 and level == GARRISON_FOLLOWER_MAX_LEVEL then
+                     xp_cap = xp_to_level
+                  else
+                     -- Treat as uncapped. Not exactly true for lv. 98 and lower epics, but will do.
+                     xp_cap = 999999
+                  end
+               end
+               follower_xp_cap[follower.followerID] = xp_cap
+
+            until true
+         end
+
+         container.count = count
+         container.free = free
+         container.all_maxed = all_maxed
+         container.type = follower_type
+         tsort(container, SortFollowersByLevel)
+      end
 
       -- dump(filtered_followers)
 
@@ -561,14 +568,14 @@ local function GarrisonMissionFrame_SetFollowerPortrait_More(portraitFrame, foll
       boosted = true
    end
 
-   if level == GARRISON_FOLLOWER_MAX_LEVEL then
+   if followerInfo.isMaxLevel then
       local level_border = portraitFrame.LevelBorder
       level_border:SetAtlas("GarrMission_PortraitRing_iLvlBorder")
       level_border:SetWidth(70)
       portraitFrame.Level:SetFormattedText("%s%s %d", (i_level == 675 and not boosted) and maxed_follower_color_code or "", ITEM_LEVEL_ABBR, i_level)
    end
 end
---hooksecurefunc("GarrisonMissionFrame_SetFollowerPortrait", GarrisonMissionFrame_SetFollowerPortrait_More)
+hooksecurefunc("GarrisonMissionPortrait_SetFollowerPortrait", GarrisonMissionFrame_SetFollowerPortrait_More)
 
 local function GarrisonMissionPage_ShowMission_More(self, missionInfo)
    local mission_page
@@ -593,7 +600,6 @@ local function GarrisonMissionPage_ShowMission_More(self, missionInfo)
    BestForCurrentSelectedMission(LE_FOLLOWER_TYPE_GARRISON_6_0, MissionPage, "MissionPage")
 end
 
-local class_based_SetClearFollower = GarrisonMissionFrame and GarrisonMissionFrame.AssignFollowerToMission and GarrisonMissionFrame.RemoveFollowerFromMission and true
 --[[ localized above ]] MissionPage_PartyButtonOnClick = function(self)
    local method_base = self.method_base
    local follower_frames = self.follower_frames
@@ -601,7 +607,7 @@ local class_based_SetClearFollower = GarrisonMissionFrame and GarrisonMissionFra
    if self[1] then
       event_frame:UnregisterEvent("GARRISON_FOLLOWER_LIST_UPDATE")
       for idx = 1, #follower_frames do
-         if class_based_SetClearFollower then method_base:RemoveFollowerFromMission(follower_frames[idx]) else GarrisonMissionPage_ClearFollower(follower_frames[idx]) end
+         method_base:RemoveFollowerFromMission(follower_frames[idx])
       end
 
       for idx = 1, #follower_frames do
@@ -609,17 +615,13 @@ local class_based_SetClearFollower = GarrisonMissionFrame and GarrisonMissionFra
          local follower = self[idx]
          if follower then
             local followerInfo = C_Garrison.GetFollowerInfo(follower)
-            if class_based_SetClearFollower then method_base:AssignFollowerToMission(followerFrame, followerInfo) else GarrisonMissionPage_SetFollower(followerFrame, followerInfo) end
+            method_base:AssignFollowerToMission(followerFrame, followerInfo)
          end
       end
       event_frame:RegisterEvent("GARRISON_FOLLOWER_LIST_UPDATE")
    end
 
-   if GarrisonFollowerMission_class_UpdateMissionParty then
-      method_base:UpdateMissionParty(follower_frames)
-   else
-      GarrisonMissionPage_UpdateMissionForParty()
-   end
+   method_base:UpdateMissionParty(follower_frames)
 end
 
 local function MissionList_PartyButtonOnClick(self)
@@ -775,7 +777,7 @@ local function GarrisonMissionList_Update_More()
       After(0.001, GarrisonMissionList_Update_More)
    end
 end
---hooksecurefunc("GarrisonMissionList_Update", GarrisonMissionList_Update_More)
+hooksecurefunc(GarrisonMissionFrame.MissionTab.MissionList,            "Update", GarrisonMissionList_Update_More)
 hooksecurefunc(GarrisonMissionFrame.MissionTab.MissionList.listScroll, "update", GarrisonMissionList_Update_More)
 
 addon_env.HideGameTooltip = GameTooltip_Hide or function() return GameTooltip:Hide() end
@@ -790,11 +792,15 @@ addon_env.MissionPage_ButtonsInit = function(button_prefix, parent_frame)
          local name = button_prefix .. suffix .. idx
          if not gmm_buttons[name] then
             local set_followers_button = CreateFrame("Button", nil, parent_frame, "UIPanelButtonTemplate")
+            -- TODO: all this stuff should be given to this function as args, not hardcoded
             -- Ugly, but I can't just parent to BorderFrame - buttons would be visible even on map screen
+            set_followers_button:SetFrameLevel(set_followers_button:GetFrameLevel() + 4)
             if button_prefix == "ShipyardMissionPage" then
-               set_followers_button:SetFrameLevel(set_followers_button:GetFrameLevel() + 4)
                set_followers_button.method_base = GarrisonShipyardFrame
                set_followers_button.follower_frames = GarrisonShipyardFrame.MissionTab.MissionPage.Followers
+            elseif button_prefix == "OrderHallMissionPage" then
+               set_followers_button.method_base = OrderHallMissionFrame
+               set_followers_button.follower_frames = OrderHallMissionFrame.MissionTab.MissionPage.Followers
             else
                set_followers_button.method_base = GarrisonMissionFrame
                set_followers_button.follower_frames = MissionPage.Followers
@@ -922,9 +928,7 @@ end
 addon_env.MissionPage_ButtonsInit("MissionPage", MissionPage)
 MissionList_ButtonsInit()
 MissionPage_WarningInit()
-PostHookFunctionOrClass("GarrisonMissionPage_ShowMission", "GarrisonMissionFrame", "ShowMission", GarrisonMissionPage_ShowMission_More)
--- local count = 0
--- hooksecurefunc("GarrisonFollowerList_UpdateFollowers", function(self) count = count + 1 print("GarrisonFollowerList_UpdateFollowers", count, self:GetName(), self:GetParent():GetName()) end)
+hooksecurefunc(GarrisonMissionFrame, "ShowMission", GarrisonMissionPage_ShowMission_More)
 
 local info_ignore_toggle = {
    notCheckable = true,
@@ -937,7 +941,7 @@ local info_ignore_toggle = {
       addon_env.top_for_mission_dirty = true
       filtered_followers_dirty = true
       if GarrisonMissionFrame:IsShown() then
-         GarrisonFollowerList_UpdateFollowers(GarrisonMissionFrame.FollowerList)
+         GarrisonMissionFrame.FollowerList:UpdateFollowers()
          if MissionPage.missionInfo then
             BestForCurrentSelectedMission()
          end
@@ -969,13 +973,12 @@ hooksecurefunc(GarrisonFollowerOptionDropDown, "initialize", function(self)
    end
 end)
 
-local GarrisonFollowerList_Update_More_need_parent
 local function GarrisonFollowerList_Update_More(self)
    -- Somehow Blizzard UI insists on updating hidden frames AND explicitly updates them OnShow.
    --  Following suit is just a waste of CPU, so we'll update only when frame is actually visible.
    if not self:IsVisible() then return end
 
-   local followerFrame = GarrisonFollowerList_Update_More_need_parent and self:GetParent() or self
+   local followerFrame = self:GetParent()
    local followers = followerFrame.FollowerList.followers
    local followersList = followerFrame.FollowerList.followersList
    local numFollowers = #followersList
@@ -989,34 +992,43 @@ local function GarrisonFollowerList_Update_More(self)
       local index = offset + i
 
       local show_ilevel
-      local portrait_frame = button.PortraitFrame
-      local level_border = portrait_frame and portrait_frame.LevelBorder
+      local follower_frame = button.Follower
+      local portrait_frame = follower_frame.PortraitFrame
+      local level_border = portrait_frame.LevelBorder
 
       if ( index <= numFollowers ) then
          local follower = followers[followersList[index]]
          if ( follower.isCollected ) then
             if ingored_followers[follower.followerID] then
-               button.BusyFrame:Show()
-               button.BusyFrame.Texture:SetTexture(0.5, 0, 0, 0.3)
+               local BusyFrame = follower_frame.BusyFrame
+               BusyFrame.Texture:SetColorTexture(0.5, 0, 0, 0.3)
+               BusyFrame:Show()
             end
 
             if follower.level == GARRISON_FOLLOWER_MAX_LEVEL then
-            --   level_border:SetAtlas("GarrMission_PortraitRing_iLvlBorder")
-            --   level_border:SetWidth(70)
+               level_border:SetAtlas("GarrMission_PortraitRing_iLvlBorder")
+               level_border:SetWidth(70)
                local i_level = follower.iLevel
-            --   portrait_frame.Level:SetFormattedText("%s%s %d", i_level == 675 and maxed_follower_color_code or "", ITEM_LEVEL_ABBR, i_level)
-            --   button.ILevel:SetText(nil)
+               portrait_frame.Level:SetFormattedText("%s%s %d", i_level == 675 and maxed_follower_color_code or "", ITEM_LEVEL_ABBR, i_level)
+               follower_frame.ILevel:SetText(nil)
                show_ilevel = true
             end
          end
       end
       if not show_ilevel then
-      --   level_border:SetAtlas("GarrMission_PortraitRing_LevelBorder")
-      --   level_border:SetWidth(58)
+         level_border:SetAtlas("GarrMission_PortraitRing_LevelBorder")
+         level_border:SetWidth(58)
       end
    end
 end
-GarrisonFollowerList_Update_More_need_parent = PostHookFunctionOrClass("GarrisonFollowerList_Update", GarrisonMissionFrame.FollowerList, "UpdateData", GarrisonFollowerList_Update_More)
+hooksecurefunc(GarrisonMissionFrame.FollowerList, "UpdateData", GarrisonFollowerList_Update_More)
+
+GarrisonLandingPageMinimapButton:HookScript("OnClick", function(self, button, down)
+   if not (button == "RightButton" and not down) then return end
+   HideUIPanel(GarrisonLandingPage)
+   ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0)
+end)
+GarrisonLandingPageMinimapButton:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 
 gmm_buttons.StartMission = MissionPage.StartMissionButton
 

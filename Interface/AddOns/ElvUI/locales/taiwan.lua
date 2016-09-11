@@ -31,16 +31,22 @@ L["Select the type of aura system you want to use with ElvUI's unitframes. The i
 L["If you have an icon or aurabar that you don't want to display simply hold down shift and right click the icon for it to disapear."] = "'圖示' 模式將禁用光環條模組,啟用單位框體玩家框體和目標框體自身的BUFF和DEBUFF";
 L["Aura Watch module"] = "'技能監視' 模式將禁用光環條模組,啟用技能監視模組,需要重載介面以生效";
 L["|cffff0000Error -- Addon 'ElvUI_Config' not found or is disabled.|r"] = "|cffff0000錯誤 -- 插件EUI設置界面沒有發現或被禁用.|r"
-
+L["Send ADDON_ACTION_BLOCKED errors to the Lua Error frame. These errors are less important in most cases and will not effect your game performance. Also a lot of these errors cannot be fixed. Please only report these errors if you notice a Defect in gameplay."] = "發送ADDON_ACTION_BLOCKED錯誤至Lua錯誤框, 這些錯誤並不重要, 不會影響你的遊戲體驗. 並且很多這類錯誤無法被修復. 請只將影響遊戲體驗的錯誤發送給我們."
+L["Automatically vendor gray items when visiting a vendor."] = "當訪問商人時自動出售灰色物品."
+L["Disables the tutorial button found on some frames."] = "禁用部分框體上的教程按鈕"
+L["Order Hall Command Bar"] = "職業大廳命令條";
 L["DataBars"] = "聲望經驗條"
+L["Current - Remaining"] = "當前值 - 剩餘值";
+L["Direction the bar moves on gains/losses"] = "狀態條的延展方向,你仍需手工調整長寬值";
 L["Artifact"] = "神器"
 L["Artifact Bar"] = "神器條"
 L["Hide At Max Level"] = "在最高等級時隱藏"
 L["Animate Config"] = "動畫設置"
 L["DATABAR_DESC"] = "設置聲望、經驗等資料條"
+L["Enable + Adjust Movers"] = "啟用+調整移動";
 
 L["Thin Border Theme"] = "瘦邊框主題"
-L["The Thin Border Theme option will change the overall apperance of your UI. Using Thin Border Theme is a slight performance increase over the traditional layout."] = true;
+L["The Thin Border Theme option will change the overall apperance of your UI. Using Thin Border Theme is a slight performance increase over the traditional layout."] = "細邊框主題(圖元主題)會改變所有的外觀,使用細邊框主題會略微提升性能";
 L["Statusbar Fill Orientation"] = "狀態條填充方向";
 L["Lowest Allowed UI Scale"] = "最低允許的UI縮放比例";
 L["Disable Tutorial Buttons"] = "禁用教程按鈕"
@@ -239,10 +245,10 @@ do
 	L['Announce when you interrupt a spell to the specified chat channel.'] = "在指定頻道通報技能打斷資訊";	
 	L["DESC_MOVERCONFIG"] = [=[解除框架移動鎖定. 現在可以移動它們, 移好後請點擊「鎖定」.
 
-	選項:
-	  Shift + 右擊 - 臨時隱藏移動框.
-	  Ctrl + 右擊 - 重置為默認位置.
-	]=]
+選項:
+Shift + 右擊 - 臨時隱藏移動框.
+Ctrl + 右擊 - 重置為默認位置.
+]=]
 	L['Lock'] = "鎖定";	
 	L["This can't be right, you must of broke something! Please turn on lua errors and report the issue to Elv http://www.tukui.org/forums/forum.php?id=146"] = "請到介面幫助裏打開顯示LUA錯誤,並把錯誤報告給我 http://www.eui.cc";
 	
@@ -436,6 +442,10 @@ end
 
 --NamePlate Config
 do
+	L["Clickable Height"] = "可點擊高度";
+	L["Clickable Width"] = "可點擊寬度";
+	L["Controls how big of an area on the screen will accept clicks to target unit."] = "控制螢幕上多大的區域可以點擊到目標單位";
+	L["Elite Icon"] = "稀有圖示"
 	L["Show NPC Titles"] = "顯示NPC頭銜"
 	L["Display Minions"] = "顯示守護者"
 	L["Display Minor Units"] = "顯示守護者單位"
@@ -457,7 +467,9 @@ do
 	L["Toggle Off While In Combat"] = "關閉當進入戰鬥時";
 	L["Toggle On While In Combat"] = "打開當進入戰鬥時";
 	L["Only Show Target"] = "只顯示目標";
-	L["Only show a nameplate for the unit you have targetted."] = "只顯示你當前目標單位的姓名版";
+	L["Controls which nameplates will be displayed."] = "控制哪些姓名版將被顯昧";
+	L["Display Style"] = "顯示樣式";
+	L["Target, Quest, Combat"] = "目標, 任務, 戰鬥";
 	L["Target Scale"] = "目標縮放";
 	L["Scale of the nameplate that is targetted."] = "縮放當前目標的姓名版";
 	L["Non-Target Transparency"] = "非目標透明";
@@ -669,6 +681,10 @@ end
 
 --ACTIONBARS
 do
+	L["Color of the actionbutton when not usable."] = "當按鈕不可使用時的顏色";
+	L["Color of the actionbutton when usable."] = "當按鈕可以使用時的顏色";
+	L["Not Usable"] = "不可用";
+	L["Usable"] = "可用";
 	L["Hide Cooldown Bling"] = "隱藏冷卻閃光";
 	L["Hides the bling animation on buttons at the end of the global cooldown."] = "隱藏冷卻動畫結束時的閃光.";
 	L["Allow Masque to handle the skinning of this element."] = "允許Masque美化此部件";
@@ -1403,6 +1419,8 @@ end
 
 --Datatext
 do
+	L["Displayed Currency"] = "顯示貨幣";
+	L["Orderhall"] = "職業大廳資源";
 	L["Gold:"] = "金幣:";
 	L["Small Panels"] = "小型面板";
 	L["BottomMiniPanel"] = "小地圖底部";
@@ -1755,6 +1773,7 @@ do
 	L["LF Guild Frame"] = "尋求公會"
 	L["Stable"] = "獸欄"
 	L["TalkingHead"] = "特寫框體"
+	L["Talking Head Frame"] = "特寫框體"
 	L["AddOn Manager"] = "挿件管理";
 	L["Mirror Timers"] = "鏡像時間";
 	L["Death Recap"] = '死亡摘要';
@@ -1868,6 +1887,14 @@ end
 
 --Bags
 do
+	L["Temporary Move"] = '移動背包';
+	L["Hold Control + Right Click:"] = '按住 Ctrl 並按滑鼠右鍵：'
+	L["Reset Position"] = "重設位置"
+	L["Bag Mover (Grow Down)"] = "背包移動(向下延展)";
+	L["Bag Mover (Grow Up)"] = "背包移動(向上延展)";
+	L["Bag Mover"] = "背包移動";
+	L["Bank Mover (Grow Down)"] = "銀行移動(向下延展)";
+	L["Bank Mover (Grow Up)"] = "銀行移動(向上延展)";
 	L["Icons and Text (Short)"] = "圖標和文字(短)";
 	L['Display the tag is itemlevel less than value'] = '物品等級小於指定數值時顯示標記';
 	L['Set to 0 to disable.'] = '設置爲0則禁用.';
@@ -1875,30 +1902,35 @@ do
 	L['asterisk'] = '星號';
 	L['number'] = '數值';
 	L["Search Syntax"] = '搜索語法';
-	L["SEARCH_SYNTAX_DESC"] = [=[With the new addition of LibItemSearch, you now have access to much more advanced item searches. The following is a documentation of the search syntax. See the full explanation at: https://github.com/Jaliborc/LibItemSearch-1.2/wiki/Search-Syntax.
+L["SEARCH_SYNTAX_DESC"] = [=[With the new addition of LibItemSearch, you now have access to much more advanced item searches. The following is a documentation of the search syntax. See the full explanation at: https://github.com/Jaliborc/LibItemSearch-1.2/wiki/Search-Syntax.
 
-	Specific Searching:
-		• q:[quality] or quality:[quality]. For instance, q:epic will find all epic items.
-		• l:[level], lvl:[level] or level:[level]. For example, l:30 will find all items with level 30.
-		• t:[search], type:[search] or slot:[search]. For instance, t:weapon will find all weapons.
-		• n:[name] or name:[name]. For instance, typing n:muffins will find all items with names containing "muffins".
-		• s:[set] or set:[set]. For example, s:fire will find all items in equipment sets you have with names that start with fire.
-		• tt:[search], tip:[search] or tooltip:[search]. For instance, tt:binds will find all items that can be bound to account, on equip, or on pickup.
-
-		
-	Search Operators:
-		• ! : Negates a search. For example, !q:epic will find all items that are NOT epic.
-		• | : Joins two searches. Typing q:epic | t:weapon will find all items that are either epic OR weapons.
-		• & : Intersects two searches. For instance, q:epic & t:weapon will find all items that are epic AND weapons
-		• >, <, <=, => : Performs comparisons on numerical searches. For example, typing lvl: >30 will find all items with level HIGHER than 30.
+Specific Searching:
+    • q:[quality] or quality:[quality]. For instance, q:epic will find all epic items.
+    • l:[level], lvl:[level] or level:[level]. For example, l:30 will find all items with level 30.
+    • t:[search], type:[search] or slot:[search]. For instance, t:weapon will find all weapons.
+    • n:[name] or name:[name]. For instance, typing n:muffins will find all items with names containing "muffins".
+    • s:[set] or set:[set]. For example, s:fire will find all items in equipment sets you have with names that start with fire.
+    • tt:[search], tip:[search] or tooltip:[search]. For instance, tt:binds will find all items that can be bound to account, on equip, or on pickup.
 
 
-	The following search keywords can also be used:
-		• soulbound, bound, bop : Bind on pickup items.
-		• bou : Bind on use items.
-		• boe : Bind on equip items.
-		• boa : Bind on account items.
-		• quest : Quest bound items.]=];
+Search Operators:
+    • ! : Negates a search. For example, !q:epic will find all items that are NOT epic.
+    • | : Joins two searches. Typing q:epic | t:weapon will find all items that are either epic OR weapons.
+    • & : Intersects two searches. For instance, q:epic & t:weapon will find all items that are epic AND weapons
+    • >, <, <=, => : Performs comparisons on numerical searches. For example, typing lvl: >30 will find all items with level HIGHER than 30.
+
+
+The following search keywords can also be used:
+    • soulbound, bound, bop : Bind on pickup items.
+    • bou : Bind on use items.
+    • boe : Bind on equip items.
+    • boa : Bind on account items.
+    • quest : Quest bound items.
+    • reagents, reagent, crafting : Profession reagents.
+    • naval : Naval equipment.
+    • follower, followe, follow : Follower items.
+    • relic, reli, rel : Artifact Relics.
+    • power, powe, pow : Items granting Artifact Power.]=];
 	L['Deposit Reagents'] = '整理材料包';
 	L['Show/Hide Reagents'] = '顯示/隱藏 材料包';
 	L["Reagent Bank"] = '材料銀行';
@@ -2638,14 +2670,15 @@ do
 	L["Displays item level on equippable items."] = "在可穿戴的物品上顯示物品等級";
 	L["Item Level Threshold"] = "物品等級閥值";
 	L["The minimum item level required for it to be shown."] = "大於此閥值的物品等級將被顯示";
-	L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a comma."] = "在這個清單中的任何蒐索語法査詢匹配的項目都將被忽略.用逗號分隔每個物品."
+	L["Bag Sorting"] = "背包排序";
+	L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a semicolon ;."] = "在這個清單中的任何蒐索語法査詢匹配的項目都將被忽略.用分號分隔每個物品."
 	L["IGNORE_ITEMS_DESC"] = [=[有效的條目：
-	物品連結或物品名稱
-	蒐索語法舉例.如：
-	q:epic
-	s:Tank Set
-	q:epic&lvl:>300
-	看"背包->蒐索語法"可得到更多幫助.]=];
+物品連結或物品名稱
+蒐索語法舉例.如：
+q:epic
+s:Tank Set
+q:epic&lvl:>300
+看"背包->蒐索語法"可得到更多幫助.]=];
 	L['BAGS_DESC'] = '調整EUI背包設置. 左鍵移動';
 	L['Bag Columns'] = '背包列數';
 	L['Number of columns (width) of bags. Set it to 0 to match the width of the chat panels.'] = '背包列數(寬度), 設為0自動匹配右聊天框寬度.';

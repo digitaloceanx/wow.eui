@@ -1,10 +1,9 @@
 local _, ns = ...
 local oUF = ns.oUF or oUF
 assert(oUF, 'oUF not loaded')
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
+
 local IsInInstance = IsInInstance
-local GetNumArenaOpponentSpecs = GetNumArenaOpponentSpecs
+local UnitCanAttack = UnitCanAttack
 
 local UpdateTarget = function(self)
 	local _, instanceType = IsInInstance();
@@ -14,16 +13,27 @@ local UpdateTarget = function(self)
 		local ID = self.unit:match('arena(%d)') or self:GetID() or 0
 		local unit = 'arena'..tostring(ID)..'target'
 		local _, targetClass = UnitClass(unit)
-		if targetClass then
-			targetIcon.Icon:SetTexture("Interface\\TARGETINGFRAME\\UI-CLASSES-CIRCLES.BLP")
-			targetIcon.Icon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[targetClass]))
-			targetIcon.Name:SetText(UnitName(unit))
-			targetIcon:Show()
+		if targetIcon.showEnemy then
+			if targetClass and (not UnitCanAttack("player", unit)) then
+				targetIcon.Icon:SetTexture("Interface\\TARGETINGFRAME\\UI-CLASSES-CIRCLES.BLP")
+				targetIcon.Icon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[targetClass]))
+				targetIcon.Name:SetText(UnitName(unit))
+				targetIcon:Show()
+			else
+				targetIcon:Hide()
+			end
 		else
-			targetIcon:Hide()
+			if targetClass then
+				targetIcon.Icon:SetTexture("Interface\\TARGETINGFRAME\\UI-CLASSES-CIRCLES.BLP")
+				targetIcon.Icon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[targetClass]))
+				targetIcon.Name:SetText(UnitName(unit))
+				targetIcon:Show()
+			else
+				targetIcon:Hide()
+			end
 		end
 	else
-		self:SetScript('OnUpdate', nil)
+		targetIcon:Hide()
 	end
 end
 
@@ -64,7 +74,7 @@ end
 local Disable = function(self)
 	local targetIcon = self.ArenaTargetIcon
 	if targetIcon then
-		self:UnregisterEvent("PLAYER_TARGET_CHANGED", Update)
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD", Update)
 		self:UnregisterEvent("ARENA_OPPONENT_UPDATE", Update)
 		self:SetScript('OnUpdate', nil)		
 		targetIcon:Hide()

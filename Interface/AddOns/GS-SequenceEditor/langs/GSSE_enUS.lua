@@ -25,15 +25,19 @@ L["SequenceSpecID: "] = true
 L["No Sequence Icon setting to "] = true
 L["No value"] = true
 L["Setting Editor clean "] = true
+L[" not added to list."] = true
 
 --sequence editor stuff
 L["Sequence"] = true
-L["Create / Edit"] = true
+L["Edit"] = true
+L["New"] = true
 L["Choose Language"] = true
 L["Translated Sequence"] = true
 L["Sequence Viewer"] = true
 L["Gnome Sequencer: Sequence Viewer"] = true
 L["Load Sequence"] = true
+L["Disable Sequence"] = true
+L["Enable Sequence"] = true
 L["Translate to"] = true
 L["Sequence Editor"] = true
 L["Gnome Sequencer: Sequence Editor. Press the Close button to Save -->"] = true
@@ -47,16 +51,16 @@ L["Macro Icon"] = true
 L["PreMacro"] = true
 L["PostMacro"] = true
 L["Completely New GS Macro."] = true
-L[":|r Please wait till you have left combat before using the Sequence Editor."] = true
-L[":|r The Sequence Editor is an addon for GnomeSequencer-Enhanced that allows you to view and edit Sequences in game.  Type "] = true
+L["Please wait till you have left combat before using the Sequence Editor."] = true
+L["The Sequence Editor is an addon for GnomeSequencer-Enhanced that allows you to view and edit Sequences in game.  Type "] = true
 L["/gsse |r to get started."] = true
 L["Gnome Sequencer: Sequence Version Manager"] = true
 L["Manage Versions"] = true
 L["Active Version: "] = true
-L["Other Versions"] = true
+L["Select Other Version"] = true
 L["Make Active"] = true
 L["Delete Version"] = true
-L[":|rNo Sequences present so none displayed in the list."] = true
+L["No Sequences present so none displayed in the list."] = true
 L["Specialisation / Class ID"] = true
 -- options Debug
 
@@ -99,6 +103,8 @@ L["Use Second Trinket in Postmacro"] = true
 L["Incorporate the second trinket slot into the PostMacro. This is the equivalent of /use [combat] 14 in a PostMacro."] = true
 L["Use Neck Item in Postmacro"] = true
 L["Incorporate the neck slot into the PostMacro. This is the equivalent of /use [combat] 2 in a PostMacro."] = true
+L["Use Belt Item in Postmacro"] = true
+L["Incorporate the belt slot into the PostMacro. This is the equivalent of /use [combat] 5 in a PostMacro."] = true
 L["Debug Mode Options"] = true
 L["Enable Mod Debug Mode"] = true
 L["This option dumps extra trace information to your chat window to help troubleshoot problems with the mod"] = true
@@ -157,6 +163,14 @@ L["This will display debug messages for the GS-E Translator"] = true
 L["Debug"] = true
 L["Filter Macro Selection"] = true
 L["Show All Macros in Editor"] = true
- L["By setting this value the Sequence Editor will show every macro for every class."] = true
- L["Show Class Macros in Editor"] = true
- L["By setting this value the Sequence Editor will show every macro for your class."] = true
+L["By setting this value the Sequence Editor will show every macro for every class."] = true
+L["Show Class Macros in Editor"] = true
+L["By setting this value the Sequence Editor will show every macro for your class."] = true
+L["Source Language "] = true
+L[" is not available.  Unable to translate sequence "] = true
+L["Target language "] = true
+
+
+-- Transmission stuff
+L["GS-E is out of date. You can download the newest version from https://mods.curse.com/addons/wow/gnomesequencer-enhanced."] = true
+L["This will display debug messages for the GS-E Ingame Transmission and transfer"] = true

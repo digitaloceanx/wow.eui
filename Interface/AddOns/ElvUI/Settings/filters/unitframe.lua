@@ -591,7 +591,6 @@ G.unitframe.aurafilters['RaidDebuffs'] = {
 				[170395] = Defaults(), --Sorka Sprey
 				[170405] = Defaults(), --Maraks Blood Calling
 				[158692] = Defaults(), --Deadly Throw
-				[158702] = Defaults(), --Fixate
 				[158686] = Defaults(), --Expose Armor
 				[158683] = Defaults(), --Corrupted Blood
 				[159585] = Defaults(), --Deploy Turret
@@ -1017,7 +1016,7 @@ G.unitframe.ChannelTicks = {
 	[SpellName(689)] = 6, -- "Drain Life"
 	[SpellName(198590)] = 6, -- "Drain Soul"
 	-- [SpellName(108371)] = 6, -- "Harvest Life"
-	[SpellName(5740)] = 4, -- "Rain of Fire"
+--	[SpellName(5740)] = 4, -- "Rain of Fire"
 	[SpellName(755)] = 6, -- Health Funnel
 	-- [SpellName(103103)] = 4, --Malefic Grasp
 	--Druid

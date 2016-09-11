@@ -545,9 +545,12 @@ function GearStatsSummary_Sum(inspecting, tipUnit)
 			if quality then
 				r, g, b = GetItemQualityColor(quality);
 			end
-			
+
 			--[[# 2 - Uncommon # 3 - Rare # 4 - Epic # 5 - Legendary # 7 Account]]
 			if quality and (quality >=2 and quality <=7) then
+				if quality == 6 and iLevel == 750 and (i == 16 or i == 17) then
+					iLevel = ScanItemTooltip(GetInventoryItemLink(unit, i == 16 and 17 or 16))
+				end
 				sum["ITEMCOUNT"..quality] = (sum["ITEMCOUNT"..quality] or 0) + 1;
 				sum["ITEMLEVEL"..quality] = (sum["ITEMLEVEL"..quality] or 0) + iLevel;
 				sum["ItemLink"][i] = "["..iLevel.."]"..ElvUI[1]:RGBToHex(r,g,b).."["..itemName.."]|r";

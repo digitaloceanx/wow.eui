@@ -44,13 +44,19 @@ E.Options.args.databars = {
 					name = L["Hide In Vehicle"],
 					set = function(info, value) mod.db.experience[ info[#info] ] = value; mod:UpdateExperience() end,
 				},
-				reverseFill = {
+				hideInCombat = {
 					order = 4,
+					type = "toggle",
+					name = L["Combat Hide"],
+					set = function(info, value) mod.db.experience[ info[#info] ] = value; mod:UpdateExperience() end,
+				},
+				reverseFill = {
+					order = 5,
 					type = "toggle",
 					name = L["Reverse Fill Direction"],
 				},
 				orientation = {
-					order = 5,
+					order = 6,
 					type = "select",
 					name = L["Statusbar Fill Orientation"],
 					desc = L["Direction the bar moves on gains/losses"],
@@ -60,32 +66,35 @@ E.Options.args.databars = {
 					}
 				},
 				width = {
-					order = 6,
+					order = 7,
 					type = "range",
 					name = L["Width"],
 					min = 5, max = ceil(GetScreenWidth() or 800), step = 1,
 				},
 				height = {
-					order = 7,
+					order = 8,
 					type = "range",
 					name = L["Height"],
 					min = 5, max = ceil(GetScreenHeight() or 800), step = 1,
 				},
 				textSize = {
-					order = 8,
+					order = 9,
 					name = L["Font Size"],
 					type = "range",
 					min = 6, max = 22, step = 1,
 				},
 				textFormat = {
-					order = 9,
+					order = 10,
 					type = 'select',
 					name = L["Text Format"],
 					values = {
 						NONE = NONE,
 						PERCENT = L["Percent"],
+						CUR = L["Current"],
+						REM = L["Remaining"],
 						CURMAX = L["Current - Max"],
 						CURPERC = L["Current - Percent"],
+						CURREM = L["Current - Remaining"],
 					},
 					set = function(info, value) mod.db.experience[ info[#info] ] = value; mod:UpdateExperience() end,
 				},
@@ -115,13 +124,19 @@ E.Options.args.databars = {
 					name = L["Hide In Vehicle"],
 					set = function(info, value) mod.db.reputation[ info[#info] ] = value; mod:UpdateReputation() end,
 				},
-				reverseFill = {
+				hideInCombat = {
 					order = 3,
+					type = "toggle",
+					name = L["Combat Hide"],
+					set = function(info, value) mod.db.reputation[ info[#info] ] = value; mod:UpdateReputation() end,
+				},
+				reverseFill = {
+					order = 4,
 					type = "toggle",
 					name = L["Reverse Fill Direction"],
 				},
 				orientation = {
-					order = 4,
+					order = 5,
 					type = "select",
 					name = L["Statusbar Fill Orientation"],
 					desc = L["Direction the bar moves on gains/losses"],
@@ -131,31 +146,34 @@ E.Options.args.databars = {
 					}
 				},
 				textFormat = {
-					order = 5,
+					order = 6,
 					type = 'select',
 					name = L["Text Format"],
 					values = {
 						NONE = NONE,
 						PERCENT = L["Percent"],
+						CUR = L["Current"],
+						REM = L["Remaining"],
 						CURMAX = L["Current - Max"],
 						CURPERC = L["Current - Percent"],
+						CURREM = L["Current - Remaining"],
 					},
 					set = function(info, value) mod.db.reputation[ info[#info] ] = value; mod:UpdateReputation() end,
 				},
 				width = {
-					order = 6,
+					order = 7,
 					type = "range",
 					name = L["Width"],
 					min = 5, max = ceil(GetScreenWidth() or 800), step = 1,
 				},
 				height = {
-					order = 7,
+					order = 8,
 					type = "range",
 					name = L["Height"],
 					min = 5, max = ceil(GetScreenHeight() or 800), step = 1,
 				},
 				textSize = {
-					order = 8,
+					order = 9,
 					name = L["Font Size"],
 					type = "range",
 					min = 6, max = 22, step = 1,
@@ -181,9 +199,15 @@ E.Options.args.databars = {
 					name = L["Mouseover"],
 				},
 				hideInVehicle = {
-					order = 3,
+					order = 2,
 					type = "toggle",
 					name = L["Hide In Vehicle"],
+					set = function(info, value) mod.db.artifact[ info[#info] ] = value; mod:UpdateArtifact() end,
+				},
+				hideInCombat = {
+					order = 3,
+					type = "toggle",
+					name = L["Combat Hide"],
 					set = function(info, value) mod.db.artifact[ info[#info] ] = value; mod:UpdateArtifact() end,
 				},
 				reverseFill = {
@@ -226,8 +250,11 @@ E.Options.args.databars = {
 					values = {
 						NONE = NONE,
 						PERCENT = L["Percent"],
+						CUR = L["Current"],
+						REM = L["Remaining"],
 						CURMAX = L["Current - Max"],
 						CURPERC = L["Current - Percent"],
+						CURREM = L["Current - Remaining"],
 					},
 					set = function(info, value) mod.db.artifact[ info[#info] ] = value; mod:UpdateArtifact() end,
 				},
@@ -263,13 +290,19 @@ E.Options.args.databars = {
 					name = L["Hide In Vehicle"],
 					set = function(info, value) mod.db.honor[ info[#info] ] = value; mod:UpdateHonor() end,
 				},
-				reverseFill = {
+				hideInCombat = {
 					order = 4,
+					type = "toggle",
+					name = L["Combat Hide"],
+					set = function(info, value) mod.db.honor[ info[#info] ] = value; mod:UpdateHonor() end,
+				},
+				reverseFill = {
+					order = 5,
 					type = "toggle",
 					name = L["Reverse Fill Direction"],
 				},
 				orientation = {
-					order = 5,
+					order = 6,
 					type = "select",
 					name = L["Statusbar Fill Orientation"],
 					desc = L["Direction the bar moves on gains/losses"],
@@ -279,32 +312,35 @@ E.Options.args.databars = {
 					}
 				},
 				width = {
-					order = 6,
+					order = 7,
 					type = "range",
 					name = L["Width"],
 					min = 5, max = ceil(GetScreenWidth() or 800), step = 1,
 				},
 				height = {
-					order = 7,
+					order = 8,
 					type = "range",
 					name = L["Height"],
 					min = 5, max = ceil(GetScreenHeight() or 800), step = 1,
 				},
 				textSize = {
-					order = 8,
+					order = 9,
 					name = L["Font Size"],
 					type = "range",
 					min = 6, max = 22, step = 1,
 				},
 				textFormat = {
-					order = 9,
+					order = 10,
 					type = 'select',
 					name = L["Text Format"],
 					values = {
 						NONE = NONE,
 						PERCENT = L["Percent"],
+						CUR = L["Current"],
+						REM = L["Remaining"],
 						CURMAX = L["Current - Max"],
 						CURPERC = L["Current - Percent"],
+						CURREM = L["Current - Remaining"],
 					},
 					set = function(info, value) mod.db.honor[ info[#info] ] = value; mod:UpdateHonor() end,
 				},

@@ -16,12 +16,12 @@ function GSTRListCachedLanguages()
   return t
 end
 
-function GSTranslateSequence(sequence)
+function GSTranslateSequence(sequence, sequenceName)
 
   if not GSisEmpty(sequence) then
     if (GSisEmpty(sequence.lang) and "enUS" or sequence.lang) ~= locale then
       --GSPrintDebugMessage((GSisEmpty(sequence.lang) and "enUS" or sequence.lang) .. " ~=" .. locale, GNOME)
-      return GSTranslateSequenceFromTo(sequence, (GSisEmpty(sequence.lang) and "enUS" or sequence.lang), locale)
+      return GSTranslateSequenceFromTo(sequence, (GSisEmpty(sequence.lang) and "enUS" or sequence.lang), locale, sequenceName)
     else
       GSPrintDebugMessage((GSisEmpty(sequence.lang) and "enUS" or sequence.lang) .. " ==" .. locale, GNOME)
       return sequence
@@ -29,8 +29,20 @@ function GSTranslateSequence(sequence)
   end
 end
 
-function GSTranslateSequenceFromTo(sequence, fromLocale, toLocale)
+function GSTranslateSequenceFromTo(sequence, fromLocale, toLocale, sequenceName)
   GSPrintDebugMessage("GSTranslateSequenceFromTo  From: " .. fromLocale .. " To: " .. toLocale, GNOME)
+  -- check if fromLocale exists
+  if GSisEmpty(GSAvailableLanguages[GSTRStaticKey][fromLocale]) then
+    GSPrint(L["Source Language "] .. fromLocale .. L[" is not available.  Unable to translate sequence "] ..  sequenceName)
+    return sequence
+  end
+  if GSisEmpty(GSAvailableLanguages[GSTRStaticKey][fromLocale]) then
+    GSPrint(L["Target language "] .. fromLocale .. L[" is not available.  Unable to translate sequence "] ..  sequenceName)
+    return sequence
+  end
+
+
+
   local lines = table.concat(sequence,"\n")
   GSPrintDebugMessage("lines: " .. lines, GNOME)
 
@@ -166,8 +178,8 @@ function GSTRTranslateSpell(str, fromLocale, toLocale, cleanNewLines)
       -- try the shadow table
       local foundspell = language[GSTRStaticShadow][fromLocale][string.lower(etc)]
       if foundspell then
-        GSPrintDebugMessage("Translating from the shadow table for  Spell ID : " .. foundspell .. " to " .. language[GSTRStaticKey][toLocale][foundspell], GNOME)
-        output = output  .. GSMasterOptions.KEYWORD .. language[GSTRStaticKey][toLocale][foundspell] .. GSStaticStringRESET
+		GSPrintDebugMessage("Translating from the shadow table for  Spell ID : " .. foundspell .. " to " .. (language[GSTRStaticKey][toLocale][foundspell] or ""), GNOME) --by eui.cc language[GSTRStaticKey][toLocale][foundspell] = nil
+        output = output  .. GSMasterOptions.KEYWORD .. (language[GSTRStaticKey][toLocale][foundspell] or "") .. GSStaticStringRESET
         found = true
       else
         GSPrintDebugMessage("Did not find : " .. etc .. " in " .. fromLocale, GNOME)
@@ -272,7 +284,7 @@ function GSTRReportUnfoundSpells()
 
   for name,version in pairs(GSMasterOptions.SequenceLibrary) do
     for v, sequence in ipairs(version) do
-      GSTranslateSequenceFromTo(sequence, "enUS", "enUS")
+      GSTranslateSequenceFromTo(sequence, "enUS", "enUS", name)
     end
   end
   GSTRUnfoundSpellIds = {}

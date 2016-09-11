@@ -66,6 +66,7 @@ if (GetLocale() == "zhCN") then
 	L.StatReport_Strings_ILVL			= "(当前)装备等级";
 	L.StatReport_Strings_MRPEN		= "护甲穿透";
 	L.EUI_StatReport					= "EUI属性通报";
+	L.ArtifactForgeLevel			= "神器总等级"
 elseif (GetLocale() == "zhTW") then
 	L.StatReport_Strings_COMMA 		= "，";
 	L.StatReport_Strings_END			= "。";
@@ -99,6 +100,7 @@ elseif (GetLocale() == "zhTW") then
 	L.StatReport_Strings_ILVL			= "(当前)裝備等級";
 	L.StatReport_Strings_MRPEN		= "護甲穿透";
 	L.EUI_StatReport					= "EUI屬性通報";
+	L.ArtifactForgeLevel			= "神器總等級"
 else
 	L.StatReport_Strings_COMMA 		= ", ";
 	L.StatReport_Strings_END			= ".";
@@ -132,21 +134,22 @@ else
 	L.StatReport_Strings_ILVL			= "iLevel";
 	L.StatReport_Strings_MRPEN		= "Penetration";
 	L.EUI_StatReport					= "EUI Status Report";
+	L.ArtifactForgeLevel			= "Artifact Forge Level"
 end
 
 CH.L = L
 local function StatReport_GetPvPSpecText(switch)
 	local text = ""; 
 	if GetCombatRating(16) > 0 then
-		text = text..MyData.CRDEF..L.StatReport_Strings_CRDEF;
+		text = text..L.StatReport_Strings_CRDEF..":"..MyData.CRDEF;
 		text = text..L.StatReport_Strings_COMMA;
 	end 
 	if GetCombatRating(27) > 0 then
-		text = text..MyData.CRPP..L.StatReport_Strings_CRPP; 
+		text = text..L.StatReport_Strings_CRPP..":"..MyData.CRPP; 
 		text = text..L.StatReport_Strings_COMMA;
 	end 
 	if switch or GetCombatRating(16) > 0 or GetCombatRating(27) > 0 then
-		text = text..MyData.HP..L.StatReport_Strings_HP;
+		text = text..L.StatReport_Strings_HP..":"..MyData.HP;
 		text = text..L.StatReport_Strings_COMMA;
 	end
 	
@@ -157,16 +160,16 @@ local function StatReport_GetSpellText()
 	local text = ""; 
 	text = text..StatReport_GetPvPSpecText(); 
 	if GetCombatRating(20) > 0 then
-		text = text..MyData.SHASTE..L.StatReport_Strings_HASTE;
+		text = text..L.StatReport_Strings_HASTE..":"..MyData.SHASTE;
 		text = text..L.StatReport_Strings_COMMA;
 	end 
 	if GetCombatRating(8) > 0 then
-		text = text..MyData.SHIT..L.StatReport_Strings_HIT;
+		text = text..L.StatReport_Strings_HIT..":"..MyData.SHIT;
 		text = text..L.StatReport_Strings_COMMA;
 	end
-	text = text..MyData.SCRIT..L.StatReport_Strings_CRIT;
+	text = text..L.StatReport_Strings_CRIT..":"..MyData.SCRIT;
 	text = text..L.StatReport_Strings_COMMA;
-	text = text..MyData.SSP..L.StatReport_Strings_SSP;
+	text = text..L.StatReport_Strings_SSP..":"..MyData.SSP;
 
 	return text;
 end 
@@ -174,14 +177,14 @@ end
 local function StatReport_GetHealText() 
 	local text = ""; text = text..StatReport_GetPvPSpecText();
 	if GetCombatRating(20) > 0 then
-		text = text..MyData.SHASTE..L.StatReport_Strings_HASTE;
+		text = text..L.StatReport_Strings_HASTE..":"..MyData.SHASTE;
 		text = text..L.StatReport_Strings_COMMA;
 	end 
-	text = text..MyData.SCRIT..L.StatReport_Strings_CRIT; 
+	text = text..L.StatReport_Strings_CRIT..":"..MyData.SCRIT; 
 	text = text..L.StatReport_Strings_COMMA; 
-	text = text..MyData.SPI..L.StatReport_Strings_SPI;
+	text = text..L.StatReport_Strings_SPI..":"..MyData.SPI;
 	text = text..L.StatReport_Strings_COMMA;
-	text = text..MyData.SHP..L.StatReport_Strings_SHP;
+	text = text..L.StatReport_Strings_SHP..":"..MyData.SHP;
 	
 	return text;
 end 
@@ -190,20 +193,20 @@ local function StatReport_GetSpellAndHealText()
 	local text = ""; 
 	text = text..StatReport_GetPvPSpecText(); 
 	if GetCombatRating(20) > 0 then
-		text = text..MyData.SHASTE..L.StatReport_Strings_HASTE;
+		text = text..L.StatReport_Strings_HASTE..":"..MyData.SHASTE;
 		text = text..L.StatReport_Strings_COMMA;
 	end 
 	if GetCombatRating(8) > 0 then
-		text = text..MyData.SHIT..L.StatReport_Strings_HIT;
+		text = text..L.StatReport_Strings_HIT..":"..MyData.SHIT;
 		text = text..L.StatReport_Strings_COMMA;
 	end 
-	text = text..MyData.SCRIT..L.StatReport_Strings_CRIT;
+	text = text..L.StatReport_Strings_CRIT..":"..MyData.SCRIT;
 	text = text..L.StatReport_Strings_COMMA; 
-	text = text..MyData.SPI..L.StatReport_Strings_SPI;
+	text = text..L.StatReport_Strings_SPI..":"..MyData.SPI;
 	text = text..L.StatReport_Strings_COMMA;
-	text = text..MyData.SSP..L.StatReport_Strings_SSP;
+	text = text..L.StatReport_Strings_SSP..":"..MyData.SSP;
 	text = text..L.StatReport_Strings_COMMA; 
-	text = text..MyData.SHP..L.StatReport_Strings_SHP;
+	text = text..L.StatReport_Strings_SHP..":"..MyData.SHP;
 
 	return text;
 end 
@@ -211,22 +214,22 @@ end
 local function StatReport_GetMeleeText() 
 	local text = ""; text = text..StatReport_GetPvPSpecText();
 	if GetCombatRating(18) > 0 then
-		text = text..MyData.MHASTE..L.StatReport_Strings_HASTE;
+		text = text..L.StatReport_Strings_HASTE..":"..MyData.MHASTE;
 		text = text..L.StatReport_Strings_COMMA;
 	end 
 	if GetCombatRating(6) > 0 then
-	text = text..MyData.MHIT..L.StatReport_Strings_HIT;
+	text = text..L.StatReport_Strings_HIT..":"..MyData.MHIT;
 	text = text..L.StatReport_Strings_COMMA;
 	end
 	if GetCombatRating(9) > 0 then
-	text = text..MyData.MCRIT..L.StatReport_Strings_CRIT;
+	text = text..L.StatReport_Strings_CRIT..":"..MyData.MCRIT;
 	text = text..L.StatReport_Strings_COMMA;
 	end 
 	if GetCombatRating(24) > 0 then
-	text = text..MyData.MEXPER..L.StatReport_Strings_EXPER;
+	text = text..L.StatReport_Strings_EXPER..":"..MyData.MEXPER;
 	text = text..L.StatReport_Strings_COMMA;
 	end 
-	text = text..MyData.MAP..L.StatReport_Strings_AP;
+	text = text..L.StatReport_Strings_AP..":"..MyData.MAP;
 	return text; 
 end 
 
@@ -234,22 +237,22 @@ local function StatReport_GetRangedText()
 	local text = "";
 	text = text..StatReport_GetPvPSpecText();
 	if GetCombatRating(19) > 0 then
-	text = text..MyData.RHASTE..L.StatReport_Strings_HASTE;
+	text = text..L.StatReport_Strings_HASTE..":"..MyData.RHASTE;
 	text = text..L.StatReport_Strings_COMMA;
 	end
 	if GetCombatRating(7) > 0 then
-	text = text..MyData.RHIT..L.StatReport_Strings_HIT;
+	text = text..L.StatReport_Strings_HIT..":"..MyData.RHIT;
 	text = text..L.StatReport_Strings_COMMA;
 	end 
 	if GetCombatRating(10) > 0 then
-	text = text..MyData.RCRIT..L.StatReport_Strings_CRIT;
+	text = text..L.StatReport_Strings_CRIT..":"..MyData.RCRIT;
 	text = text..L.StatReport_Strings_COMMA;
 	end
 	if GetCombatRating(24) > 0 then
-	text = text..MyData.REXPER..L.StatReport_Strings_EXPER;
+	text = text..L.StatReport_Strings_EXPER..":"..MyData.REXPER;
 	text = text..L.StatReport_Strings_COMMA;
 	end 
-	text = text..MyData.RAP..L.StatReport_Strings_AP;
+	text = text..L.StatReport_Strings_AP..":"..MyData.RAP;
 	
 	return text;
 end 
@@ -257,29 +260,29 @@ end
 local function StatReport_GetTankText(rHaste)
 	local text = ""; 
 	text = text..StatReport_GetPvPSpecText(1);
-	text = text..MyData.DODGE..L.StatReport_Strings_DODGE;
+	text = text..L.StatReport_Strings_DODGE..":"..MyData.DODGE;
 	text = text..L.StatReport_Strings_COMMA;
 	if GetCombatRating(6) > 0 then
-	text = text..MyData.MHIT..L.StatReport_Strings_HIT;
+	text = text..L.StatReport_Strings_HIT..":"..MyData.MHIT;
 	text = text..L.StatReport_Strings_COMMA;
 	end 
 	if GetCombatRating(24) > 0 then
-	text = text..MyData.MEXPER..L.StatReport_Strings_EXPER;
+	text = text..L.StatReport_Strings_EXPER..":"..MyData.MEXPER;
 	text = text..L.StatReport_Strings_COMMA;
 	end 
 	if (rHaste and GetCombatRating(18) > 0) then
-	text = text..MyData.MHASTE..L.StatReport_Strings_HASTE;
+	text = text..L.StatReport_Strings_HASTE..":"..MyData.MHASTE;
 	text = text..L.StatReport_Strings_COMMA;
 	end 
 	if (MyData.CLASS_EN ~= "DRUID") then
-	text = text..MyData.PARRY..L.StatReport_Strings_PARRY;
+	text = text..L.StatReport_Strings_PARRY..":"..MyData.PARRY;
 	text = text..L.StatReport_Strings_COMMA;
 	end 
 	if (MyData.CLASS_EN == "WARRIOR" or MyData.CLASS_EN == "PALADIN") then
-	text = text..MyData.BLOCK..L.StatReport_Strings_BLOCK; 
+	text = text..L.StatReport_Strings_BLOCK..":"..MyData.BLOCK; 
 	text = text..L.StatReport_Strings_COMMA;
 	end 
-	text = text..MyData.ARMOR..L.StatReport_Strings_ARMOR;
+	text = text..L.StatReport_Strings_ARMOR..":"..MyData.ARMOR;
 
 	return text;
 end 
@@ -347,11 +350,11 @@ local function StatReport_UpdateMyData()
 	MyData.AGI = UnitStat("player", 2);
 	MyData.STA = UnitStat("player", 3);
 	MyData.INT = UnitStat("player", 4);
-	MyData.SPI = UnitStat("player", 5);
+--	MyData.SPI = "" --UnitStat("player", 5);
 	MyData.Versatility = GetCombatRating(CR_VERSATILITY_DAMAGE_DONE);
-	if GetMultistrike() > 0 then
-		MyData.multistrike = format("%.2F%%", GetMultistrike());
-	end
+--	if GetMultistrike() > 0 then
+--		MyData.multistrike = format("%.2F%%", GetMultistrike());
+--	end
 	if GetLifesteal() > 0 then
 		MyData.lifesteal = format("%.2F%%", GetLifesteal());
 	end
@@ -382,6 +385,15 @@ local function StatReport_UpdateMyData()
 	MyData.CRDEF = format("%s(%.1f%%)", GetCombatRating(16),GetCombatRatingBonus(16) + GetModResilienceDamageReduction());
 	MyData.CRPP = format("%s(%.1f%%)", GetCombatRating(27),GetCombatRatingBonus(27));
 end
+
+local function GetArtifactForgeLevel()
+	if not ArtifactFrame then
+		ShowUIPanel(SocketInventoryItem(16))
+		HideUIPanel(ArtifactFrame)
+	end
+
+	return ArtifactFrame.ForgeBadgeFrame.ForgeLevelLabel:GetText()
+end
 	
 function CH:SendReport(self,button) 
 	StatReport_UpdateMyData();
@@ -393,6 +405,11 @@ function CH:SendReport(self,button)
 		msg = msg..L.StatReport_Strings_ILVL..MyData.ILVL;
 		msg = msg..L.StatReport_Strings_COMMA;
 	end
+	local Alv = GetArtifactForgeLevel();
+	if Alv then
+		msg = msg..L.ArtifactForgeLevel..": "..Alv;
+		msg = msg..L.StatReport_Strings_COMMA;
+	end
 	if MyData.GS then
 		msg = msg.." GS:"..MyData.GS;
 		msg = msg..L.StatReport_Strings_COMMA;
@@ -402,7 +419,8 @@ function CH:SendReport(self,button)
 		msg = msg..L.StatReport_Strings_COMMA;
 	end
 	if MyData.LV >=80 then 
-		msg = msg..format("%.1f%%", MyData.MST)..L.StatReport_Strings_MST; msg = msg..L.StatReport_Strings_COMMA;
+		msg = msg..L.StatReport_Strings_MST..":"..format("%.1f%%", MyData.MST);
+		msg = msg..L.StatReport_Strings_COMMA;
 	end 
 	if MyData.CLASS_EN == "MAGE" or MyData.CLASS_EN == "WARLOCK" then
 		msg = msg..StatReport_GetSpellText(); 
@@ -474,10 +492,18 @@ function CH:SendReport(self,button)
 			msg = msg..StatReport_GetMeleeText();
 		end
 	end
+	if MyData.CLASS_EN == "DEMONHUNTER" then
+		if MyData.TKEY == select(2,GetSpecializationInfo(2)) then
+			msg = msg..StatReport_GetTankText();
+		else
+			msg = msg..StatReport_GetMeleeText();
+		end
+	end
+
 	local haveit = false
 	if MyData.Versatility > 0 then
 		msg = msg..L.StatReport_Strings_COMMA;
-		msg = msg..MyData.Versatility..STAT_VERSATILITY;
+		msg = msg..STAT_VERSATILITY..":"..MyData.Versatility;
 		haveit = true;
 	end
 	if MyData.multistrike then
@@ -487,7 +513,7 @@ function CH:SendReport(self,button)
 		else
 			msg = msg..L.StatReport_Strings_COMMA;
 		end
-		msg = msg..MyData.multistrike..STAT_MULTISTRIKE;
+		msg = msg..STAT_MULTISTRIKE..":"..MyData.multistrike;
 		haveit = true;
 	end
 	if MyData.lifesteal then
@@ -497,7 +523,7 @@ function CH:SendReport(self,button)
 		else
 			msg = msg..L.StatReport_Strings_COMMA;
 		end
-		msg = msg..MyData.lifesteal..STAT_LIFESTEAL;
+		msg = msg..STAT_LIFESTEAL..":"..MyData.lifesteal;
 	end
 	
 	msg = msg..L.StatReport_Strings_END;

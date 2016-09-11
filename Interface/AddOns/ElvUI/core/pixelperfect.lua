@@ -114,7 +114,11 @@ function E:UIScale(event)
 		end
 
 		self.UIParent:ClearAllPoints();
-		self.UIParent:Point("BOTTOM");
+		if self.global.general.commandBarSetting == "ENABLED_RESIZEPARENT" then
+			self.UIParent:Point("BOTTOM");
+		else
+			self.UIParent:Point("CENTER");
+		end
 
 		--Calculate potential coordinate differences
 		self.diffGetLeft = E:Round(abs(UIParent:GetLeft() - self.UIParent:GetLeft()))

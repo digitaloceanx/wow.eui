@@ -10,38 +10,24 @@ local function LoadSkin()
 
 	ObjectiveTrackerBlocksFrame.QuestHeader:StripTextures()
 	ObjectiveTrackerBlocksFrame.QuestHeader.Text:FontTemplate()
-
-
 	ObjectiveTrackerBlocksFrame.AchievementHeader:StripTextures()
 	ObjectiveTrackerBlocksFrame.AchievementHeader.Text:FontTemplate()
-
-
 	ObjectiveTrackerBlocksFrame.ScenarioHeader:StripTextures()
 	ObjectiveTrackerBlocksFrame.ScenarioHeader.Text:FontTemplate()
 
 	BONUS_OBJECTIVE_TRACKER_MODULE.Header:StripTextures()
 	BONUS_OBJECTIVE_TRACKER_MODULE.Header.Text:FontTemplate()
+	WORLD_QUEST_TRACKER_MODULE.Header:StripTextures()
+	WORLD_QUEST_TRACKER_MODULE.Header.Text:FontTemplate()
 
-	hooksecurefunc("ObjectiveTracker_Collapse", function()
-	--	ObjectiveTrackerFrame.HeaderMenu.MinimizeButton.text:SetText("+")
-		if EuiAutoQuestButton then EuiAutoQuestButton:Hide(); end
-	end)
-
-	hooksecurefunc("ObjectiveTracker_Expand", function()
-	--	ObjectiveTrackerFrame.HeaderMenu.MinimizeButton.text:SetText("-")
-		if EuiAutoQuestButton then EuiAutoQuestButton:Show(); end
-	end)
-	
 	local function OnClick(self)
 		local textObject = self.text
 		local text = textObject:GetText()
 
 		if (text and text == "-") then
 			textObject:SetText("+")
-		--	if EuiAutoQuestButton then EuiAutoQuestButton:Hide(); end
 		else
 			textObject:SetText("-")
-		--	if EuiAutoQuestButton then EuiAutoQuestButton:Show(); end
 		end
 	end
 

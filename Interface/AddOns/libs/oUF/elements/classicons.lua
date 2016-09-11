@@ -103,10 +103,12 @@ local Update = function(self, event, unit, powerType)
 		end
 
 		for i = 1, max do
-			if(i <= cur) then
-				element[i]:Show()
-			else
-				element[i]:Hide()
+			if element[i] then --by eui.cc
+				if(i <= cur) then
+					element[i]:Show()
+				else
+					element[i]:Hide()
+				end
 			end
 		end
 

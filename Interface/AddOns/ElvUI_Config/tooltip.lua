@@ -27,6 +27,11 @@ E.Options.args.tooltip = {
 			name = L["General"],
 			disabled = function() return not E.Tooltip; end,
 			args = {
+				header = {
+					order = 0,
+					type = "header",
+					name = L["General"],
+				},
 				cursorAnchor = {
 					order = 1,
 					type = 'toggle',
@@ -110,13 +115,15 @@ E.Options.args.tooltip = {
 					name = L["No Transparent Theme"],
 					disabled = function() return E.db.general.transparent == false end,
 				},
-				useCustomFactionColors = {
-					order = 8,
-					type = 'toggle',
-					name = L["Custom Faction Colors"],
+				colorAlpha = {
+					order = 18,
+					type = "range",
+					name = OPACITY,
+					isPercent = true,
+					min = 0, max = 1, step = 0.01,
 				},
 				fontGroup = {
-					order = 9,
+					order = 19,
 					type = "group",
 					guiInline = true,
 					name = L["Tooltip Font Settings"],
@@ -175,11 +182,19 @@ E.Options.args.tooltip = {
 					},
 				},
 				factionColors = {
-					order = 10,
+					order = 20,
 					type = "group",
 					name = L["Custom Faction Colors"],
 					guiInline = true,
-					args = {},
+					args = {
+						useCustomFactionColors = {
+							order = 0,
+							type = 'toggle',
+							name = L["Custom Faction Colors"],
+							get = function(info) return E.db.tooltip.useCustomFactionColors end,
+							set = function(info, value) E.db.tooltip.useCustomFactionColors = value; end,
+						},
+					},
 					get = function(info)
 						local t = E.db.tooltip.factionColors[ info[#info] ]
 						local d = P.tooltip.factionColors[ info[#info] ]
@@ -200,6 +215,11 @@ E.Options.args.tooltip = {
 			get = function(info) return E.db.tooltip.visibility[ info[#info] ] end,
 			set = function(info, value) E.db.tooltip.visibility[ info[#info] ] = value; end,
 			args = {
+				header = {
+					order = 0,
+					type = "header",
+					name = L["Visibility"],
+				},
 				actionbars = {
 					order = 1,
 					type = 'select',
@@ -254,6 +274,11 @@ E.Options.args.tooltip = {
 			get = function(info) return E.db.tooltip.healthBar[ info[#info] ] end,
 			set = function(info, value) E.db.tooltip.healthBar[ info[#info] ] = value; end,
 			args = {
+				header = {
+					order = 0,
+					type = "header",
+					name = L["Health Bar"],
+				},
 				height = {
 					order = 1,
 					name = L["Height"],

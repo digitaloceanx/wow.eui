@@ -21,9 +21,14 @@ L["Aura Watch module"] = true;
 L["|cffff0000Error -- Addon 'ElvUI_Config' not found or is disabled.|r"] = true;
 	L["It appears one of your AddOns have disabled the AddOn Blizzard_CompactRaidFrames. This can cause errors and other issues. The AddOn will now be re-enabled."] = true;
 L["DataBars"] = true;
+L["Current - Remaining"] = true;
 L["Artifact"] = true;
 L["Artifact Bar"] = true;
 L["Hide At Max Level"] = true;
+L["Direction the bar moves on gains/losses"] = true;
+L["Disables the tutorial button found on some frames."] = true;
+L["Order Hall Command Bar"] = true;
+L["Enable + Adjust Movers"] = true;
 
 L["DATABAR_DESC"] = true;
 L["Thin Border Theme"] = true;
@@ -141,6 +146,10 @@ L["Separate Panel Sizes"] = true;
 L["Alerts"] = true;
 
 --ActionBars
+L["Color of the actionbutton when not usable."] = true;
+L["Color of the actionbutton when usable."] = true;
+L["Not Usable"] = true;
+L["Usable"] = true;
 L["Hide Cooldown Bling"] = true;
 L["Hides the bling animation on buttons at the end of the global cooldown."] = true;
 L["Allow Masque to handle the skinning of this element."] = true;
@@ -251,6 +260,14 @@ L[ [=[This works like a macro, you can run different situations to get the actio
  Example: '[combat] show;hide']=] ] = true;
 
 --Bags
+L["Temporary Move"] = true;
+L["Hold Control + Right Click:"] = true;
+L["Reset Position"] = true;
+L["Bag Mover (Grow Down)"] = true;
+L["Bag Mover (Grow Up)"] = true;
+L["Bag Mover"] = true;
+L["Bank Mover (Grow Down)"] = true;
+L["Bank Mover (Grow Up)"] = true;
 L["Icons and Text (Short)"] = true;
 L["Show Junk Icon"] = true;
 L["Display the junk icon on all grey items that can be vendored."] = true;
@@ -259,7 +276,8 @@ L["Display Item Level"] = true;
 L["Displays item level on equippable items."] = true;
 L["Item Level Threshold"] = true;
 L["The minimum item level required for it to be shown."] = true;
-L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a comma."] = true;
+L["Bag Sorting"] = true;
+L["Items in this list or items that match any Search Syntax query in this list will be ignored when sorting. Separate each entry with a semicolon ;."] = true;
 L["IGNORE_ITEMS_DESC"] = [=[Valid entries:
 
 Item links or item names
@@ -299,7 +317,12 @@ The following search keywords can also be used:
 	• bou : Bind on use items.
 	• boe : Bind on equip items.
 	• boa : Bind on account items.
-	• quest : Quest bound items.]=];	
+    • quest : Quest bound items.
+    • reagents, reagent, crafting : Profession reagents.
+    • naval : Naval equipment.
+    • follower, followe, follow : Follower items.
+    • relic, reli, rel : Artifact Relics.
+    • power, powe, pow : Items granting Artifact Power.]=];	
 L['Deposit Reagents'] = true;
 L['Show/Hide Reagents'] = true;
 L["Reagent Bank"] = true;
@@ -595,6 +618,8 @@ L["ELVUI_CREDITS"] = "I would like to give out a special shout out to the follow
 L["Testing:"] = true;
 
 --DataTexts
+L["Displayed Currency"] = true;
+L["Orderhall"] = true;
 L["Gold:"] = true;
 L["Small Panels"] = true;
 L["BottomMiniPanel"] = true;
@@ -879,6 +904,10 @@ L["Experience Bar"] = true;
 L["Reputation Bar"] = true;
 
 --NamePlates
+L["Clickable Height"] = true;
+L["Clickable Width"] = true;
+L["Controls how big of an area on the screen will accept clicks to target unit."] = true;
+L["Elite Icon"] = true
 L["Show NPC Titles"] = true;
 L["Display Minions"] = true;
 L["Display Minor Units"] = true;
@@ -900,7 +929,9 @@ L["Friendly Combat Toggle"] = true;
 L["Toggle Off While In Combat"] = true;
 L["Toggle On While In Combat"] = true;
 L["Only Show Target"] = true;
-L["Only show a nameplate for the unit you have targetted."] = true;
+L["Controls which nameplates will be displayed."] = true;
+L["Display Style"] = true;
+L["Target, Quest, Combat"] = true;
 L["Target Scale"] = true;
 L["Scale of the nameplate that is targetted."] = true;
 L["Non-Target Transparency"] = true;
@@ -1058,6 +1089,7 @@ L["BG Map"] = true;
 L["LF Guild Frame"] = true;
 L["Stable"] = true;
 L["TalkingHead"] = true;
+L["Talking Head Frame"] = true;
 L["AddOn Manager"] = true;
 L["Mirror Timers"] = true;
 L["Death Recap"] = true;

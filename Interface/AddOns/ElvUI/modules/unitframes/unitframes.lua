@@ -26,6 +26,7 @@ local CompactRaidFrameContainer = CompactRaidFrameContainer
 local CompactUnitFrame_UnregisterEvents = CompactUnitFrame_UnregisterEvents
 local MAX_RAID_MEMBERS = MAX_RAID_MEMBERS
 local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES
+local GetSpecialization = GetSpecialization
 
 --Global variables that we don't cache, list them here for mikk's FindGlobals script
 -- GLOBALS: UIParent, ElvCharacterDB, ElvUF_Parent, oUF_RaidDebuffs, CompactRaidFrameManager
@@ -1110,7 +1111,7 @@ function ElvUF:DisableBlizzard(unit)
 			HandleFrame('ArenaPrepFrame'..id)
 			HandleFrame('ArenaEnemyFrame'..id..'PetFrame')
 		else
-			for i=1, 3 do
+			for i=1, 5 do
 				HandleFrame(('ArenaEnemyFrame%d'):format(i))
 				HandleFrame(('ArenaPrepFrame%d'):format(i))
 				HandleFrame(('ArenaEnemyFrame%dPetFrame'):format(i))
@@ -1411,13 +1412,13 @@ function UF:UpdateClickSet()
 	local spec = 'spec1'
 	if not self.ClickSet then return; end
 	
-	if self.ClickSet.specswap == true and GetActiveSpecGroup() == 2 then
+	local spec = 'spec1'
+	if self.ClickSet.specswap == true and GetSpecialization() == 2 then
 		spec = 'spec2'
-	end
-	
-	local frameName = self:GetName();
-	if frameName and frameName:find('Boss') or frameName:find('Arena') then
+	elseif self.ClickSet.specswap == true and GetSpecialization() == 3 then
 		spec = 'spec3'
+	elseif self.ClickSet.specswap == true and GetSpecialization() == 4 then
+		spec = 'spec4'
 	end
 	
 	if E.db["clickset"][spec] == nil then return end

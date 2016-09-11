@@ -16,7 +16,7 @@ P['general'] = {
 	['bottomPanel'] = true,
 	['hideErrorFrame'] = true,
 	['enhancedPvpMessages'] = true,
-	['objectiveFrameHeight'] = 480,
+	['objectiveFrameHeight'] = 680, --by eui.cc
 	['bonusObjectivePosition'] = "LEFT",
 	["talkingHeadFrameScale"] = 0.9,
 
@@ -114,6 +114,7 @@ P['databars'] = {
 		["reverseFill"] = false,
 		["hideAtMaxLevel"] = true,
 		["hideInVehicle"] = false,
+		["hideInCombat"] = false,
 	},
 	['reputation'] = {
 		['enable'] = false,
@@ -125,6 +126,7 @@ P['databars'] = {
 		['orientation'] = 'VERTICAL',
 		["reverseFill"] = false,
 		["hideInVehicle"] = false,
+		["hideInCombat"] = false,
 	},
 	['artifact'] = {
 		['enable'] = true,
@@ -136,6 +138,7 @@ P['databars'] = {
 		['orientation'] = 'VERTICAL',
 		["reverseFill"] = false,
 		["hideInVehicle"] = false,
+		["hideInCombat"] = false,
 	},
 	['honor'] = {
 		['enable'] = true,
@@ -147,6 +150,7 @@ P['databars'] = {
 		['orientation'] = 'VERTICAL',
 		["reverseFill"] = false,
 		["hideInVehicle"] = false,
+		["hideInCombat"] = false,
 	},
 }
 
@@ -166,7 +170,7 @@ P['bags'] = {
 	['moneyFormat'] = 'SMART',
 	['moneyCoins'] = true,
 	["junkIcon"] = false,
-	['ignoreItems'] = '',
+	['ignoredItems'] = {},
 	['itemLevel'] = true,
 	['itemLevelThreshold'] = 1,
 	['itemLevelFont'] = 'EUI',
@@ -176,6 +180,7 @@ P['bags'] = {
 	["countFontSize"] = 10,
 	["countFontOutline"] = "OUTLINE",
 	["countFontColor"] = {r = 1, g = 1, b = 1},
+	["reverseLoot"] = false,
 	['bagBar'] = {
 		['growthDirection'] = 'VERTICAL',
 		['sortDirection'] = 'ASCENDING',
@@ -197,7 +202,7 @@ P["nameplates"] = {
 	['nonTargetTransparency'] = 0.35,
 	["motionType"] =  "OVERLAP", --by eui.cc
 
-	["onlyShowTarget"] = false,
+	["displayStyle"] = "ALL",
 	["lowHealthThreshold"] = 0.4,
 	["showFriendlyCombat"] = "DISABLED",
 	["showEnemyCombat"] = "DISABLED",
@@ -230,6 +235,10 @@ P["nameplates"] = {
 		["badScale"] = 1.2,
 		["useThreatColor"] = true,
 	},
+
+	["clickableWidth"] = 150,
+	["clickableHeight"] = 50,
+
 	['units'] = {
 		['PLAYER'] = {
 			['enable'] = false,
@@ -504,6 +513,13 @@ P["nameplates"] = {
 					['filter'] = 'CCDebuffs'
 				},
 			},
+			['eliteIcon'] = {
+				['enable'] = false,
+				['size'] = 20,
+				["position"] = "RIGHT",
+				['xOffset'] = 15,
+				['yOffset'] = 0,
+			},
 		},
 		['ENEMY_NPC'] = {
 			["minors"] = true,
@@ -554,6 +570,13 @@ P["nameplates"] = {
 					['maxDuration'] = 120,
 					['filter'] = 'CCDebuffs'
 				},
+			},
+			['eliteIcon'] = {
+				['enable'] = false,
+				['size'] = 20,
+				["position"] = "RIGHT",
+				['xOffset'] = 15,
+				['yOffset'] = 0,
 			},
 		},
 	},
@@ -654,7 +677,7 @@ P['datatexts'] = {
 		['LeftChatDataPanel'] = {
 			['left'] = 'Talent/Loot Specialization',
 			['middle'] = 'Durability',
-			['right'] = 'Garrison',
+			['right'] = 'Orderhall',
 		},
 		['RightChatDataPanel'] = {
 			['left'] = 'System',
@@ -670,14 +693,23 @@ P['datatexts'] = {
 		['TopRightMiniPanel'] = '',
 		['TopLeftMiniPanel'] = '',
 	},
-	['localtime'] = true,
-	['time24'] = false,
 	['battleground'] = true,
 	['panelTransparency'] = false,
-	['goldFormat'] = 'BLIZZARD',
-	['goldCoins'] = false,
 	["noCombatClick"] = false,
 	["noCombatHover"] = false,
+
+	--Datatext Options
+	--General
+	['goldFormat'] = 'BLIZZARD',
+	['goldCoins'] = false,
+	--Currencies Datatext
+	["currencies"] = {
+		["displayedCurrency"] = "GOLD",
+		["displayStyle"] = "ICON",
+	},
+	--Time Datatext
+	['localtime'] = true,
+	['time24'] = false,
 
 	--Enabled/Disabled Panels
 	['minimapPanels'] = true,
@@ -705,6 +737,7 @@ P['tooltip'] = {
 	["headerFontSize"] = 12,
 	["textFontSize"] = 12,
 	["smallTextFontSize"] = 12,
+	["colorAlpha"] = 0.8,
 	['visibility'] = {
 		['unitFrames'] = 'NONE',
 		["bags"] = "NONE",
@@ -2899,6 +2932,8 @@ P["actionbar"] = {
 
 	['noRangeColor'] = { r = 0.8, g = 0.1, b = 0.1 },
 	['noPowerColor'] = { r = 0.5, g = 0.5, b = 1 },
+	["usableColor"] = { r = 1, g = 1, b = 1 },
+	["notUsableColor"] = { r = 0.4, g = 0.4, b = 0.4 },
 
 	['keyDown'] = true,
 	['movementModifier'] = 'SHIFT',

@@ -12,17 +12,38 @@ local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
 
-function UF:Construct_PowerBar(frame, bg, text, textPos)
-	local power = CreateFrame('StatusBar', nil, frame)
+function UF:Construct_PowerBar(frame, bg, text, textPos, orientation)
+	local power
+--	if E.db.unitframe.transparent and E.db.unitframe.powertrans and E.db.general.transparentStyle == 2 then
+--		power = E:TranseBar(frame, orientation)
+--	else
+		power = CreateFrame('StatusBar', nil, frame)
+--	end
+
 	UF['statusbars'][power] = true
 
 	power:SetFrameStrata("LOW")
 	power.PostUpdate = self.PostUpdatePower
 
 	if bg then
-		power.bg = power:CreateTexture(nil, 'BORDER')
-		power.bg:SetAllPoints()
-		power.bg:SetTexture(E["media"].blankTex)
+		if E.db.unitframe.transparent and E.db.unitframe.powertrans and E.db.general.transparentStyle == 2 then
+			local pbg = CreateFrame("Frame", nil, power)
+			pbg:SetFrameLevel(power:GetFrameLevel()-2)
+			pbg:SetAllPoints(power)
+			pbg:SetAlpha(0)
+			local b = pbg:CreateTexture(nil, "BACKGROUND")
+			b:SetTexture(E["media"].normTex)
+			b:SetAllPoints(power)
+			power.bg = b
+			power.pbg = pbg
+		else
+			power.bg = power:CreateTexture(nil, 'BORDER')
+			power.bg:SetAllPoints()
+			power.bg:SetTexture(E["media"].blankTex)
+			if E.db.unitframe.transparent then
+				power.bg:SetAlpha(E.db.general.backdropfadecolor.a or 0.4)
+			end
+		end
 		power.bg.multiplier = 0.2
 	end
 

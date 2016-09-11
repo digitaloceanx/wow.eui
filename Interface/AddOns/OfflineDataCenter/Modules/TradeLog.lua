@@ -295,7 +295,9 @@ local function TradeLog_Output(trade, func, plain, isdate)
 		func(msg, 1, 0.5, 0.5);
 	else
 		msg = msg..string.gsub(TRADE_LOG_FAILED, "%%t", whoLink);
-		msg = string.gsub(msg, "%%r", trade.reason);
+		if trade.reason and type(trade.reason) == "string" then --by eui.cc
+			msg = string.gsub(msg, "%%r", trade.reason);
+		end
 		func(msg, 1, 0.1, 0.1);
 	end
 end

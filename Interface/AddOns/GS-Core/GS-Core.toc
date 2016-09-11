@@ -4,15 +4,14 @@
 ## Title-zhTW: |cffC495DDEUI|r |cFF00D1FF一鍵宏增強版|r 核心
 ## Notes: Allows you to execute a sequence of macros without stopping on unusable spells.
 ## Author: TimothyLuke - Original GS code by Semlar
-## Version: v1.3.1 Legion 7.0.3
+## Version: 134
 ## SavedVariables: GnomeOptions
 ## OptionalDeps: WeakAuras
-## X-Curse-Packaged-Version: r20160827000424
-## X-Curse-Project-Name: GnomeSequencer - Enhanced
-## X-Curse-Project-ID: gnomesequencer-enhanced
-## X-Curse-Repository-ID: wow/gnomesequencer-enhanced/mainline
+## X-Curse-Packaged-Version: r20160909041415
+## X-Curse-Project-Name: GnomeSequencer - Enhanced : Advanced Macros
+## Dependencies: ElvUI
 ## X-Revision: ElvUI
-## X-WoWI-ID: 23921
+
 # Lib
 embeds.xml
 

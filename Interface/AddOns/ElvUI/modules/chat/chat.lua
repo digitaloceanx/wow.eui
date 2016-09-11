@@ -467,7 +467,7 @@ function CH:StyleChat(frame)
 	_G[format(editbox:GetName().."Left", id)]:Kill()
 	_G[format(editbox:GetName().."Mid", id)]:Kill()
 	_G[format(editbox:GetName().."Right", id)]:Kill()
-	editbox:SetTemplate('Default', true)
+	editbox:SetTemplate('notrans')
 	editbox:SetAltArrowKeyMode(CH.db.useAltKey)
 	editbox:HookScript("OnEditFocusGained", function(self) self:Show(); if not LeftChatPanel:IsShown() then LeftChatPanel.editboxforced = true; LeftChatToggleButton:GetScript('OnEnter')(LeftChatToggleButton) end end)
 	editbox:HookScript("OnEditFocusLost", function(self) if LeftChatPanel.editboxforced then LeftChatPanel.editboxforced = nil; if LeftChatPanel:IsShown() then LeftChatToggleButton:GetScript('OnLeave')(LeftChatToggleButton) end end self:Hide() end)
@@ -499,9 +499,11 @@ function CH:StyleChat(frame)
 		end
 	end)
 
-	--This usually taints, but LibChatAnims should make sure it doesn't.
-	frame.OldAddMessage = frame.AddMessage
-	frame.AddMessage = CH.AddMessage
+	if id ~= 2 then --Don't add timestamps to combat log, they don't work.
+		--This usually taints, but LibChatAnims should make sure it doesn't.
+		frame.OldAddMessage = frame.AddMessage
+		frame.AddMessage = CH.AddMessage
+	end
 
 	--copy chat button
 	frame.button = CreateFrame('Frame', format("CopyChatButton%d", id), frame)
@@ -1030,42 +1032,6 @@ local function GetChatIcons(sender)
 	end
 end
 
---Copied from FrameXML/ChatFrame.lua and modified to use pcall on GetPlayerInfoByGUID
---For some reason, arg12 is sometimes in hexadecimal form and not the expected "Player-[server ID]-[player UID]" format
-function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
-	local chatType = strsub(event, 10);
-	if ( strsub(chatType, 1, 7) == "WHISPER" ) then
-		chatType = "WHISPER";
-	end
-	if ( strsub(chatType, 1, 7) == "CHANNEL" ) then
-		chatType = "CHANNEL"..arg8;
-	end
-	local info = ChatTypeInfo[chatType];
-
-	--ambiguate guild chat names
-	if (chatType == "GUILD") then
-		arg2 = Ambiguate(arg2, "guild")
-	else
-		arg2 = Ambiguate(arg2, "none")
-	end
-
-	if ( info and info.colorNameByClass and arg12 ) then
-		local _, localizedClass, englishClass, localizedRace, englishRace, sex, name, realm = pcall(GetPlayerInfoByGUID, arg12)
-
-		if ( englishClass ) then
-			local classColorTable = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[englishClass] or RAID_CLASS_COLORS[englishClass];
-			if ( not classColorTable ) then
-				return arg2;
-			end
-			CH.ClassNames[name:lower()] = englishClass
-			CH.ClassNames[name.."-"..realm] = englishClass
-			return format("\124cff%.2x%.2x%.2x", classColorTable.r*255, classColorTable.g*255, classColorTable.b*255)..arg2.."\124r"
-		end
-	end
-
-	return arg2;
-end
-
 E.NameReplacements = {}
 function CH:ChatFrame_MessageEventHandler(event, ...)
 	if ( strsub(event, 1, 8) == "CHAT_MSG" ) then
@@ -1093,7 +1059,23 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 		end
 
 		arg2 = E.NameReplacements[arg2] or arg2
-		local coloredName = GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+
+		--Check if arg12 is a valid GUID (sometimes it gets stored as hexadecimal in ElvUI chat history)
+		local success, _, englishClass, _, _, _, name, realm = pcall(GetPlayerInfoByGUID, arg12)
+		local coloredName = GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, (success and arg12 or nil), arg13, arg14);
+
+		--Cache name->class
+		if name and name ~= '' then
+			CH.ClassNames[name:lower()] = englishClass
+			if realm and realm ~= '' then
+				CH.ClassNames[name.."-"..gsub(realm,"[%s%-]","")] = englishClass
+			else
+				local _, myRealm = UnitFullName("player")
+				if myRealm and myRealm ~= "" then
+					CH.ClassNames[name.."-"..gsub(myRealm,"[%s%-]","")] = englishClass
+				end
+			end
+		end
 
 		local channelLength = strlen(arg4);
 		local infoType = type;
@@ -2078,11 +2060,11 @@ function CH:Initialize()
 		end
 	end)
 
---	if self.db.chatHistory then
---		self.SoundPlayed = true;
---		self:DisplayChatHistory()
---		self.SoundPlayed = nil;
---	end
+	if self.db.chatHistory then
+		self.SoundPlayed = true;
+		self:DisplayChatHistory()
+		self.SoundPlayed = nil;
+	end
 
 
 	local S = E:GetModule('Skins')

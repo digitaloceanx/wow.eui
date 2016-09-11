@@ -199,6 +199,14 @@ local OptionsTable = {
           get = function(info) return GSMasterOptions.use2 end,
           order = 590
         },
+        use6={
+          name = L["Use Belt Item in Postmacro"],
+          desc = L["Incorporate the belt slot into the PostMacro. This is the equivalent of /use [combat] 5 in a PostMacro."],
+          type = "toggle",
+          set = function(info,val) GSMasterOptions.use6 = val GSReloadSequences() end,
+          get = function(info) return GSMasterOptions.use6 end,
+          order = 590
+        },
       },
     },
     colourTab = {
@@ -513,6 +521,14 @@ local OptionsTable = {
           type = "toggle",
           set = function(info,val) GSMasterOptions.DebugModules["GS-SequenceEditor"] = val end,
           get = function(info) return GSMasterOptions.DebugModules["GS-SequenceEditor"] end,
+          order = 31
+        },
+        debugmodtransmission={
+          name = "GS-SequenceTransmission",
+          desc = L["This will display debug messages for the GS-E Ingame Transmission and transfer"],
+          type = "toggle",
+          set = function(info,val) GSMasterOptions.DebugModules[GSStaticSourceTransmission] = val end,
+          get = function(info) return GSMasterOptions.DebugModules[GSStaticSourceTransmission] end,
           order = 31
         },
       }

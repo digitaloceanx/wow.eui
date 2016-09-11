@@ -568,7 +568,7 @@ P["unitframe"].units.player.Swing = {
 }
 P["unitframe"].units.player.gcd = false
 P["unitframe"].units.player.portrait.enable = true
-P["unitframe"].units.player.portrait.overlay = true
+P["unitframe"].units.player.portrait.overlay = false
 P["unitframe"].units.player.portrait.alpha = 0.35
 P["unitframe"].units.target.portrait.alpha = 0.35
 P["unitframe"].units.boss.portrait.alpha = 0.35
@@ -585,7 +585,7 @@ P["unitframe"].units.targettarget.power.width = 'fill'
 P["unitframe"].units.targettarget.name.length = 'LONGLEVEL'
 P["unitframe"].colors.castColor = { r = .78,g = .67,b = .35 }
 P["unitframe"].units.target.portrait.enable = true
-P["unitframe"].units.target.portrait.overlay = true
+P["unitframe"].units.target.portrait.overlay = false
 P["unitframe"].units.target.debuffs.enable = true
 P["unitframe"].units.target.threatStyle = 'HEALTHBORDER'
 P["unitframe"].units.arena['arenaTargetIcon'] = {
@@ -1368,17 +1368,17 @@ end
 
 E.ClickSets_Sets = {
 	PRIEST = { --牧师
-			["shift-type1"]	= 139,--"恢復",
-			["ctrl-type1"]	= 527,--"驅散魔法",
-			["alt-type1"]	= 2061,--"快速治療",
-			["alt-ctrl-type1"]	= 2006,--"復活術",
-			["type2"]		= 17,--"真言術:盾",
-			["shift-type2"]	= 33076,--"癒合禱言",
-			["ctrl-type2"]	= 528,--"驅除疾病", 
-			["alt-type2"]	= 2060,--"強效治療術",
-			["alt-ctrl-type2"]	= 32546,--"束縛治療",
-			["type3"]		= 34861,--"治療之環",
-			["shift-type3"] = 2050, --治疗术
+			["shift-type1"]	= 186263,--暗影愈合
+			["ctrl-type1"]	= 194509,--真言术：耀
+			["alt-type1"]	= 200829,--恳求
+			["alt-ctrl-type1"]	= 212036,--群体复活
+			["type2"]		= 17,--真言术：盾
+			["shift-type2"]	= 152118,--意志洞悉-天赋
+			["ctrl-type2"]	= 527,--纯净术
+			["alt-type2"]	= 204065,--暗影盟约-天赋
+			["alt-ctrl-type2"]	= 33206,--痛苦压制
+			["type3"]		= 1706,--漂浮术
+			["shift-type3"] = 73325,--信仰飞跃
 			["alt-type3"] = 1706, --漂浮术
 			["ctrl-type3"] = 194509,--真言术：耀
 			["type4"] = 596, --治疗祷言
@@ -1440,19 +1440,18 @@ E.ClickSets_Sets = {
 	},
 
 	WARRIOR = { --ZS
-			["ctrl-type1"]	= 50720,--"戒備守護",
+			["ctrl-type1"]	= 198304,--"戒備守護",
 			["type2"]		= 3411,--"阻擾",
 	},
 
 	MAGE = { --FS
-			["alt-type1"]	= 1459,--"秘法智力",
+			["alt-type1"]	= 157980,--超级新星
 			["ctrl-type1"]	= 54646,--"专注",
-			["type2"]		= 475,--"解除詛咒",
 			["shift-type2"]	= 130,--"缓落",
 	},
 
 	WARLOCK = { --SS
-			["alt-type1"]	= 80398,--"黑暗意图",
+			["alt-type1"]	= 20707,--灵魂石
 			["type2"]		= 5697,--"魔息",
 	},
 
@@ -1462,13 +1461,13 @@ E.ClickSets_Sets = {
 	},
 	
 	ROGUE = { --DZ
-			["type2"]		= 57933,--"偷天換日",
+			["type2"]		= 57934,--嫁祸诀窍
 	},
 	
 	DEATHKNIGHT = {
 			["shift-type1"] = 61999, --战复
-			["type2"] = 47541, --死缠
-			["type3"] = 49016, -- 邪恶狂乱（邪恶天赋)
+			["type2"] = 108199,--"血魔之握
+			["type3"] = 61999,  --战复
 	},
 	MONK = {
 			["shift-type1"] = 115450, -- 化瘀术
@@ -1478,7 +1477,9 @@ E.ClickSets_Sets = {
 			["alt-type2"]	= 116841,
 			["shift-type2"]	= 115151,
 	},
-	DEMONHUNTER = {},
+	DEMONHUNTER = {
+		["type2"]		= 207810,--虚空联结2
+	},
 }
 
 E.ClickSets_Sets3 = {

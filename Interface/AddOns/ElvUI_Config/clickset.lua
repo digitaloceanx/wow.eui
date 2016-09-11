@@ -670,6 +670,7 @@ E.Options.args.clickset = {
 			type = 'group',
 			name = select(2, GetSpecializationInfo(3)) or " ",
 			order = 20,
+			hidden = function() return not GetSpecializationInfo(3) end,
 			get = function(info) return E.db.clickset.spec3[ info[#info] ] end,
 			set = function(info, value) E.db.clickset.spec3[ info[#info] ] = value; ClickSet:updateClickset() end,
 			disabled = function() return not E.db.clickset.specswap end,
@@ -972,6 +973,7 @@ E.Options.args.clickset = {
 			type = 'group',
 			name = select(2, GetSpecializationInfo(4)) or " ",
 			order = 20,
+			hidden = function() return not GetSpecializationInfo(4) end,
 			get = function(info) return E.db.clickset.spec4[ info[#info] ] end,
 			set = function(info, value) E.db.clickset.spec4[ info[#info] ] = value; ClickSet:updateClickset() end,
 			disabled = function() return not E.db.clickset.specswap end,
@@ -1348,14 +1350,4 @@ E.Options.args.clickset = {
 	},
 }
 
-if GetSpecializationInfo(4) then
-	E.Options.args.clickset.args.spec4.name = select(2, GetSpecializationInfo(4))
-else
-	E.Options.args.clickset.args.spec4 = nil
-end
-if GetSpecializationInfo(3) then
-	E.Options.args.clickset.args.spec3.name = select(2, GetSpecializationInfo(3))
-else
-	E.Options.args.clickset.args.spec3 = nil
-end
 ClickSet:LoadClassOpt()

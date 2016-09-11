@@ -5,12 +5,12 @@
 ## Notes: Handy notes for your maps
 ## Notes-zhCN: 地图标记模块
 ## Author: Xinhuan (modify by Eui.cc)
-## Version: v1.4.7
+## Version: v1.4.9
 ## DefaultState: enabled
 ## X-Category: Map
 ## X-eMail: xinhuan @ gmail DOT com
 ## OptionalDeps: Ace3, TomTom, HereBeDragons-1.0
-## X-Curse-Packaged-Version: v1.4.7
+## X-Curse-Packaged-Version: v1.4.9
 ## X-Curse-Project-Name: HandyNotes
 ## X-Curse-Project-ID: handynotes
 ## X-Curse-Repository-ID: wow/handynotes/mainline

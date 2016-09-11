@@ -4,6 +4,8 @@
 ## Title-zhCN: |cffC495DDEUI|r离线数据中心
 ## Title-zhTW: |cffC495DDEUI|r離線數據中心
 ## Version: r52
+## Dependencies: ElvUI
+## X-Revision: ElvUI
 ## SavedVariables: ODC_DB, ODC_Config,  MB_DB, BB_DB, IN_DB, MB_Config
 
 ..\Libs\LibStub\LibStub.lua

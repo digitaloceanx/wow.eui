@@ -108,7 +108,7 @@ function AS:GetOptions()
 	local Options = {
 		order = 100,
 		type = "group",
-		name = AS.Title,
+		name = "11."..AS.Title,
 		args = {
 			addons = {
 				order = 0,
@@ -519,7 +519,6 @@ function AS:GetOptions()
 			order = 4,
 			type = 'group',
 			name = L['Embed Settings'],
-			guiInline = true,
 			get = function(info) return AS:CheckOption(info[#info]) end,
 			set = function(info, value) AS:SetOption(info[#info], value) AS:Embed_Check() end,
 			args = E.Options.args.addonskins.args.embed.args,

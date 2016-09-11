@@ -8,5 +8,6 @@ FMXP_BUTTON_GET_NAME = "Get Name"
 FMXP_BUTTON_ACHIEVEMENTS = "Achievements"
 FMXP_BUTTON_ARMORY = "Armory"
 
+FMXP_BUTTON_REPORT_PLAYER_FOR = REPORT_PLAYER_FOR.." "
 FMXP_BUTTON_CHAT_BLACKLIST = "EUI: Added to the blacklist"
-FMXP_BUTTON_CHAT_BLACKLIST_INTRO = ' Has been added to the EUI information filtering blacklist!'	
+FMXP_BUTTON_CHAT_BLACKLIST_INTRO = ' Has been added to the EUI information filtering blacklist!'

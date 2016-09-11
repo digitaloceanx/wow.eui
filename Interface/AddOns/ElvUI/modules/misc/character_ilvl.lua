@@ -36,31 +36,41 @@ local function UpdateButtonsText(frame)
 		isClose = false;
 	end
 
+	local unit, itemM, itemS, itemMlv, itemSlv, itemMMax
+	if frame == "Inspect" then
+		unit = "target"
+	else
+		unit = "player"
+	end
+	itemM = GetInventoryItemLink(unit, 16)
+	itemS = GetInventoryItemLink(unit, 17)
+	itemMlv = itemM and ItemUpgradeInfo:GetUpgradedItemLevel(itemM) or 0
+	itemSlv = itemS and ItemUpgradeInfo:GetUpgradedItemLevel(itemS) or 0
+	itemMMax = (itemMlv > itemSlv) and itemMlv or itemSlv
+
 	for _, slot in pairs(slots) do
 		local id = GetInventorySlotInfo(slot)
 		local text = _G[frame..slot].t
 		local item
 
-		if frame == "Inspect" then
-			item = GetInventoryItemLink("target", id)
-		else
-			item = GetInventoryItemLink("player", id)
-		end
+		item = GetInventoryItemLink(unit, id)
 
 		if slot == "ShirtSlot" or slot == "TabardSlot" then
 			text:SetText("")
 		elseif item then
 			local oldilevel = text:GetText()
-			local _, _, _, ilevel = GetItemInfo(item)
-			local upgrade = item:match(":(%d+)\124h%[")
+			local _, _, q, ilevel = GetItemInfo(item)
 
 			if ilevel then
-				if ilevel ~= oldilevel then
-					if ilevel == 1 then
-						text:SetText("")
-					else
-					--	if upgrades[upgrade] == nil then upgrades[upgrade] = 0 end
-						text:SetText("|cFFFFFF00".. ItemUpgradeInfo:GetUpgradedItemLevel(item))
+				if q == 6 and ilevel == 750 and (id == 16 or id == 17) then--修正神器副手itemLink字串不含升级物品信息的问题
+					text:SetText("|cFFFFFF00".. itemMMax)
+				else				
+					if ilevel ~= oldilevel then
+						if ilevel == 1 then
+							text:SetText("")
+						else
+							text:SetText("|cFFFFFF00".. ItemUpgradeInfo:GetUpgradedItemLevel(item))
+						end
 					end
 				end
 			else

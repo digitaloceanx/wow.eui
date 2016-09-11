@@ -87,7 +87,7 @@ do
 			['Disease'] = true,
 		},
 		['MAGE'] = {
-			['Curse'] = true,
+			['Curse'] = false,
 		},
 		['DRUID'] = {
 			['Magic'] = false,

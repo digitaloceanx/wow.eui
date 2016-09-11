@@ -1,4 +1,4 @@
-local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
+ï»¿local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
@@ -141,7 +141,7 @@ end
 
 ElvUF.Tags.Events['raidgroup'] = 'GROUP_ROSTER_UPDATE'
 ElvUF.Tags.Methods['raidgroup'] = function(unit)
-	local R = {'¢Ù','¢Ú','¢Û','¢Ü','¢Ý','¢Þ','¢ß','¢à'}
+	local R = {'â‘ ','â‘¡','â‘¢','â‘£','â‘¤','â‘¥','â‘¦','â‘§'}
 	if IsInRaid() then
 		for i = 1, GetNumGroupMembers() do
 			local name, _, subgroup = GetRaidRosterInfo(i)

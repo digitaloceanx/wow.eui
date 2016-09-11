@@ -3,6 +3,8 @@
 -- Author: Semlar
 -- Version: r4
 local E, L = unpack(ElvUI)
+if not E.db.SingleAddons.WorldFlightMap then return; end
+
 local FlightmapCoordinates = { -- fairly accurate sizes for the different flight maps, these were calculated using very special maths and things
 	[1] = { -- Kalimdor
 		left = 10970,
@@ -502,8 +504,8 @@ function EUIWorldFlightMap_Toggle(toggle)
 	else
 		EUIWorldFlightMapFrame:UnregisterEvent('TAXIMAP_OPENED')
 		EUIWorldFlightMapFrame:UnregisterEvent('TAXIMAP_CLOSED')
-		TaxiFrame:RegisterEvent("TAXIMAP_OPENED");
-		TaxiFrame:RegisterEvent("TAXIMAP_CLOSED");		
+	--	TaxiFrame:RegisterEvent("TAXIMAP_OPENED");
+	--	TaxiFrame:RegisterEvent("TAXIMAP_CLOSED");		
 	end
 end
 

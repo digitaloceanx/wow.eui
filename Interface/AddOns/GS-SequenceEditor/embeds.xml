@@ -8,5 +8,7 @@
     <Include file="..\libs\AceConfig-3.0\AceConfig-3.0.xml"/>
     <Include file="..\libs\AceEvent-3.0\AceEvent-3.0.xml"/>
     <Include file="..\libs\AceLocale-3.0\AceLocale-3.0.xml"/>
-
+    <Include file="..\libs\AceSerializer-3.0\AceSerializer-3.0.xml"/>
+    <Include file="..\libs\AceComm-3.0\AceComm-3.0.xml"/>
+    <Include file="..\libs\LibCompress\LibCompress.xml"/>
 </Ui>

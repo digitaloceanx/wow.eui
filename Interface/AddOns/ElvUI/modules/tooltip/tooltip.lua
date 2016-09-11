@@ -10,78 +10,79 @@ local twipe, tinsert, tconcat = table.wipe, table.insert, table.concat
 local floor = math.floor
 local find, format, sub = string.find, string.format, string.sub
 --WoW API / Variables
+local CanInspect = CanInspect
 local CreateFrame = CreateFrame
-local GetTime = GetTime
-local UnitGUID = UnitGUID
-local GetScreenWidth = GetScreenWidth
-local InCombatLockdown = InCombatLockdown
-local IsShiftKeyDown = IsShiftKeyDown
-local IsControlKeyDown = IsControlKeyDown
-local IsAltKeyDown = IsAltKeyDown
+local C_PetJournalGetPetTeamAverageLevel = C_PetJournal.GetPetTeamAverageLevel
+local GameTooltip_ClearMoney = GameTooltip_ClearMoney
+local GetAverageItemLevel = GetAverageItemLevel
+local GetGuildInfo = GetGuildInfo
+local GetInspectSpecialization = GetInspectSpecialization
 local GetInventoryItemLink = GetInventoryItemLink
 local GetInventorySlotInfo = GetInventorySlotInfo
-local GetSpecialization = GetSpecialization
-local GetInspectSpecialization = GetInspectSpecialization
-local GetSpecializationRoleByID = GetSpecializationRoleByID
-local GetSpecializationInfo = GetSpecializationInfo
-local UnitExists = UnitExists
-local CanInspect = CanInspect
-local GetAverageItemLevel = GetAverageItemLevel
-local NotifyInspect = NotifyInspect
+local GetItemCount = GetItemCount
 local GetMouseFocus = GetMouseFocus
-local GetSpecializationInfoByID = GetSpecializationInfoByID
-local UnitLevel = UnitLevel
-local UnitIsPlayer = UnitIsPlayer
-local UnitClass = UnitClass
-local UnitName = UnitName
-local GetGuildInfo = GetGuildInfo
-local UnitPVPName = UnitPVPName
-local UnitRealmRelationship = UnitRealmRelationship
-local UnitIsAFK = UnitIsAFK
-local UnitIsDND = UnitIsDND
+local GetNumGroupMembers = GetNumGroupMembers
 local GetQuestDifficultyColor = GetQuestDifficultyColor
-local UnitRace = UnitRace
-local UnitFactionGroup = UnitFactionGroup
-local UnitIsTapDenied = UnitIsTapDenied
-local UnitIsTapDeniedByPlayer = UnitIsTapDeniedByPlayer
-local UnitReaction = UnitReaction
-local UnitIsWildBattlePet = UnitIsWildBattlePet
-local UnitIsBattlePetCompanion = UnitIsBattlePetCompanion
-local UnitClassification = UnitClassification
-local UnitCreatureType = UnitCreatureType
-local UnitBattlePetLevel = UnitBattlePetLevel
+local GetRaidBuffTrayAuraInfo = GetRaidBuffTrayAuraInfo
 local GetRelativeDifficultyColor = GetRelativeDifficultyColor
-local UnitIsPVP = UnitIsPVP
-local UnitHasVehicleUI = UnitHasVehicleUI
+local GetScreenWidth = GetScreenWidth
+local GetSpecialization = GetSpecialization
+local GetSpecializationInfo = GetSpecializationInfo
+local GetSpecializationInfoByID = GetSpecializationInfoByID
+local GetSpecializationRoleByID = GetSpecializationRoleByID
+local GetTime = GetTime
+local InCombatLockdown = InCombatLockdown
+local IsAltKeyDown = IsAltKeyDown
+local IsControlKeyDown = IsControlKeyDown
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
-local GetNumGroupMembers = GetNumGroupMembers
-local UnitIsUnit = UnitIsUnit
-local UnitIsDeadOrGhost = UnitIsDeadOrGhost
-local GetItemCount = GetItemCount
-local UnitAura = UnitAura
-local GetRaidBuffTrayAuraInfo = GetRaidBuffTrayAuraInfo
-local C_MountJournal_GetNumMounts = C_MountJournal.GetNumMounts
-local C_MountJournal_GetMountInfo = C_MountJournal.GetMountInfoByID
-local C_MountJournal_GetMountInfoExtra = C_MountJournal.GetMountInfoExtraByID
-local C_PetJournalGetPetTeamAverageLevel = C_PetJournal.GetPetTeamAverageLevel
+local IsShiftKeyDown = IsShiftKeyDown
+local NotifyInspect = NotifyInspect
 local SetTooltipMoney = SetTooltipMoney
-local GameTooltip_ClearMoney = GameTooltip_ClearMoney
-local TARGET = TARGET
-local DEAD = DEAD
-local INTERACTIVE_SERVER_LABEL = INTERACTIVE_SERVER_LABEL
-local FOREIGN_SERVER_LABEL = FOREIGN_SERVER_LABEL
-local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local UnitAura = UnitAura
+local UnitBattlePetLevel = UnitBattlePetLevel
+local UnitBattlePetType = UnitBattlePetType
+local UnitClass = UnitClass
+local UnitClassification = UnitClassification
+local UnitCreatureType = UnitCreatureType
+local UnitExists = UnitExists
+local UnitFactionGroup = UnitFactionGroup
+local UnitGUID = UnitGUID
+local UnitHasVehicleUI = UnitHasVehicleUI
+local UnitIsAFK = UnitIsAFK
+local UnitIsBattlePetCompanion = UnitIsBattlePetCompanion
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsDND = UnitIsDND
+local UnitIsPlayer = UnitIsPlayer
+local UnitIsPVP = UnitIsPVP
+local UnitIsTapDenied = UnitIsTapDenied
+local UnitIsTapDeniedByPlayer = UnitIsTapDeniedByPlayer
+local UnitIsUnit = UnitIsUnit
+local UnitIsWildBattlePet = UnitIsWildBattlePet
+local UnitLevel = UnitLevel
+local UnitName = UnitName
+local UnitPVPName = UnitPVPName
+local UnitRace = UnitRace
+local UnitReaction = UnitReaction
+local UnitRealmRelationship = UnitRealmRelationship
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
-local PVP = PVP
+local DEAD = DEAD
 local FACTION_ALLIANCE = FACTION_ALLIANCE
+local FACTION_BAR_COLORS = FACTION_BAR_COLORS
 local FACTION_HORDE = FACTION_HORDE
+local FOREIGN_SERVER_LABEL = FOREIGN_SERVER_LABEL
+local ID = ID
+local INTERACTIVE_SERVER_LABEL = INTERACTIVE_SERVER_LABEL
 local LEVEL = LEVEL
 local LE_REALM_RELATION_COALESCED = LE_REALM_RELATION_COALESCED
 local LE_REALM_RELATION_VIRTUAL = LE_REALM_RELATION_VIRTUAL
-local FACTION_BAR_COLORS = FACTION_BAR_COLORS
-local ID = ID
-
+local PET_TYPE_SUFFIX = PET_TYPE_SUFFIX
+local PVP = PVP
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local TARGET = TARGET
+local C_MountJournal_GetNumMounts = C_MountJournal.GetNumMounts
+local C_MountJournal_GetMountInfo = C_MountJournal.GetMountInfoByID
+local C_MountJournal_GetMountInfoExtra = C_MountJournal.GetMountInfoExtraByID
 --Global variables that we don't cache, list them here for mikk's FindGlobals script
 -- GLOBALS: ElvUI_ContainerFrame, RightChatPanel, TooltipMover, UIParent, ElvUI_KeyBinder
 -- GLOBALS: ItemRefCloseButton, RightChatToggleButton, BNToastFrame, MMHolder, GameTooltipText
@@ -114,7 +115,7 @@ local tooltips = {
 	ShoppingTooltip1,
 	ShoppingTooltip2,
 	ShoppingTooltip3,
-	WorldMapTooltip,
+
 	WorldMapTooltip.BackdropFrame, --Set template on backdrop because it is resized to cover potential item tooltips on worldmap
 	WorldMapCompareTooltip1,
 	WorldMapCompareTooltip2,
@@ -268,6 +269,7 @@ end
 
 function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 	if E.private.tooltip.enable ~= true then return end
+	if not self.db.visibility then return; end
 
 	if(tt:GetAnchorType() ~= "ANCHOR_NONE") then return end
 	if InCombatLockdown() and self.db.visibility.combat then
@@ -336,7 +338,14 @@ function TT:GetItemLvL(unit)
 	local ulvl = UnitLevel(unit)
 	local not2hand
 	local findItem = 0
+	local itemM, itemS, itemMlv, itemSlv, itemMMax
 	
+	itemM = GetInventoryItemLink(unit, 16)
+	itemS = GetInventoryItemLink(unit, 17)
+	itemMlv = itemM and ItemUpgradeInfo:GetUpgradedItemLevel(itemM) or 0
+	itemSlv = itemS and ItemUpgradeInfo:GetUpgradedItemLevel(itemS) or 0
+	itemMMax = (itemMlv > itemSlv) and itemMlv or itemSlv
+
 	for i = 1, #SlotName do
 		local slotLink = GetInventoryItemLink(unit, GetInventorySlotInfo(("%sSlot"):format(SlotName[i])))
 		if (slotLink ~= nil) then
@@ -347,7 +356,11 @@ function TT:GetItemLvL(unit)
 				elseif IsPVPItem(slotLink) then
 					pvp = pvp + 1
 				end
-				total = total + ItemUpgradeInfo:GetUpgradedItemLevel(slotLink)
+				if quality == 6 and ilvl == 750 and (SlotName[i] == "SecondaryHand" or SlotName[i] == "MainHand") then --修正神器副手itemLink字串不含升级物品信息的问题
+					total = total + itemMMax
+				else
+					total = total + ItemUpgradeInfo:GetUpgradedItemLevel(slotLink)
+				end
 			end
 
 			if ((SlotName[i] == 'SecondaryHand') or (SlotName[i] == 'MainHand' and ItemEquipLoc ~= "INVTYPE_2HWEAPON" and ItemEquipLoc ~= "INVTYPE_RANGED" and ItemEquipLoc ~= "INVTYPE_RANGEDRIGHT")) and not not2hand then
@@ -619,6 +632,13 @@ function TT:GameTooltip_OnTooltipSetUnit(tt)
 			if(isPetWild or isPetCompanion) then
 				level = UnitBattlePetLevel(unit)
 
+				local petType = PET_TYPE_SUFFIX[UnitBattlePetType(unit)]
+				if creatureType then
+					creatureType = format("%s %s", creatureType, petType)
+				else
+					creatureType = petType
+				end
+
 				local teamLevel = C_PetJournalGetPetTeamAverageLevel();
 				if(teamLevel) then
 					diffColor = GetRelativeDifficultyColor(teamLevel, level);
@@ -781,7 +801,9 @@ end
 
 function TT:SetStyle(tt)
 --	tt:SetTemplate("Transparent")
-	tt:SetTemplate(E.db.tooltip.transparent and "notrans" or "Transparent")
+	tt:SetTemplate(E.db.tooltip.transparent and "notrans" or "Transparent", nil, true)
+	local r, g, b = tt:GetBackdropColor()
+	tt:SetBackdropColor(r, g, b, self.db.colorAlpha)
 end
 
 function TT:MODIFIER_STATE_CHANGED(event, key)

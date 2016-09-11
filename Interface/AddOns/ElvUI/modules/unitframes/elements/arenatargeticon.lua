@@ -32,6 +32,7 @@ function UF:Configure_ArenaTargetIcon(frame)
 	else
 		targetIcon.bg:Point('RIGHT', frame, 'LEFT', db.arenaTargetIcon.xOffset, db.arenaTargetIcon.yOffset)
 	end
+	targetIcon.showEnemy = db.arenaTargetIcon.showEnemy
 
 	targetIcon.Name:ClearAllPoints()
 	if db.arenaTargetIcon.Name then

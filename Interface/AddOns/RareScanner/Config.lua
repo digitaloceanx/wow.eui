@@ -21,6 +21,7 @@ private.SOUNDS = {
 	["PVP Horde"] = "Sound\\spells\\pvpwarninghorde.ogg",
 	["Ready Check"] = "Sound\\interface\\levelup2.ogg",
 	["Horn"] = "Sound\\Events\\gruntling_horn_bb.ogg",
+	["Event Wardrum Ogre"] = "Sound\\Event Sounds\\Event_wardrum_ogre.ogg",
 }
 
 private.TOOLTIP_POSITIONS = {

@@ -1,11 +1,12 @@
 ﻿## Interface: 70000
 ## Title: |cffC495DDEUI|r Script
-## Title-zhCN: |cffC495DDEUI|r要塞增强包
-## Title-zhTW: |cffC495DDEUI|r要塞增強包
+## Title-zhCN: |cffC495DDEUI|r要塞职业大厅增强包
+## Title-zhTW: |cffC495DDEUI|r要塞職業大廳增強包
 ## Author: eui.cc
 ## X-Category: ElvUI
-## Version: 20160824A
-## RequiredDeps: ElvUI
+## Version: 20160908A
+## Dependencies: ElvUI
+## X-Revision: ElvUI
 ## LoadOnDemand: 1 
 ## LoadWith: Blizzard_GarrisonUI
 ## SavedVariables: SV_GarrisonMissionManager, MasterPlanAG
@@ -35,6 +36,7 @@ GarrisonMissionManager.lua
 SharedMissionUI.lua
 MissionUI.lua
 ShipyardUI.lua
+OrderHallUI.lua
 GarrisonBuilding.lua
 Broker.lua
 

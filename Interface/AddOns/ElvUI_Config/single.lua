@@ -24,10 +24,13 @@ E.Options.args.singleFunc = {
 		},	
 		EuiGarrison = {
 			order = 1,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["EuiGarrison"],
-			func = function() 
-				if E:IsConfigurableAddOn('EuiGarrison') then
+			type = 'toggle',
+			name = L["EuiGarrison"],
+			desc = L["Enable/Disable"]..L["EuiGarrison"],
+			disabled = function() return not E:IsConfigurableAddOn('EuiGarrison'); end,
+			get = function() return not IsAddOnLoaded("EuiGarrison"); end,
+			set = function(info, value) 
+				if value then
 					E:Print(L['Disabled']..L["EuiGarrison"]);
 					DisableAddOn('EuiGarrison');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -36,16 +39,6 @@ E.Options.args.singleFunc = {
 					EnableAddOn('EuiGarrison');
 					E:StaticPopup_Show("CONFIG_RL");
 				end
-			end,
-		},
-		gmm = {
-			order = 2,
-			type = 'toggle',
-			name = L["GarrisonMissionManager"],
-			get = function(info) return E.db.euiscript.gmm; end,
-			set = function(info, value)
-				E.db.euiscript.gmm = value;
-				E:StaticPopup_Show("CONFIG_RL");
 			end,
 		},
 		BodyGuardAway = {
@@ -66,10 +59,13 @@ E.Options.args.singleFunc = {
 		},		
 		ExtraCD = {
 			order = 7,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["ExtraCD"],
-			func = function() 
-				if E:IsConfigurableAddOn('ExtraCD') then
+			type = 'toggle',
+			name = L["ExtraCD"],
+			desc = L["Enable/Disable"]..L["ExtraCD"],
+			disabled = function() return not E:IsConfigurableAddOn('ExtraCD'); end,
+			get = function() return IsAddOnLoaded("ExtraCD"); end,
+			set = function(info, value) 
+				if value then
 					E:Print(L['Disabled']..L["ExtraCD"]);
 					DisableAddOn('ExtraCD');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -101,10 +97,13 @@ E.Options.args.singleFunc = {
 		},		
 		HandyNotes_DraenorTreasures = {
 			order = 10,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["HandyNotes_DraenorTreasures"],
-			func = function() 
-				if E:IsConfigurableAddOn('HandyNotes_DraenorTreasures') then
+			type = 'toggle',
+			name = L["HandyNotes_DraenorTreasures"],
+			desc = L["Enable/Disable"]..L["HandyNotes_DraenorTreasures"],
+			disabled = function() return not E:IsConfigurableAddOn('HandyNotes_DraenorTreasures'); end,
+			get = function() return IsAddOnLoaded("HandyNotes_DraenorTreasures"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["HandyNotes_DraenorTreasures"]);
 					DisableAddOn('HandyNotes_DraenorTreasures');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -132,10 +131,13 @@ E.Options.args.singleFunc = {
 		},		
 		MikScrollingBattleText = {
 			order = 13,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["MikScrollingBattleText"],
-			func = function() 
-				if E:IsConfigurableAddOn('MikScrollingBattleText') then
+			type = 'toggle',
+			name = L["MikScrollingBattleText"],
+			desc = L["Enable/Disable"]..L["MikScrollingBattleText"],
+			disabled = function() return not E:IsConfigurableAddOn('MikScrollingBattleText'); end,
+			get = function() return IsAddOnLoaded("MikScrollingBattleText"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["MikScrollingBattleText"]);
 					DisableAddOn('MikScrollingBattleText');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -240,10 +242,13 @@ E.Options.args.singleFunc = {
 		},		
 		OffileDataCenter = {
 			order = 20,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["OffileDataCenter"],
-			func = function() 
-				if E:IsConfigurableAddOn('OffileDataCenter') then
+			type = 'toggle',
+			name = L["OffileDataCenter"],
+			desc = L["Enable/Disable"]..L["OffileDataCenter"],
+			disabled = function() return not E:IsConfigurableAddOn('OffileDataCenter'); end,
+			get = function() return IsAddOnLoaded("OffileDataCenter"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["OffileDataCenter"]);
 					DisableAddOn('OffileDataCenter');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -281,10 +286,13 @@ E.Options.args.singleFunc = {
 		},		
 		RaidBuilder = {
 			order = 24,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["RaidBuilder"],
-			func = function() 
-				if E:IsConfigurableAddOn('MeetingStone') then
+			type = 'toggle',
+			name = L["RaidBuilder"],
+			desc = L["Enable/Disable"]..L["RaidBuilder"],
+			disabled = function() return not E:IsConfigurableAddOn('MeetingStone'); end,
+			get = function() return IsAddOnLoaded("MeetingStone"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["RaidBuilder"]);
 					DisableAddOn('MeetingStone');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -325,10 +333,13 @@ E.Options.args.singleFunc = {
 		},
 		Skada = {
 			order = 28,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["Skada"],
-			func = function() 
-				if E:IsConfigurableAddOn('Skada') then
+			type = 'toggle',
+			name = L["Skada"],
+			desc = L["Enable/Disable"]..L["Skada"],
+			disabled = function() return not E:IsConfigurableAddOn('Skada'); end,
+			get = function() return IsAddOnLoaded("Skada"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["Skada"]);
 					DisableAddOn('Skada');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -378,10 +389,13 @@ E.Options.args.singleFunc = {
 		},
 		HPetBattleAnyToggle = {
 			order = 42,
-			type = "execute",
-			name = L["Enable/Disable"]..L["HPetBattleAny"],
-			func = function()
-				if E:IsConfigurableAddOn('HPetBattleAny') then
+			type = "toggle",
+			name = L["HPetBattleAny"],
+			desc = L["Enable/Disable"]..L["HPetBattleAny"],
+			disabled = function() return not E:IsConfigurableAddOn('HPetBattleAny'); end,
+			get = function() return IsAddOnLoaded("HPetBattleAny"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["HPetBattleAny"]);
 					DisableAddOn('HPetBattleAny');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -411,10 +425,13 @@ E.Options.args.singleFunc = {
 		},
 		RematchToggle = {
 			order = 46,
-			type = "execute",
-			name = L["Enable/Disable"]..L["Rematch"],
-			func = function()
-				if E:IsConfigurableAddOn('Rematch') then
+			type = "toggle",
+			name = L["Rematch"],
+			desc = L["Enable/Disable"]..L["Rematch"],
+			disabled = function() return not E:IsConfigurableAddOn('Rematch'); end,
+			get = function() return IsAddOnLoaded("Rematch"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["Rematch"]);
 					DisableAddOn('Rematch');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -444,10 +461,13 @@ E.Options.args.singleFunc = {
 		},	
 		RareScanner = {
 			order = 52,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["RareScanner"],
-			func = function() 
-				if E:IsConfigurableAddOn('RareScanner') then
+			type = 'toggle',
+			name = L["RareScanner"],
+			desc = L["Enable/Disable"]..L["RareScanner"],
+			disabled = function() return not E:IsConfigurableAddOn('RareScanner'); end,
+			get = function() return IsAddOnLoaded("RareScanner"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["RareScanner"]);
 					DisableAddOn('RareScanner');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -478,10 +498,13 @@ E.Options.args.singleFunc = {
 		},
 		GearStatsSummary = {
 			order = 58,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["GearStatsSummary"],
-			func = function() 
-				if E:IsConfigurableAddOn('GearStatsSummary') then
+			type = 'toggle',
+			name = L["GearStatsSummary"],
+			desc = L["Enable/Disable"]..L["GearStatsSummary"],
+			disabled = function() return not E:IsConfigurableAddOn('GearStatsSummary'); end,
+			get = function() return IsAddOnLoaded("GearStatsSummary"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["GearStatsSummary"]);
 					DisableAddOn('GearStatsSummary');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -499,10 +522,13 @@ E.Options.args.singleFunc = {
 		},
 		IskarAssist = {
 			order = 60,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["IskarAssist"],
-			func = function() 
-				if E:IsConfigurableAddOn('IskarAssist') then
+			type = 'toggle',
+			name = L["IskarAssist"],
+			desc = L["Enable/Disable"]..L["IskarAssist"],
+			disabled = function() return not E:IsConfigurableAddOn('IskarAssist'); end,
+			get = function() return IsAddOnLoaded("IskarAssist"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["IskarAssist"]);
 					DisableAddOn('IskarAssist');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -544,10 +570,13 @@ E.Options.args.singleFunc = {
 		},		
 		Mapster = {
 			order = 68,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["Mapster"],
-			func = function() 
-				if E:IsConfigurableAddOn('Mapster') then
+			type = 'toggle',
+			name = L["Mapster"],
+			desc = L["Enable/Disable"]..L["Mapster"],
+			disabled = function() return not E:IsConfigurableAddOn('Mapster'); end,
+			get = function() return IsAddOnLoaded("Mapster"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["Mapster"]);
 					DisableAddOn('Mapster');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -579,7 +608,7 @@ E.Options.args.singleFunc = {
 			set = function(info,value)
 				if E:IsConfigurableAddOn('Mapster') then
 					E.db.SingleAddons.WorldFlightMap = value;
-					EUIWorldFlightMap_Toggle(value);
+					E:StaticPopup_Show("CONFIG_RL");
 				end
 			end,
 		},
@@ -590,10 +619,13 @@ E.Options.args.singleFunc = {
 		},
 		Outfitter = {
 			order = 72,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["Outfitter"],
-			func = function() 
-				if E:IsConfigurableAddOn('Outfitter') then
+			type = 'toggle',
+			name = L["Outfitter"],
+			desc = L["Enable/Disable"]..L["Outfitter"],
+			disabled = function() return not E:IsConfigurableAddOn('Outfitter'); end,
+			get = function() return IsAddOnLoaded("Outfitter"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["Outfitter"]);
 					DisableAddOn('Outfitter');
 					E:StaticPopup_Show("CONFIG_RL");
@@ -623,10 +655,13 @@ E.Options.args.singleFunc = {
 		},
 		TDDps = {
 			order = 75,
-			type = 'execute',
-			name = L["Enable/Disable"]..L["TDDps"],
-			func = function() 
-				if E:IsConfigurableAddOn('TDDps') then
+			type = 'toggle',
+			name = L["TDDps"],
+			desc = L["Enable/Disable"]..L["TDDps"],
+			disabled = function() return not E:IsConfigurableAddOn('TDDps'); end,
+			get = function() return IsAddOnLoaded("TDDps"); end,
+			set = function(info, value)
+				if value then
 					E:Print(L['Disabled']..L["TDDps"]);
 					DisableAddOn('TDDps');
 					E:StaticPopup_Show("CONFIG_RL");

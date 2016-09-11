@@ -311,7 +311,6 @@ local function SetupChat(toggle)
 	E:GetModule('DataTexts'):LoadDataTexts();
 	E:GetModule('Chat'):UpdateAnchors()
 	E:GetModule('Layout'):ToggleChatPanels()
-	E:GetModule('Bags'):PositionBagFrames()
 
 	for i = 1, NUM_CHAT_WINDOWS do
 		local frame = _G[format("ChatFrame%s", i)]

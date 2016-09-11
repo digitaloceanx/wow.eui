@@ -78,6 +78,13 @@ local function CreateAuraBar(oUF, anchor)
 	frame.anchor = anchor
 	
 	-- the main bar
+--	local E = unpack(ElvUI)
+--	local statusBar
+--	if E.db.general.transparent and E.db.general.transparentStyle == 2 then
+--		statusBar = E:TranseBar(frame)
+--	else
+--		statusBar = CreateFrame("StatusBar", nil, frame)
+--	end
 	local statusBar = CreateFrame("StatusBar", nil, frame)
 	statusBar:SetStatusBarTexture(auraBarParent.auraBarTexture or [[Interface\TargetingFrame\UI-StatusBar]])
 	statusBar:SetAlpha(auraBarParent.fgalpha or 1)
