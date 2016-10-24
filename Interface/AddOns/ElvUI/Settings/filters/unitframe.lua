@@ -36,7 +36,6 @@ G.unitframe.aurafilters['CCDebuffs'] = {
 			[91807] = Defaults(), --Shambling Rush (Pet)
 			[91797] = Defaults(), --Monstrous Blow (Pet)
 			[108194] = Defaults(), --Asphyxiate
-			--[115001] = Defaults(), --Remorseless Winter
 		-- Druid
 			[33786] = Defaults(), --Cyclone
 			[339] = Defaults(), --Entangling Roots
@@ -47,7 +46,6 @@ G.unitframe.aurafilters['CCDebuffs'] = {
 			[99] = Defaults(), --Disorienting Roar
 			[127797] = Defaults(), --Ursol's Vortex
 			[45334] = Defaults(), --Immobilized
-			--[114238] = Defaults(), --Fae Silence
 		-- Hunter
 			[3355] = Defaults(), --Freezing Trap
 			[24394] = Defaults(), --Intimidation
@@ -65,9 +63,7 @@ G.unitframe.aurafilters['CCDebuffs'] = {
 			[102051] = Defaults(), --Frostjaw
 		-- Paladin
 			[20066] = Defaults(), --Repentance
-			--[10326] = Defaults(), --Turn Evil
 			[853] = Defaults(), --Hammer of Justice
-			--[105593] = Defaults(), --Fist of Justice
 			[31935] = Defaults(), --Avenger's Shield
 			[105421] = Defaults(), --Blinding Light
 		-- Priest
@@ -78,7 +74,6 @@ G.unitframe.aurafilters['CCDebuffs'] = {
 			[15487] = Defaults(), --Silence
 			[114404] = Defaults(), --Void Tendrils
 			[88625] = Defaults(), --Holy Word: Chastise
-			--[87194] = Defaults(), --Sin and Punishment
 		-- Rogue
 			[2094] = Defaults(), --Blind
 			[1776] = Defaults(), --Gouge
@@ -102,15 +97,12 @@ G.unitframe.aurafilters['CCDebuffs'] = {
 			[30283] = Defaults(), --Shadowfury
 			[115268] = Defaults(), --Mesmerize (Shivarra)
 			[89766] = Defaults(), --Axe Toss (Felguard)
-			--[137143] = Defaults(), --Blood Horror
 		-- Warrior
 			[7922] = Defaults(), --Charge Stun
 			[105771] = Defaults(), --Warbringer
 			[107566] = Defaults(), --Staggering Shout
 			[132168] = Defaults(), --Shockwave
 			[107570] = Defaults(), --Storm Bolt
-			--[118895] = Defaults(), --Dragon Roar
-			--[18498] = Defaults(), --Gag Order
 		-- Monk
 			[116706] = Defaults(), --Disable
 			[115078] = Defaults(), --Paralysis
@@ -166,11 +158,9 @@ G.unitframe.aurafilters['TurtleBuffs'] = {
 		--Shaman
 			[98007] = Defaults(), -- Spirit Link Totem
 			[30823] = Defaults(), -- Shamanistic Rage
-			--[108271] = Defaults(), -- Astral Shift
 		--Paladin
 			[1022] = Defaults(5), -- Hand of Protection
 			[6940] = Defaults(), -- Hand of Sacrifice
-			--[114039] = Defaults(), -- Hand of Purity
 			[31821] = Defaults(3), -- Devotion Aura
 			[498] = Defaults(2), -- Divine Protection
 			[642] = Defaults(5), -- Divine Shield
@@ -178,7 +168,6 @@ G.unitframe.aurafilters['TurtleBuffs'] = {
 			[31850] = Defaults(4), -- Ardent Defender
 		--Warrior
 			[118038] = Defaults(5), -- Die by the Sword
-			--[55694] = Defaults(), -- Enraged Regeneration
 			[97463] = Defaults(), -- Rallying Cry
 			[12975] = Defaults(), -- Last Stand
 			[114029] = Defaults(2), -- Safeguard
@@ -208,35 +197,27 @@ G.unitframe.aurafilters['PlayerBuffs'] = {
 			[32612] = Defaults(), -- Invisibility
 			[110960] = Defaults(), -- Greater Invisibility
 			[108839] = Defaults(), -- Ice Flows
-			--[111264] = Defaults(), -- Ice Ward
 			[108843] = Defaults(), -- Blazing Speed
 		--Death Knight
 			[48797] = Defaults(), -- Anti-Magic Shell
 			[48792] = Defaults(), -- Icebound Fortitude
 			[49039] = Defaults(), -- Lichborne
 			[87256] = Defaults(), -- Dancing Rune Weapon
-			--[49222] = Defaults(), -- Bone Shield
 			[55233] = Defaults(), -- Vampiric Blood
 			[50461] = Defaults(), -- Anti-Magic Zone
 			[51271] = Defaults(), -- Pillar of Frost
-			--[96268] = Defaults(), -- Death's Advance
 		--Priest
 			[33206] = Defaults(), -- Pain Suppression
 			[47788] = Defaults(), -- Guardian Spirit
 			[81782] = Defaults(), -- Power Word: Barrier
 			[47585] = Defaults(), -- Dispersion
-			--[6346] = Defaults(), -- Fear Ward
 			[10060] = Defaults(), -- Power Infusion
 			[114239] = Defaults(), -- Phantasm
 			[119032] = Defaults(), -- Spectral Guise
 			[27827] = Defaults(), -- Spirit of Redemption
 		--Warlock
 			[104773] = Defaults(), -- Unending Resolve
-			--[110913] = Defaults(), -- Dark Bargain
 			[108359] = Defaults(), -- Dark Regeneration
-			--[113860] = Defaults(), -- Dark Sould: Misery
-			--[113861] = Defaults(), -- Dark Soul: Knowledge
-			--[113858] = Defaults(), -- Dark Soul: Instability
 			[88448] = Defaults(), -- Demonic Rebirth
 		--Druid
 			[22812] = Defaults(), -- Barkskin
@@ -246,18 +227,15 @@ G.unitframe.aurafilters['PlayerBuffs'] = {
 			[102543] = Defaults(), -- Incarnation: King of the Jungle
 			[102558] = Defaults(), -- Incarnation: Son of Ursoc
 			[102560] = Defaults(), -- Incarnation: Chosen of Elune
-			--[132158] = Defaults(), -- Nature's Swiftness
 			[106898] = Defaults(), -- Stampeding Roar
 			[1850] = Defaults(), -- Dash
 			[106951] = Defaults(), -- Berserk
 			[52610] = Defaults(), -- Savage Roar
 			[69369] = Defaults(), -- Predatory Swiftness
-			--[112071] = Defaults(), -- Celestial Alignment
 			[124974] = Defaults(), -- Nature's Vigil
 		--Hunter
 			[19263] = Defaults(), -- Deterrence
 			[53480] = Defaults(), -- Roar of Sacrifice (Cunning)
-			--[51755] = Defaults(), -- Camouflage
 			[54216] = Defaults(), -- Master's Call
 			[3045] = Defaults(), -- Rapid Fire
 			[3584] = Defaults(), -- Feign Death
@@ -269,19 +247,14 @@ G.unitframe.aurafilters['PlayerBuffs'] = {
 			[74001] = Defaults(), -- Combat Readiness
 			[5277] = Defaults(), -- Evasion
 			[45182] = Defaults(), -- Cheating Death
-			--[51713] = Defaults(), -- Shadow Dance
-			--[114018] = Defaults(), -- Shroud of Concealment
 			[2983] = Defaults(), -- Sprint
 			[11327] = Defaults(), -- Vanish
 			[108212] = Defaults(), -- Burst of Speed
-			--[57933] = Defaults(), -- Tricks of the Trade
 			[79140] = Defaults(), -- Vendetta
 			[13750] = Defaults(), -- Adrenaline Rush
 		--Shaman
 			[98007] = Defaults(), -- Spirit Link Totem
 			[30823] = Defaults(), -- Shamanistic Rage
-			--[108271] = Defaults(), -- Astral Shift
-			--[16188] = Defaults(), -- Ancestral Swiftness
 			[2825] = Defaults(), -- Bloodlust
 			[79206] = Defaults(), -- Spiritwalker's Grace
 			[8178] = Defaults(), -- Grounding Totem Effect
@@ -292,14 +265,11 @@ G.unitframe.aurafilters['PlayerBuffs'] = {
 		--Paladin
 			[1044] = Defaults(), -- Hand of Freedom
 			[1022] = Defaults(), -- Hand of Protection
-			--[1038] = Defaults(), -- Hand of Salvation
 			[6940] = Defaults(), -- Hand of Sacrifice
-			--[114039] = Defaults(), -- Hand of Purity
 			[31821] = Defaults(), -- Devotion Aura
 			[498] = Defaults(), -- Divine Protection
 			[642] = Defaults(), -- Divine Shield
 			[86659] = Defaults(), -- Guardian of the Ancient Kings (Prot)
-			--[20925] = Defaults(), -- Sacred Shield
 			[31850] = Defaults(), -- Ardent Defender
 			[31884] = Defaults(), -- Avenging Wrath
 			[53563] = Defaults(), -- Beacon of Light
@@ -308,7 +278,6 @@ G.unitframe.aurafilters['PlayerBuffs'] = {
 			[85499] = Defaults(), -- Speed of Light
 		--Warrior
 			[118038] = Defaults(), -- Die by the Sword
-			--[55694] = Defaults(), -- Enraged Regeneration
 			[97463] = Defaults(), -- Rallying Cry
 			[12975] = Defaults(), -- Last Stand
 			[114029] = Defaults(), -- Safeguard
@@ -336,13 +305,9 @@ G.unitframe.aurafilters['PlayerBuffs'] = {
 			[68992] = Defaults(), -- Darkflight
 	},
 }
-
-
-
 --[[
 	Buffs that really we dont need to see
 ]]
-
 G.unitframe.aurafilters['Blacklist'] = {
 	['type'] = 'Blacklist',
 	['spells'] = {
@@ -358,7 +323,6 @@ G.unitframe.aurafilters['Blacklist'] = {
 		[57723] = Defaults(), --Exhaustion
 		[58539] = Defaults(), --watchers corpse
 		[26013] = Defaults(), --deserter
-		[6788] = Defaults(), --weakended soul
 		[71041] = Defaults(), --dungeon deserter
 		[41425] = Defaults(), --"Hypothermia"
 		[55711] = Defaults(), --Weakened Heart
@@ -411,6 +375,8 @@ G.unitframe.aurafilters['Whitelist'] = {
 		[159674] = Defaults(), --ºÚÊ¯Ö®Ó¡
 		[159675] = Defaults(), --Õ½¸èÖ®Ó¡
 		[159676] = Defaults(), --ËªÀÇÖ®Ó¡
+		[192132] = Defaults(), -- Mystic Empowerment: Thunder (Hyrja, Halls of Valor)
+		[192133] = Defaults(), -- Mystic Empowerment: Holy (Hyrja, Halls of Valor)
 	},
 }
 
@@ -421,458 +387,218 @@ G.unitframe.aurafilters['Whitelist'] = {
 G.unitframe.aurafilters['RaidDebuffs'] = {
 	['type'] = 'Whitelist',
 	['spells'] = {
-		--Highmaul
-			--Trash
-				[175601] = Defaults(), --Tainted Claws
-				[175599] = Defaults(), --Devour
-				[172069] = Defaults(), --Radiating Poison
-				[172066] = Defaults(), --Radiating Poison
-				[166779] = Defaults(), --Staggering Blow
-				[56037] = Defaults(), --Rune of Destruction
-				[175654] = Defaults(), --Rune of Disintegration
-				[166185] = Defaults(), --Rending Slash
-				[166175] = Defaults(), --Earth Devastating Slam
-				[174404] = Defaults(), --Frozen Core
-				[173763] = Defaults(), --Wild Flames
-				[174500] = Defaults(), --Rending Throw
-				[174939] = Defaults(), --Time Stop
-				[172115] = Defaults(), --Earthen Thrust
-				[166200] = Defaults(), --Arcane Volatility
-				[174473] = Defaults(), --Corrupted Blood
-
-			--Kargath Bladefist
-				[158986] = Defaults(), --Berserker Rush
-				[159113] = Defaults(), --Impale
-				[159178] = Defaults(), --Open Wounds
-				[159213] = Defaults(), --Monsters Brawl
-				[159410] = Defaults(), --Mauling Brew
-				[160521] = Defaults(), --Vile Breath
-				[159386] = Defaults(), --Iron Bomb
-				[159188] = Defaults(), --Grapple
-				[162497] = Defaults(), --On the hunt
-				[159202] = Defaults(), --Flame jet
-
-			--The Butcher
-				[156152] = Defaults(), --Gushing Wounds
-				[156151] = Defaults(), --The Tenderizer
-				[156143] = Defaults(), --The Cleaver
-				[163046] = Defaults(), --Pale Vitriol
-
-			--Brackenspore
-				[159220] = Defaults(), --Necrotic Breath
-				[163242] = Defaults(), --Infesting Spores
-				[163590] = Defaults(), --Creeping Moss
-				[163241] = Defaults(), --Rot
-				[160179] = Defaults(), --Mind Fungus
-				[159972] = Defaults(), --Flesh Eater
-
-			--Tectus
-				[162346] = Defaults(), --Crystalline Barrage
-				[162892] = Defaults(), --Petrification
-				[162475] = Defaults(), --Tectonic Upheaval
-
-			--Twin Ogrons
-				[155569] = Defaults(), --Injured
-				[158241] = Defaults(), --Blaze
-				[158026] = Defaults(), --Enfeebling Roar
-				[167200] = Defaults(), --Arcane Wound
-				[159709] = Defaults(), --Weakened Defenses
-				[167179] = Defaults(), --Weakened Defenses
-				[163374] = Defaults(), --Arcane Volatility
-				[158200] = Defaults(), --Quake
-
-			--Ko'ragh
-				[163472] = Defaults(), --Dominating Power
-				[172895] = Defaults(), --Expel Magic: Fel
-				[162185] = Defaults(), --Expel Magic: Fire
-				[162184] = Defaults(), --Expel Magic: Shadow
-				[161242] = Defaults(), --Caustic Energy
-				[161358] = Defaults(), --Suppression Field
-				[156803] = Defaults(), --Nullification Barrier
-
-			--Imperator Mar'gok
-				[164004] = Defaults(), --Branded: Displacement
-				[164005] = Defaults(), --Branded: Fortification
-				[164006] = Defaults(), --Branded: Replication
-				[158619] = Defaults(), --Fetter
-				[164176] = Defaults(), --Mark of Chaos: Displacement
-				[164178] = Defaults(), --Mark of Chaos: Fortification
-				[164191] = Defaults(), --Mark of Chaos: Replication
-				[157349] = Defaults(), --Force Nova
-				[164232] = Defaults(), --Force Nova
-				[164235] = Defaults(), --Force Nova
-				[164240] = Defaults(), --Force Nova
-				[158553] = Defaults(), --Crush Armor
-				[165102] = Defaults(), --Infinite Darkness
-				[157801] = Defaults(), --Slow
-
-		--Blackrock Foundry
-			--Trash
-
-			--Blackhand
-				[156096] = Defaults(), --Marked for Death
-				[156743] = Defaults(), --Impaled
-				[156047] = Defaults(), --Slagged
-				[156401] = Defaults(), --Molten Slag
-				[156404] = Defaults(), --Burned
-				[158054] = Defaults(), --Shattering Smash
-				[156888] = Defaults(), --Overheated
-				[157000] = Defaults(), --Attach Slag Bombs
-				[156999] = Defaults(), --Throw Slag Bombs
-
-			--Beastlord Darmac
-				[155365] = Defaults(), --Pinned Down
-				[155061] = Defaults(), --Rend and Tear
-				[155030] = Defaults(), --Seared Flesh
-				[155236] = Defaults(), --Crush Armor
-				[159044] = Defaults(), --Epicentre
-				[162276] = Defaults(), --Unsteady Mythic
-				[155657] = Defaults(), --Flame Infusion
-				[155222] = Defaults(), --Tantrum
-				[155399] = Defaults(), --Conflagration
-				[154989] = Defaults(), --Inferno Breath
-				[155499] = Defaults(), --Superheated Shrapnel
-
-			--Flamebender Ka'graz
-				[155318] = Defaults(), --Lava Slash
-				[155277] = Defaults(), --Blazing Radiance
-				[154952] = Defaults(), --Fixate
-				[155074] = Defaults(), --Charring Breath
-				[163284] = Defaults(), --Rising Flame
-				[162293] = Defaults(), --Empowered Armament
-				[155493] = Defaults(), --Firestorm
-				[163633] = Defaults(), --Magma Monsoon
-
-			--Operator Thogar
-				[155921] = Defaults(), --Enkindle
-				[165195] = Defaults(), --Prototype Pulse Grenade
-				[155701] = Defaults(), --Serrated Slash
-				[156310] = Defaults(), --Lava Shock
-				[164380] = Defaults(), --Burning
-
-			--The Blast Furnace
-				[155240] = Defaults(), --Tempered
-				[155242] = Defaults(), --Heath
-				[176133] = Defaults(), --Bomb
-				[156934] = Defaults(), --Rupture
-				[175104] = Defaults(), --Melt Armor
-				[176121] = Defaults(), --Volatile Fire
-				[158702] = Defaults(), --Fixate
-				[155225] = Defaults(), --Melt
-
-			--Hans'gar and Franzok
-				[157139] = Defaults(), --Shattered Vertebrae
-				[161570] = Defaults(), --Searing Plates
-				[157853] = Defaults(), --Aftershock
-
-			--Gruul
-				[155080] = Defaults(), --Inferno Slice
-				[143962] = Defaults(), --Inferno Strike
-				[155078] = Defaults(), --Overwhelming Blows
-				[36240] = Defaults(), --Cave In
-				[155326] = Defaults(), --Petrifying Slam
-				[165300] = Defaults(), --Flare Mythic
-
-			--Kromog
-				[157060] = Defaults(), --Rune of Grasping Earth
-				[156766] = Defaults(), --Warped Armor
-				[161839] = Defaults(), --Rune of Crushing Earth
-				[156844] = Defaults(), --Stone Breath
-
-			--Oregorger
-				[156309] = Defaults(), --ACid Torrent
-				[156203] = Defaults(), --Retched Blackrock
-				[173471] = Defaults(), --Acidmaw
-
-			--The Iron Maidens
-				[164271] = Defaults(), --Penetrating Shot
-				[158315] = Defaults(), --Dark hunt
-				[156601] = Defaults(), --Sanguine Strikes
-				[170395] = Defaults(), --Sorka Sprey
-				[170405] = Defaults(), --Maraks Blood Calling
-				[158692] = Defaults(), --Deadly Throw
-				[158686] = Defaults(), --Expose Armor
-				[158683] = Defaults(), --Corrupted Blood
-				[159585] = Defaults(), --Deploy Turret
-				[156112] = Defaults(), --Convulsive Shadows
-
-		-- Hellfire Citadel
-			-- Hellfire Assault
-				[184369] = Defaults(), -- Howling Axe (Target)
-				[180079] = Defaults(), -- Felfire Munitions
-
-			-- Iron Reaver
-				[179897] = Defaults(), -- Blitz
-				[185978] = Defaults(), -- Firebomb Vulnerability
-				[182373] = Defaults(), -- Flame Vulnerability
-				[182280] = Defaults(), -- Artillery (Target)
-				[182074] = Defaults(), -- Immolation
-				[182001] = Defaults(), -- Unstable Orb
-
-			-- Kormrok
-				[187819] = Defaults(), -- Crush
-				[181345] = Defaults(), -- Foul Crush
-
-			-- Hellfire High Council
-				[184360] = Defaults(), -- Fel Rage
-				[184449] = Defaults(), -- Mark of the Necromancer
-				[185065] = Defaults(), -- Mark of the Necromancer
-				[184450] = Defaults(), -- Mark of the Necromancer
-				[185066] = Defaults(), -- Mark of the Necromancer
-				[184676] = Defaults(), -- Mark of the Necromancer
-				[184652] = Defaults(), -- Reap
-
-			-- Kilrogg Deadeye
-				[181488] = Defaults(), -- Vision of Death
-				[188929] = Defaults(), -- Heart Seeker (Target)
-				[180389] = Defaults(), -- Heart Seeker (DoT)
-
-			-- Gorefiend
-				[179867] = Defaults(), -- Gorefiend's Corruption
-				[181295] = Defaults(), -- Digest
-				[179977] = Defaults(), -- Touch of Doom
-				[179864] = Defaults(), -- Shadow of Death
-				[179909] = Defaults(), -- Shared Fate (self root)
-				[179908] = Defaults(), -- Shared Fate (other players root)
-
-			-- Shadow-Lord Iskar
-				[181957] = Defaults(), -- Phantasmal Winds
-				[182200] = Defaults(), -- Fel Chakram
-				[182178] = Defaults(), -- Fel Chakram
-				[182325] = Defaults(), -- Phantasmal Wounds
-				[185239] = Defaults(), -- Radiance of Anzu
-				[185510] = Defaults(), -- Dark Bindings
-				[182600] = Defaults(), -- Fel Fire
-				[179219] = Defaults(), -- Phantasmal Fel Bomb
-				[181753] = Defaults(), -- Fel Bomb
-
-			-- Soulbound Construct (Socrethar)
-				[182038] = Defaults(), -- Shattered Defenses
-				[188666] = Defaults(), -- Eternal Hunger (Add fixate, Mythic only)
-				[189627] = Defaults(), -- Volatile Fel Orb (Fixated)
-				[180415] = Defaults(), -- Fel Prison
-
-			-- Tyrant Velhari
-				[185237] = Defaults(), -- Touch of Harm
-				[185238] = Defaults(), -- Touch of Harm
-				[185241] = Defaults(), -- Edict of Condemnation
-				[180526] = Defaults(), -- Font of Corruption
-
-			-- Fel Lord Zakuun
-				[181508] = Defaults(), -- Seed of Destruction
-				[181653] = Defaults(), -- Fel Crystals (Too Close)
-				[179428] = Defaults(), -- Rumbling Fissure (Soak)
-				[182008] = Defaults(), -- Latent Energy (Cannot soak)
-				[179407] = Defaults(), -- Disembodied (Player in Shadow Realm)
-
-			-- Xhul'horac
-				[188208] = Defaults(), -- Ablaze
-				[186073] = Defaults(), -- Felsinged
-				[186407] = Defaults(), -- Fel Surge
-				[186500] = Defaults(), -- Chains of Fel
-				[186063] = Defaults(), -- Wasting Void
-				[186333] = Defaults(), -- Void Surge
-
-			-- Mannoroth
-				[181275] = Defaults(), -- Curse of the Legion
-				[181099] = Defaults(), -- Mark of Doom
-				[181597] = Defaults(), -- Mannoroth's Gaze
-				[182006] = Defaults(), -- Empowered Mannoroth's Gaze
-				[181841] = Defaults(), -- Shadowforce
-				[182088] = Defaults(), -- Empowered Shadowforce
-
-			-- Archimonde
-				[184964] = Defaults(), -- Shackled Torment
-				[186123] = Defaults(), -- Wrought Chaos
-				[185014] = Defaults(), -- Focused Chaos
-				[186952] = Defaults(), -- Nether Banish
-				[186961] = Defaults(), -- Nether Banish
-				[189891] = Defaults(), -- Nether Tear
-				[183634] = Defaults(), -- Shadowfel Burst
-				[189895] = Defaults(), -- Void Star Fixate
-				[190049] = Defaults(), -- Nether Corruption
-
-	-- Legion
+-- Legion
+		--ÄáÉºµÂÀ­
+		[202977] = Defaults(),
+		[203552] = Defaults(),
+		--ÒÁ¸ñÅµË¹@¸¯Ê´Ö®ÐÄ
+		[208931] = Defaults(),
+		[215234] = Defaults(),
+		[208689] = Defaults(),
+		--°¬ÀÖÈðÉª
+		[210948] = Defaults(),
+		[210229] = Defaults(),
+		[215582] = Defaults(),
+		[212993] = Defaults(),
+		[215443] = Defaults(),
+		[215288] = Defaults(),
+		--ÎÚË÷¿Ë
+		[197942] = Defaults(),
+		[108109] = Defaults(),
+		[199237] = Defaults(),
+		--ÃÎ÷ÊÖ®Áú
+		[203028] = Defaults(),
+		[204122] = Defaults(),
+		[203690] = Defaults(),
+		[203771] = Defaults(),
+		--ÈûÄÉÁôË¹
+		[210346] = Defaults(),
+		[212630] = Defaults(),
+		[211368] = Defaults(),
+		[211178] = Defaults(),
+		[211180] = Defaults(),
+		--ÈøÎ¬Ë¹
+		[210264] = Defaults(),
+		[209288] = Defaults(),
 		-- The Nighthold
-			-- Skorpyron
-				[204766] = Defaults(), -- Energy Surge
-				[214718] = Defaults(), -- Acidic Fragments
-				[211801] = Defaults(), -- Volatile Fragments
-				[204284] = Defaults(), -- Broken Shard (Protection)
-				[204275] = Defaults(), -- Arcanoslash (Tank)
-				[211659] = Defaults(), -- Arcane Tether (Tank debuff)
-				[204483] = Defaults(), -- Focused Blast (Stun)
+-- The Nighthold
+	-- Skorpyron
+		[204766] = Defaults(), -- Energy Surge
+		[214718] = Defaults(), -- Acidic Fragments
+		[211801] = Defaults(), -- Volatile Fragments
+		[204284] = Defaults(), -- Broken Shard (Protection)
+		[204275] = Defaults(), -- Arcanoslash (Tank)
+		[211659] = Defaults(), -- Arcane Tether (Tank debuff)
+		[204483] = Defaults(), -- Focused Blast (Stun)
 
-			-- Chronomatic Anomaly
-				[206607] = Defaults(), -- Chronometric Particles (Tank stack debuff)
-				[206609] = Defaults(), -- Time Release (Heal buff/debuff)
-				[205653] = Defaults(), -- Passage of Time
-				[225901] = Defaults(), -- Time Bomb
-				[207871] = Defaults(), -- Vortex (Mythic)
-				[212099] = Defaults(), -- Temporal Charge
+	-- Chronomatic Anomaly
+		[206607] = Defaults(), -- Chronometric Particles (Tank stack debuff)
+		[206609] = Defaults(), -- Time Release (Heal buff/debuff)
+		[205653] = Defaults(), -- Passage of Time
+		[225901] = Defaults(), -- Time Bomb
+		[207871] = Defaults(), -- Vortex (Mythic)
+		[212099] = Defaults(), -- Temporal Charge
 
-			-- Trilliax
-				[206488] = Defaults(), -- Arcane Seepage
-				[206641] = Defaults(), -- Arcane Spear (Tank)
-				[206798] = Defaults(), -- Toxic Slice
-				[214672] = Defaults(), -- Annihilation
-				[214573] = Defaults(), -- Stuffed
-				[214583] = Defaults(), -- Sterilize
-				[208910] = Defaults(), -- Arcing Bonds
-				[206838] = Defaults(), -- Succulent Feast
+	-- Trilliax
+		[206488] = Defaults(), -- Arcane Seepage
+		[206641] = Defaults(), -- Arcane Spear (Tank)
+		[206798] = Defaults(), -- Toxic Slice
+		[214672] = Defaults(), -- Annihilation
+		[214573] = Defaults(), -- Stuffed
+		[214583] = Defaults(), -- Sterilize
+		[208910] = Defaults(), -- Arcing Bonds
+		[206838] = Defaults(), -- Succulent Feast
 
-			-- Spellblade Aluriel
-				[212492] = Defaults(), -- Annihilate (Tank)
-				[212494] = Defaults(), -- Annihilated (Main Tank debuff)
-				[212587] = Defaults(), -- Mark of Frost
-				[212531] = Defaults(), -- Mark of Frost (marked)
-				[212530] = Defaults(), -- Replicate: Mark of Frost 
-				[212647] = Defaults(), -- Frostbitten
-				[212736] = Defaults(), -- Pool of Frost
-				[213085] = Defaults(), -- Frozen Tempest
-				[213621] = Defaults(), -- Entombed in Ice
-				[213148] = Defaults(), -- Searing Brand Chosen
-				[213181] = Defaults(), -- Searing Brand Stunned
-				[213166] = Defaults(), -- Searing Brand
-				[213278] = Defaults(), -- Burning Ground
-				[213504] = Defaults(), -- Arcane Fog
+	-- Spellblade Aluriel
+		[212492] = Defaults(), -- Annihilate (Tank)
+		[212494] = Defaults(), -- Annihilated (Main Tank debuff)
+		[212587] = Defaults(), -- Mark of Frost
+		[212531] = Defaults(), -- Mark of Frost (marked)
+		[212530] = Defaults(), -- Replicate: Mark of Frost
+		[212647] = Defaults(), -- Frostbitten
+		[212736] = Defaults(), -- Pool of Frost
+		[213085] = Defaults(), -- Frozen Tempest
+		[213621] = Defaults(), -- Entombed in Ice
+		[213148] = Defaults(), -- Searing Brand Chosen
+		[213181] = Defaults(), -- Searing Brand Stunned
+		[213166] = Defaults(), -- Searing Brand
+		[213278] = Defaults(), -- Burning Ground
+		[213504] = Defaults(), -- Arcane Fog
 
-			-- Tichondrius
-				[206480] = Defaults(), -- Carrion Plague
-				[215988] = Defaults(), -- Carrion Nightmare
-				[208230] = Defaults(), -- Feast of Blood
-				[212794] = Defaults(), -- Brand of Argus
-				[216685] = Defaults(), -- Flames of Argus
-				[206311] = Defaults(), -- Illusionary Night
-				[206466] = Defaults(), -- Essence of Night
-				[216024] = Defaults(), -- Volatile Wound
-				[216027] = Defaults(), -- Nether Zone
-				[216039] = Defaults(), -- Fel Storm
-				[216726] = Defaults(), -- Ring of Shadows
-				[216040] = Defaults(), -- Burning Soul
+	-- Tichondrius
+		[206480] = Defaults(), -- Carrion Plague
+		[215988] = Defaults(), -- Carrion Nightmare
+		[208230] = Defaults(), -- Feast of Blood
+		[212794] = Defaults(), -- Brand of Argus
+		[216685] = Defaults(), -- Flames of Argus
+		[206311] = Defaults(), -- Illusionary Night
+		[206466] = Defaults(), -- Essence of Night
+		[216024] = Defaults(), -- Volatile Wound
+		[216027] = Defaults(), -- Nether Zone
+		[216039] = Defaults(), -- Fel Storm
+		[216726] = Defaults(), -- Ring of Shadows
+		[216040] = Defaults(), -- Burning Soul
 
-			-- Krosus
-				[206677] = Defaults(), -- Searing Brand
-				[205344] = Defaults(), -- Orb of Destruction
+	-- Krosus
+		[206677] = Defaults(), -- Searing Brand
+		[205344] = Defaults(), -- Orb of Destruction
 
-			-- High Botanist Tel'arn
-				[218503] = Defaults(), -- Recursive Strikes (Tank)
-				[219235] = Defaults(), -- Toxic Spores
-				[218809] = Defaults(), -- Call of Night
-				[218342] = Defaults(), -- Parasitic Fixate
-				[218304] = Defaults(), -- Parasitic Fetter
-				[218780] = Defaults(), -- Plasma Explosion
+	-- High Botanist Tel'arn
+		[218503] = Defaults(), -- Recursive Strikes (Tank)
+		[219235] = Defaults(), -- Toxic Spores
+		[218809] = Defaults(), -- Call of Night
+		[218342] = Defaults(), -- Parasitic Fixate
+		[218304] = Defaults(), -- Parasitic Fetter
+		[218780] = Defaults(), -- Plasma Explosion
 
-			-- Star Augur Etraeus
-				[205984] = Defaults(), -- Gravitaional Pull
-				[214167] = Defaults(), -- Gravitaional Pull
-				[214335] = Defaults(), -- Gravitaional Pull
-				[206936] = Defaults(), -- Icy Ejection
-				[206388] = Defaults(), -- Felburst
-				[206585] = Defaults(), -- Absolute Zero
-				[206398] = Defaults(), -- Felflame
-				[206589] = Defaults(), -- Chilled
-				[205649] = Defaults(), -- Fel Ejection
-				[206965] = Defaults(), -- Voidburst
-				[206464] = Defaults(), -- Coronal Ejection
-				[207143] = Defaults(), -- Void Ejection
-				[206603] = Defaults(), -- Frozen Solid
-				[207720] = Defaults(), -- Witness the Void
-				[216697] = Defaults(), -- Frigid Pulse
+	-- Star Augur Etraeus
+		[205984] = Defaults(), -- Gravitaional Pull
+		[214167] = Defaults(), -- Gravitaional Pull
+		[214335] = Defaults(), -- Gravitaional Pull
+		[206936] = Defaults(), -- Icy Ejection
+		[206388] = Defaults(), -- Felburst
+		[206585] = Defaults(), -- Absolute Zero
+		[206398] = Defaults(), -- Felflame
+		[206589] = Defaults(), -- Chilled
+		[205649] = Defaults(), -- Fel Ejection
+		[206965] = Defaults(), -- Voidburst
+		[206464] = Defaults(), -- Coronal Ejection
+		[207143] = Defaults(), -- Void Ejection
+		[206603] = Defaults(), -- Frozen Solid
+		[207720] = Defaults(), -- Witness the Void
+		[216697] = Defaults(), -- Frigid Pulse
 
-			-- Grand Magistrix Elisande
-				[209166] = Defaults(), -- Fast Time
-				[211887] = Defaults(), -- Ablated
-				[209615] = Defaults(), -- Ablation
-				[209244] = Defaults(), -- Delphuric Beam
-				[209165] = Defaults(), -- Slow Time
-				[209598] = Defaults(), -- Conflexive Burst
-				[209433] = Defaults(), -- Spanning Singularity
-				[209973] = Defaults(), -- Ablating Explosion
-				[209549] = Defaults(), -- Lingering Burn
-				[211261] = Defaults(), -- Permaliative Torment
-				[208659] = Defaults(), -- Arcanetic Ring
+	-- Grand Magistrix Elisande
+		[209166] = Defaults(), -- Fast Time
+		[211887] = Defaults(), -- Ablated
+		[209615] = Defaults(), -- Ablation
+		[209244] = Defaults(), -- Delphuric Beam
+		[209165] = Defaults(), -- Slow Time
+		[209598] = Defaults(), -- Conflexive Burst
+		[209433] = Defaults(), -- Spanning Singularity
+		[209973] = Defaults(), -- Ablating Explosion
+		[209549] = Defaults(), -- Lingering Burn
+		[211261] = Defaults(), -- Permaliative Torment
+		[208659] = Defaults(), -- Arcanetic Ring
 
-			-- Gul'dan
-				[210339] = Defaults(), -- Time Dilation
-				[180079] = Defaults(), -- Felfire Munitions
-				[206875] = Defaults(), -- Fel Obelisk (Tank)
-				[206840] = Defaults(), -- Gaze of Vethriz
-				[206896] = Defaults(), -- Torn Soul
-				[206221] = Defaults(), -- Empowered Bonds of Fel
-				[208802] = Defaults(), -- Soul Corrosion
-				[212686] = Defaults(), -- Flames of Sargeras
+	-- Gul'dan
+		[210339] = Defaults(), -- Time Dilation
+		[180079] = Defaults(), -- Felfire Munitions
+		[206875] = Defaults(), -- Fel Obelisk (Tank)
+		[206840] = Defaults(), -- Gaze of Vethriz
+		[206896] = Defaults(), -- Torn Soul
+		[206221] = Defaults(), -- Empowered Bonds of Fel
+		[208802] = Defaults(), -- Soul Corrosion
+		[212686] = Defaults(), -- Flames of Sargeras
 
-		-- The Emerald Nightmare
-			-- Nythendra
-				[204504] = Defaults(), -- Infested
-				[205043] = Defaults(), -- Infested mind
-				[203096] = Defaults(), -- Rot
-				[204463] = Defaults(), -- Volatile Rot
-				[203045] = Defaults(), -- Infested Ground
-				[203646] = Defaults(), -- Burst of Corruption
+-- The Emerald Nightmare
+	-- Nythendra
+		[204504] = Defaults(), -- Infested
+		[205043] = Defaults(), -- Infested mind
+		[203096] = Defaults(), -- Rot
+		[204463] = Defaults(), -- Volatile Rot
+		[203045] = Defaults(), -- Infested Ground
+		[203646] = Defaults(), -- Burst of Corruption
 
-			-- Elerethe Renferal
-				[210228] = Defaults(), -- Dripping Fangs
-				[215307] = Defaults(), -- Web of Pain
-				[215300] = Defaults(), -- Web of Pain
-				[215460] = Defaults(), -- Necrotic Venom
-				[213124] = Defaults(), -- Venomous Pool
-				[210850] = Defaults(), -- Twisting Shadows
-				[215489] = Defaults(), -- Venomous Pool
+	-- Elerethe Renferal
+		[210228] = Defaults(), -- Dripping Fangs
+		[215307] = Defaults(), -- Web of Pain
+		[215300] = Defaults(), -- Web of Pain
+		[215460] = Defaults(), -- Necrotic Venom
+		[213124] = Defaults(), -- Venomous Pool
+		[210850] = Defaults(), -- Twisting Shadows
+		[215489] = Defaults(), -- Venomous Pool
+		[218519] = Defaults(), -- Wind Burn (Mythic)
 
-			-- Il'gynoth, Heart of the Corruption
-				[210279] = Defaults(), -- Creeping Nightmares
-				[213162] = Defaults(), -- Nightmare Blast
-				[212681] = Defaults(), -- Cleansed Ground
-				[210315] = Defaults(), -- Nightmare Brambles
-				[211507] = Defaults(), -- Nightmare Javelin
-				[211471] = Defaults(), -- Scorned Touch
-				[208697] = Defaults(), -- Mind Flay
-				[215143] = Defaults(), -- Cursed Blood
+	-- Il'gynoth, Heart of the Corruption
+		[208929] = Defaults(), -- Spew Corruption
+		[210984] = Defaults(), -- Eye of Fate
+		[209469] = Defaults(5), -- Touch of Corruption
+		[208697] = Defaults(), -- Mind Flay
+		[215143] = Defaults(),  -- Cursed Blood
 
-			-- Ursoc
-				[198108] = Defaults(), -- Unbalanced
-				[197943] = Defaults(), -- Overwhelm
-				[204859] = Defaults(), -- Rend Flesh
-				[205611] = Defaults(), -- Miasma
-				[198006] = Defaults(), -- Focused Gaze
-				[197980] = Defaults(), -- Nightmarish Cacophony
+	-- Ursoc
+		[198108] = Defaults(), -- Unbalanced
+		[197943] = Defaults(), -- Overwhelm
+		[204859] = Defaults(), -- Rend Flesh
+		[205611] = Defaults(), -- Miasma
+		[198006] = Defaults(), -- Focused Gaze
+		[197980] = Defaults(), -- Nightmarish Cacophony
 
-			-- Dragons of Nightmare
-				[203102] = Defaults(), -- Mark of Ysondre
-				[203121] = Defaults(), -- Mark of Taerar
-				[203125] = Defaults(), -- Mark of Emeriss
-				[203124] = Defaults(), -- Mark of Lethon
-				[204731] = Defaults(), -- Wasting Dread
-				[203110] = Defaults(), -- Slumbering Nightmare
-				[207681] = Defaults(), -- Nightmare Bloom
-				[205341] = Defaults(), -- Sleeping Fog
-				[203770] = Defaults(), -- Defiled Vines
-				[203787] = Defaults(), -- Volatile Infection
+	-- Dragons of Nightmare
+		[203102] = Defaults(), -- Mark of Ysondre
+		[203121] = Defaults(), -- Mark of Taerar
+		[203125] = Defaults(), -- Mark of Emeriss
+		[203124] = Defaults(), -- Mark of Lethon
+		[204731] = Defaults(5), -- Wasting Dread
+		[203110] = Defaults(5), -- Slumbering Nightmare
+		[207681] = Defaults(5), -- Nightmare Bloom
+		[205341] = Defaults(5), -- Sleeping Fog
+		[203770] = Defaults(5), -- Defiled Vines
+		[203787] = Defaults(5), -- Volatile Infection
 
-			-- Cenarius
-				[210279] = Defaults(), -- Creeping Nightmares
-				[213162] = Defaults(), -- Nightmare Blast
-				[210315] = Defaults(), -- Nightmare Brambles
-				[212681] = Defaults(), -- Cleansed Ground
-				[211507] = Defaults(), -- Nightmare Javelin
-				[211471] = Defaults(), -- Scorned Touch
-				[211612] = Defaults(), -- Replenishing Roots
-				[216516] = Defaults(), -- Ancient Dream
+	-- Cenarius
+		[210279] = Defaults(), -- Creeping Nightmares
+		[213162] = Defaults(), -- Nightmare Blast
+		[210315] = Defaults(), -- Nightmare Brambles
+		[212681] = Defaults(), -- Cleansed Ground
+		[211507] = Defaults(), -- Nightmare Javelin
+		[211471] = Defaults(), -- Scorned Touch
+		[211612] = Defaults(), -- Replenishing Roots
+		[216516] = Defaults(), -- Ancient Dream
 
-			-- Xavius
-				[206005] = Defaults(), -- Dream Simulacrum
-				[206651] = Defaults(), -- Darkening Soul
-				[209158] = Defaults(), -- Blackening Soul
-				[211802] = Defaults(), -- Nightmare Blades
-				[206109] = Defaults(), -- Awakening to the Nightmare
-				[209034] = Defaults(), -- Bonds of Terror
-				[210451] = Defaults(), -- Bonds of Terror
-				[208431] = Defaults(), -- Corruption: Descent into Madness
-				[207409] = Defaults(), -- Madness
-				[211634] = Defaults(), -- The Infinite Dark
-				[208385] = Defaults(), -- Tainted Discharge
+	-- Xavius
+		[206005] = Defaults(), -- Dream Simulacrum
+		[206651] = Defaults(), -- Darkening Soul
+		[209158] = Defaults(), -- Blackening Soul
+		[211802] = Defaults(), -- Nightmare Blades
+		[206109] = Defaults(), -- Awakening to the Nightmare
+		[209034] = Defaults(), -- Bonds of Terror
+		[210451] = Defaults(), -- Bonds of Terror
+		[208431] = Defaults(), -- Corruption: Descent into Madness
+		[207409] = Defaults(), -- Madness
+		[211634] = Defaults(), -- The Infinite Dark
+		[208385] = Defaults(), -- Tainted Discharge
 	},
 }
 
@@ -898,59 +624,47 @@ end
 
 G.unitframe.buffwatch = {
 	PRIEST = {
-		[6788] = ClassBuff(6788, "TOPRIGHT", {1, 0, 0}, true),	 -- Weakened Soul
-		[41635] = ClassBuff(41635, "BOTTOMRIGHT", {0.2, 0.7, 0.2}),	 -- Prayer of Mending
-		[139] = ClassBuff(139, "BOTTOMLEFT", {0.4, 0.7, 0.2}), -- Renew
-		[17] = ClassBuff(17, "TOPLEFT", {0.81, 0.85, 0.1}, true),	 -- Power Word: Shield
-		[123258] = ClassBuff(123258, "TOPLEFT", {0.81, 0.85, 0.1}, true),	 -- Power Word: Shield Power Insight
-		[10060] = ClassBuff(10060 , "RIGHT", {227/255, 23/255, 13/255}), -- Power Infusion
-		[47788] = ClassBuff(47788, "LEFT", {221/255, 117/255, 0}, true), -- Guardian Spirit
+		[194384] = ClassBuff(194384, "TOPRIGHT", {1, 0, 0.75}, true),        -- Atonement
+		[41635] = ClassBuff(41635, "BOTTOMRIGHT", {0.2, 0.7, 0.2}),          -- Prayer of Mending
+		[139] = ClassBuff(139, "BOTTOMLEFT", {0.4, 0.7, 0.2}),               -- Renew
+		[17] = ClassBuff(17, "TOPLEFT", {0.81, 0.85, 0.1}, true),            -- Power Word: Shield
+		[47788] = ClassBuff(47788, "LEFT", {221/255, 117/255, 0}, true),     -- Guardian Spirit
 		[33206] = ClassBuff(33206, "LEFT", {227/255, 23/255, 13/255}, true), -- Pain Suppression
 	},
 	DRUID = {
-		[774] = ClassBuff(774, "TOPRIGHT", {0.8, 0.4, 0.8}),	 -- Rejuvenation
-		[8936] = ClassBuff(8936, "BOTTOMLEFT", {0.2, 0.8, 0.2}),	 -- Regrowth
-		[33763] = ClassBuff(33763, "TOPLEFT", {0.4, 0.8, 0.2}),	 -- Lifebloom
-		[48438] = ClassBuff(48438, "BOTTOMRIGHT", {0.8, 0.4, 0}),	 -- Wild Growth
-		[155777] = ClassBuff(155777, "BOTTOMRIGHT", {0.8, 0.4, 0}),	 -- Wild Growth
-		[188550] = ClassBuff(188550, "TOPLEFT", {0.8, 0.4, 0}),	 -- Wild Growth
+		[774] = ClassBuff(774, "TOPRIGHT", {0.8, 0.4, 0.8}),      -- Rejuvenation
+		[155777] = ClassBuff(155777, "RIGHT", {0.8, 0.4, 0.8}),   -- Germination
+		[8936] = ClassBuff(8936, "BOTTOMLEFT", {0.2, 0.8, 0.2}),  -- Regrowth
+		[33763] = ClassBuff(33763, "TOPLEFT", {0.4, 0.8, 0.2}),   -- Lifebloom
+		[188550] = ClassBuff(188550, "TOPLEFT", {0.4, 0.8, 0.2}), -- Lifebloom T18 4pc
+		[48438] = ClassBuff(48438, "BOTTOMRIGHT", {0.8, 0.4, 0}), -- Wild Growth
+		[207386] = ClassBuff(207386, "TOP", {0.4, 0.2, 0.8}),     -- Spring Blossoms
+		[102352] = ClassBuff(102352, "LEFT", {0.2, 0.8, 0.8}),    -- Cenarion Ward
+		[200389] = ClassBuff(200389, "BOTTOM", {1, 1, 0.4}),      -- Cultivation
 	},
 	PALADIN = {
-		[53563] = ClassBuff(53563, "TOPRIGHT", {0.7, 0.3, 0.7}),	 -- Beacon of Light
-		[1022] = ClassBuff(1022, "BOTTOMRIGHT", {0.2, 0.2, 1}, true),	-- Hand of Protection
-		[1044] = ClassBuff(1044, "BOTTOMRIGHT", {0.89, 0.45, 0}, true),	-- Hand of Freedom
-		[1038] = ClassBuff(1038, "BOTTOMRIGHT", {0.93, 0.75, 0}, true),	-- Hand of Salvation
-		[6940] = ClassBuff(6940, "BOTTOMRIGHT", {0.89, 0.1, 0.1}, true),	-- Hand of Sacrifice
-		[114039] = ClassBuff(114039, "BOTTOMRIGHT", {164/255, 105/255, 184/255}), -- Hand of Purity
-		[148039] = ClassBuff(148039, 'TOPLEFT', {0.93, 0.75, 0}), -- Sacred Shield
-		[156322] = ClassBuff(156322, 'BOTTOMLEFT', {0.87, 0.7, 0.03}), -- Eternal Flame
+		[53563] = ClassBuff(53563, "TOPRIGHT", {0.7, 0.3, 0.7}),         -- Beacon of Light
+		[156910] = ClassBuff(156910, "TOPRIGHT", {0.7, 0.3, 0.7}),       -- Beacon of Faith
+		[1022] = ClassBuff(1022, "BOTTOMRIGHT", {0.2, 0.2, 1}, true),    -- Hand of Protection
+		[1044] = ClassBuff(1044, "BOTTOMRIGHT", {0.89, 0.45, 0}, true),  -- Hand of Freedom
+		[6940] = ClassBuff(6940, "BOTTOMRIGHT", {0.89, 0.1, 0.1}, true), -- Hand of Sacrifice
+		[114163] = ClassBuff(114163, 'BOTTOMLEFT', {0.87, 0.7, 0.03}),   -- Eternal Flame
 	},
 	SHAMAN = {
-		[61295] = ClassBuff(61295, "TOPRIGHT", {0.7, 0.3, 0.7}),	 -- Riptide
-		[974] = ClassBuff(974, "BOTTOMLEFT", {0.2, 0.7, 0.2}, true),	 -- Earth Shield
-		[51945] = ClassBuff(51945, "BOTTOMRIGHT", {0.7, 0.4, 0}),	 -- Earthliving
+		[61295] = ClassBuff(61295, "TOPRIGHT", {0.7, 0.3, 0.7}), -- Riptide
 	},
 	MONK = {
-		[119611] = ClassBuff(119611, "TOPLEFT", {0.8, 0.4, 0.8}),	 --Renewing Mist
-		[116849] = ClassBuff(116849, "TOPRIGHT", {0.2, 0.8, 0.2}),	 -- Life Cocoon
-		[132120] = ClassBuff(132120, "BOTTOMLEFT", {0.4, 0.8, 0.2}), -- Enveloping Mist
-		[124081] = ClassBuff(124081, "BOTTOMRIGHT", {0.7, 0.4, 0}), -- Zen Sphere
-		[124682] = ClassBuff(124682, "TOPLEFT", {0.7, 0.4, 0}), -- ë³ëµÖ®Îí
-		[191840] = ClassBuff(191840, "BOTTOMLEFT", {0.7, 0.4, 0}), -- ¾«»ªÖ®Èª
+		[119611] = ClassBuff(119611, "TOPLEFT", {0.8, 0.4, 0.8}),    --Renewing Mist
+		[116849] = ClassBuff(116849, "TOPRIGHT", {0.2, 0.8, 0.2}),   -- Life Cocoon
+		[124682] = ClassBuff(124682, "BOTTOMLEFT", {0.4, 0.8, 0.2}), -- Enveloping Mist
+		[124081] = ClassBuff(124081, "BOTTOMRIGHT", {0.7, 0.4, 0}),  -- Zen Sphere
 	},
 	ROGUE = {
 		[57934] = ClassBuff(57934, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Tricks of the Trade
 	},
-	MAGE = {
-		[111264] = ClassBuff(111264, "TOPLEFT", {0.2, 0.2, 1}), -- Ice Ward
-	},
 	WARRIOR = {
-		[114030] = ClassBuff(114030, "TOPLEFT", {0.2, 0.2, 1}), -- Vigilance
+		[114030] = ClassBuff(114030, "TOPLEFT", {0.2, 0.2, 1}),          -- Vigilance
 		[3411] = ClassBuff(3411, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Intervene
-		[114029] = ClassBuff(114029, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Safe Guard
-	},
-	DEATHKNIGHT = {
-		[49016] = ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Unholy Frenzy
 	},
 	PET = {
 		[19615] = ClassBuff(19615, 'TOPLEFT', {227/255, 23/255, 13/255}, true), -- Frenzy
@@ -958,6 +672,9 @@ G.unitframe.buffwatch = {
 	},
 	HUNTER = {}, --Keep even if it's an empty table, so a reference to G.unitframe.buffwatch[E.myclass][SomeValue] doesn't trigger error
 	DEMONHUNTER = {},
+	WARLOCK = {},
+	MAGE = {},
+	DEATHKNIGHT = {},
 	ALL = {
 	--	ClassBuff(740, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, nil, nil, 14, true), --Äþ¾²
 		[97463] = ClassBuff(97463, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, 0, 14, true),--¼¯½áÄÅº°*
@@ -1015,11 +732,7 @@ G.unitframe.ChannelTicks = {
 	--Warlock
 	[SpellName(689)] = 6, -- "Drain Life"
 	[SpellName(198590)] = 6, -- "Drain Soul"
-	-- [SpellName(108371)] = 6, -- "Harvest Life"
---	[SpellName(5740)] = 4, -- "Rain of Fire"
 	[SpellName(755)] = 6, -- Health Funnel
-	-- [SpellName(103103)] = 4, --Malefic Grasp
-	--Druid
 	--Priest
 	[SpellName(48045)] = 5, -- "Mind Sear"
 	[SpellName(179338)] = 5, -- "Searing insanity"
@@ -1072,110 +785,4 @@ G.unitframe.AuraBarColors = {
 
 G.unitframe.DebuffHighlightColors = {
 	[25771] = {enable = false, style = "FILL", color = {r = 0.85, g = 0, b = 0, a = 0.85}},
-}
-
---G.oldBuffWatch is only used for data retrieval by E:DBConversions()
-G.oldBuffWatch = {
-	PRIEST = {
-		ClassBuff(6788, "TOPRIGHT", {1, 0, 0}, true),	 -- Weakened Soul
-		ClassBuff(41635, "BOTTOMRIGHT", {0.2, 0.7, 0.2}),	 -- Prayer of Mending
-		ClassBuff(139, "BOTTOMLEFT", {0.4, 0.7, 0.2}), -- Renew
-		ClassBuff(17, "TOPLEFT", {0.81, 0.85, 0.1}, true),	 -- Power Word: Shield
-		ClassBuff(123258, "TOPLEFT", {0.81, 0.85, 0.1}, true),	 -- Power Word: Shield Power Insight
-		ClassBuff(10060 , "RIGHT", {227/255, 23/255, 13/255}), -- Power Infusion
-		ClassBuff(47788, "LEFT", {221/255, 117/255, 0}, true), -- Guardian Spirit
-		ClassBuff(33206, "LEFT", {227/255, 23/255, 13/255}, true), -- Pain Suppression
-	},
-	DRUID = {
-		ClassBuff(774, "TOPRIGHT", {0.8, 0.4, 0.8}),	 -- Rejuvenation
-		ClassBuff(8936, "BOTTOMLEFT", {0.2, 0.8, 0.2}),	 -- Regrowth
-		ClassBuff(33763, "TOPLEFT", {0.4, 0.8, 0.2}),	 -- Lifebloom
-		ClassBuff(48438, "BOTTOMRIGHT", {0.8, 0.4, 0}),	 -- Wild Growth
-	},
-	PALADIN = {
-		ClassBuff(53563, "TOPRIGHT", {0.7, 0.3, 0.7}),	 -- Beacon of Light
-		ClassBuff(1022, "BOTTOMRIGHT", {0.2, 0.2, 1}, true),	-- Hand of Protection
-		ClassBuff(1044, "BOTTOMRIGHT", {0.89, 0.45, 0}, true),	-- Hand of Freedom
-		ClassBuff(1038, "BOTTOMRIGHT", {0.93, 0.75, 0}, true),	-- Hand of Salvation
-		ClassBuff(6940, "BOTTOMRIGHT", {0.89, 0.1, 0.1}, true),	-- Hand of Sacrifice
-		ClassBuff(114039, "BOTTOMRIGHT", {164/255, 105/255, 184/255}), -- Hand of Purity
-		ClassBuff(148039, 'TOPLEFT', {0.93, 0.75, 0}), -- Sacred Shield
-		ClassBuff(156322, 'BOTTOMLEFT', {0.87, 0.7, 0.03}), -- Eternal Flame
-	},
-	SHAMAN = {
-		ClassBuff(61295, "TOPRIGHT", {0.7, 0.3, 0.7}),	 -- Riptide
-		ClassBuff(974, "BOTTOMLEFT", {0.2, 0.7, 0.2}, true),	 -- Earth Shield
-		ClassBuff(51945, "BOTTOMRIGHT", {0.7, 0.4, 0}),	 -- Earthliving
-	},
-	MONK = {
-		ClassBuff(119611, "TOPLEFT", {0.8, 0.4, 0.8}),	 --Renewing Mist
-		ClassBuff(116849, "TOPRIGHT", {0.2, 0.8, 0.2}),	 -- Life Cocoon
-		ClassBuff(132120, "BOTTOMLEFT", {0.4, 0.8, 0.2}), -- Enveloping Mist
-		ClassBuff(124081, "BOTTOMRIGHT", {0.7, 0.4, 0}), -- Zen Sphere
-	},
-	ROGUE = {
-		ClassBuff(57934, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Tricks of the Trade
-	},
-	MAGE = {
-		ClassBuff(111264, "TOPLEFT", {0.2, 0.2, 1}), -- Ice Ward
-	},
-	WARRIOR = {
-		ClassBuff(114030, "TOPLEFT", {0.2, 0.2, 1}), -- Vigilance
-		ClassBuff(3411, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Intervene
-		ClassBuff(114029, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Safe Guard
-	},
-	DEATHKNIGHT = {
-		ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Unholy Frenzy
-	},
-	PET = {
-		ClassBuff(19615, 'TOPLEFT', {227/255, 23/255, 13/255}, true), -- Frenzy
-		ClassBuff(136, 'TOPRIGHT', {0.2, 0.8, 0.2}, true) --Mend Pet
-	},
-	HUNTER = {}, --Keep even if it's an empty table, so a reference to G.unitframe.buffwatch[E.myclass][SomeValue] doesn't trigger error
-	DEMONHUNTER = {},
-	ALL = {
-	--	ClassBuff(740, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, nil, nil, 14, true), --Äþ¾²
-		ClassBuff(97463, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, 0, 14, true),--¼¯½áÄÅº°*
-		ClassBuff(64844, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, nil, 14, true), --ÉñÊ¥ÔÞÃÀÊ«*
-		ClassBuff(81782, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, nil, 14, true), --ÕæÑÔÊõ£ºÕÏ*
-		ClassBuff(15286, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, nil, 14, true), --ÎüÑª¹íµÄÓµ±§
-		ClassBuff(31821, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, nil, 14, true), --ò¯³Ï¹â»·
-		ClassBuff(88611, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, nil, 14, true), --ÑÌÎíµ¯*
-		ClassBuff(145629, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, nil, 14, true), --·´Ä§·¨ÁìÓò
-	--	ClassBuff(108280, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, nil, nil, 14, true), --ÖÎÁÆÖ®³±Í¼ÌÚ
-		ClassBuff(98007, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, nil, 14, true), --Áé»êÁ´½ÓÍ¼ÌÚ*
-	--	ClassBuff(172106, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, nil, 14, true), --ÁéºüÊØ»¤*
-	--	ClassBuff(159916, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, -10, nil, 14, true), --Ä§·¨ÔöÐ§
-	},
-	CHAR = { --¸öÈË¼õÉË×é
-		ClassBuff(48707, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --·´Ä§·¨»¤ÕÖ
-		ClassBuff(30823, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ÈøÂúÖ®Å­
-		ClassBuff(108271, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ÈøÂúÖ®Å­
-		ClassBuff(33206, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --Í´¿àÑ¹ÖÆ
-		ClassBuff(47585, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ÏûÉ¢
-		ClassBuff(871, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --¶ÜÇ½
-		ClassBuff(48792, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --±ù·âÖ®ÈÍ
-		ClassBuff(498, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --Ê¥ÓÓÊõ
-		ClassBuff(22812, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --Ê÷Æ¤Êõ
-		ClassBuff(61336, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --Éú´æ±¾ÄÜ
-		ClassBuff(5277, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ÉÁ±Ü
-		ClassBuff(74001, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --±¸Õ½¾ÍÐ÷
-		ClassBuff(47788, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ÊØ»¤Ö®»ê
-		ClassBuff(19263, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ÍþÉå
-		ClassBuff(6940, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ÎþÉüÖ®ÊÖ
-		ClassBuff(31850, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --³ãÈÈ·ÀÓùÕß
-		ClassBuff(31224, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --°µÓ°¶·Åñ
-		ClassBuff(42650, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ÍöÕß´ó¾ü
-		ClassBuff(86657, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --Ô¶¹ÅÊØÎÀ
-		ClassBuff(118038, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --½£ÔÚÈËÔÚ
-		ClassBuff(115176, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ìøÎòÚ¤Ïë
-		ClassBuff(115308, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --Æ®Ãì¾Æ
-		ClassBuff(120954, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --×³µ¨¾Æ
-		ClassBuff(115295, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --½ðÖÓÕÖ
-		ClassBuff(51271, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --±ùËªÖ®Öù
-		ClassBuff(12975, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ÆÆ¸ª³ÁÖÛ
-		ClassBuff(97463, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --¼¯½áÄÅº°
-		ClassBuff(102342, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --ÌúÄ¾Ê÷Æ¤
-		ClassBuff(114039, "TOP", {1, 0, 0}, true, nil, "texturedIcon", nil, nil, nil, nil, 10, nil, 14, true), --´¿¾»Ö®ÊÖ
-	},
 }

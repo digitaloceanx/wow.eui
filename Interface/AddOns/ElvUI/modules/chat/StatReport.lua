@@ -182,8 +182,8 @@ local function StatReport_GetHealText()
 	end 
 	text = text..L.StatReport_Strings_CRIT..":"..MyData.SCRIT; 
 	text = text..L.StatReport_Strings_COMMA; 
-	text = text..L.StatReport_Strings_SPI..":"..MyData.SPI;
-	text = text..L.StatReport_Strings_COMMA;
+--	text = text..L.StatReport_Strings_SPI..":"..MyData.SPI;
+--	text = text..L.StatReport_Strings_COMMA;
 	text = text..L.StatReport_Strings_SHP..":"..MyData.SHP;
 	
 	return text;
@@ -202,8 +202,8 @@ local function StatReport_GetSpellAndHealText()
 	end 
 	text = text..L.StatReport_Strings_CRIT..":"..MyData.SCRIT;
 	text = text..L.StatReport_Strings_COMMA; 
-	text = text..L.StatReport_Strings_SPI..":"..MyData.SPI;
-	text = text..L.StatReport_Strings_COMMA;
+--	text = text..L.StatReport_Strings_SPI..":"..MyData.SPI;
+--	text = text..L.StatReport_Strings_COMMA;
 	text = text..L.StatReport_Strings_SSP..":"..MyData.SSP;
 	text = text..L.StatReport_Strings_COMMA; 
 	text = text..L.StatReport_Strings_SHP..":"..MyData.SHP;

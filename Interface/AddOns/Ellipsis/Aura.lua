@@ -17,6 +17,8 @@ local TIME_FULL_MINS 	= '%d:%02d'
 local TIME_FULL_SECS 	= '%.0f'
 local TIME_FULL_TENS 	= '%.1f'
 
+local FORMAT_UNIT_AURA	= '%s: %s'
+
 local floor, ceil = math.floor, math.ceil
 local tinsert, tremove = table.insert, table.remove
 local unpack, pairs = unpack, pairs
@@ -25,6 +27,7 @@ local auraDB
 
 -- variables configured by user options
 local highR, highG, highB, medR, medG, medB, lowR, lowG, lowB
+local pointBarTop, pointBarBot, pointIconTop, pointIconBot
 local unitWidth, sendAlerts, ghostingEnabled, ghostDuration
 local tickRate = 1 -- set to initial value to delay OnUpdate until options are configured
 local FormatRemainingTime -- function ref, set by user options
@@ -192,8 +195,8 @@ local function CreateAura(parentUnit)
 
 	-- main gui widgets
 	widget = new:CreateTexture(nil, 'BORDER')
-	widget:SetPoint('TOPLEFT', new, 'TOPLEFT')
-	widget:SetPoint('BOTTOMLEFT', new, 'BOTTOMLEFT')
+	widget:SetPoint(pointIconTop, new, pointIconTop)
+	widget:SetPoint(pointIconBot, new, pointIconBot)
 	widget:SetTexCoord(0.08, 0.92, 0.08, 0.92)
 	new.icon = widget
 
@@ -205,8 +208,8 @@ local function CreateAura(parentUnit)
 	new.border = widget
 
 	widget = CreateFrame('StatusBar', nil, new)
-	widget:SetPoint('TOPRIGHT', new, 'TOPRIGHT')
-	widget:SetPoint('BOTTOMRIGHT', new, 'BOTTOMRIGHT')
+	widget:SetPoint(pointBarTop, new, pointBarTop)
+	widget:SetPoint(pointBarBot, new, pointBarBot)
 	widget:SetFrameLevel(widget:GetFrameLevel() - 1) -- ensure bar is behind the base frame (where text is anchored)
 	widget:SetMinMaxValues(0, 1)
 	new.bar = widget
@@ -268,7 +271,14 @@ function Aura:New(currentTime, parentUnit, spellID, spellName, spellIcon, durati
 	new.icon:SetDesaturated(false)
 
 	new.stacks:SetText(stackCount > 1 and stackCount or '')
-	new.name:SetText(spellName)
+
+	if (auraDB.textFormat == 'AURA') then
+		new.name:SetText(spellName)
+	elseif (auraDB.textFormat == 'UNIT') then
+		new.name:SetText(new.parentUnit.unitName)
+	else
+		new.name:SetFormattedText(FORMAT_UNIT_AURA, new.parentUnit.unitName, spellName)
+	end
 
 	if (duration == 0) then -- passive effect
 		new.border:SetVertexColor(unpack(auraDB.colourHigh))
@@ -448,6 +458,19 @@ end
 function Ellipsis:ConfigureAuras()
 	unitWidth		= self.db.profile.units.width
 	tickRate		= self.db.profile.advanced.tickRate
+
+	if (auraDB.flipIcon) then
+		pointBarTop		= 'TOPLEFT'
+		pointBarBot		= 'BOTTOMLEFT'
+		pointIconTop	= 'TOPRIGHT'
+		pointIconBot	= 'BOTTOMRIGHT'
+	else
+		pointBarTop		= 'TOPRIGHT'
+		pointBarBot		= 'BOTTOMRIGHT'
+		pointIconTop	= 'TOPLEFT'
+		pointIconBot	= 'BOTTOMLEFT'
+	end
+
 	ghostingEnabled	= auraDB.ghosting
 	ghostDuration	= auraDB.ghostDuration * -1
 
@@ -481,5 +504,21 @@ function Ellipsis:UpdateExistingAuras()
 			aura.border:SetVertexColor(unpack(auraDB.colourHigh))
 			aura.bar:SetStatusBarColor(unpack(auraDB.colourHigh))
 		end
+
+		if (auraDB.textFormat == 'AURA') then
+			aura.name:SetText(aura.spellName)
+		elseif (auraDB.textFormat == 'UNIT') then
+			aura.name:SetText(aura.parentUnit.unitName)
+		else
+			aura.name:SetFormattedText(FORMAT_UNIT_AURA, aura.parentUnit.unitName, aura.spellName)
+		end
+
+		aura.icon:ClearAllPoints()
+		aura.icon:SetPoint(pointIconTop, aura, pointIconTop)
+		aura.icon:SetPoint(pointIconBot, aura, pointIconBot)
+
+		aura.bar:ClearAllPoints()
+		aura.bar:SetPoint(pointBarTop, aura, pointBarTop)
+		aura.bar:SetPoint(pointBarBot, aura, pointBarBot)
 	end
 end

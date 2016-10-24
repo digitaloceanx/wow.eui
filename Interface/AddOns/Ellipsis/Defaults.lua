@@ -55,10 +55,12 @@ function Ellipsis:GetDefaults()
 				unitPrioritize		= false			-- whether unit prioritiy overrides chosen sorting method
 			},
 			auras = {
+				style				= 'BAR',		-- BAR|ICON
 				interactive			= true,			-- control ability to cancel/announce timers with mouse-clicks
 				tooltips			= 'HELPER',		-- FULL|HELPER|OFF
-				style				= 'BAR',		-- BAR|ICON
 				timeFormat			= 'ABRV',		-- ABRV|TRUN|FULL
+				textFormat			= 'AURA',		-- AURA|UNIT|BOTH
+				flipIcon			= false,		-- flip icon to the right side of the bar
 				ghosting			= true,
 				ghostDuration		= 10,
 				-- appearance (text)
@@ -82,6 +84,8 @@ function Ellipsis:GetDefaults()
 			},
 			units ={
 				width				= 160,			-- also used for auras when in bar style, or for wrap distance in ICON style
+				opacityFaded		= 1,			-- set the opacity of units not currently being targeted
+				opacityNoTarget		= 1,			-- set the opacity of the notarget unit
 				headerHeight		= 16,			-- height of the header block for each unit
 				headerFont			= 'Friz Quadrata TT',
 				headerFontSize		= 12,
@@ -89,6 +93,7 @@ function Ellipsis:GetDefaults()
 				headerShowLevel		= true,
 				headerColourBy		= 'REACTION',	-- CLASS|REACTION|NONE (NONE = use player chosen colour)
 				stripServer			= false,
+				collapseAllUnits	= false,
 				collapsePlayer		= false,
 				collapseNoTarget	= false,
 				-- colours

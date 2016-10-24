@@ -3,23 +3,6 @@ local DT = E:GetModule('DataTexts')
 
 local InCombatLockdown = InCombatLockdown
 
-local function FixCastShown(frameName)
-	frameName = 'ElvUF_'..frameName;
-	for i = 1, 2 do
-		local castbar = _G[frameName].Castbar
-		if not castbar.oldHide then
-			castbar.oldHide = castbar.Hide
-			castbar.Hide = castbar.Show
-			castbar:Show()
-		else
-			castbar.Hide = castbar.oldHide
-			castbar.oldHide = nil
-			castbar:Hide()
-			castbar.lastUpdate = 0
-		end
-	end
-end
-
 local ShortcutsList = {
 	{text = L["Setup Chat"], 
 	func = function() E:Install(); ElvUIInstallFrame.SetPage(3); end},
@@ -74,7 +57,7 @@ local menuFrame = CreateFrame("Frame", "ShortOptClickMenu", E.UIParent)
 
 local function Click(self)
 	local position = self:GetPoint()
-	if position:match("LEFT") then
+	if position and position:match("LEFT") then
 		E:DropDown(ShortcutsList, menuFrame)
 	else
 		E:DropDown(ShortcutsList, menuFrame, -160, 0)

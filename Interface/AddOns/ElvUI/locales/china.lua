@@ -14,6 +14,7 @@ if not L then return end
 ]]
 --Static Popup
 do
+	L["Are you sure you want to apply this font to all ElvUI elements?"] = "你确认你想应用此字体到所有EUI模块?"
 	L["Find BigFoot or DuoWan is loaded! please delete its."] = "发现有大脚或魔盒插件被载入！请删除他们再使用EUI.";
 	L["ElvUI needs to perform database optimizations please be patient."] = "你想体验2014愚人节彩蛋么？";
 	L["Do you enjoy the new ElvUI?"] = "你喜欢新的EUI配色么?";
@@ -51,8 +52,13 @@ L["Disable Tutorial Buttons"] = "禁用教程按钮"
 L["Talking Head Scale"] = "特写框体缩放"
 L["Hide In Vehicle"] = "载具时隐藏"
 L["Enable + Adjust Movers"] = "启用+调整移动";
-
+L["Current Level:"] = "当前等级:"
+L["Honor XP:"] = "荣誉值:"
+L["Honor Remaining:"] = "荣誉值剩余:"
+L["Bars"] = "条"
+L["Honor Bar"] = "荣誉条"
 --Minimap
+L["Reset Zoom"] = "缩放复位";
 L['Always Display'] = '总是显示';
 L['Location Text'] = '地区文字';
 L["Minimap Buttons"] = '小地图按钮';
@@ -447,6 +453,8 @@ end
 
 --NamePlate Config
 do
+	L["Detection"] = "检测";
+	L["Suramar Detection"] = " 苏拉玛检测";
 	L["Clickable Height"] = "可点击高度";
 	L["Clickable Width"] = "可点击宽度";
 	L["Controls how big of an area on the screen will accept clicks to target unit."] = "控制屏幕上多大的区域可以点击到目标单位";
@@ -679,9 +687,12 @@ do
 	L["Target Aura Bars"] = "目标光环条"
 	L["Focus Aura Bars"] = "焦点光环条"
 end
-	
+
 --ACTIONBARS
 do
+	L["Shows a swipe animation when a spell is recharging but still has charges left."] = "显示转圈动画当充能法术仍有可用数时";
+	L["Use Draw Swipe"] = "使用转圈动画";
+	L["Zone Ability"] = "区域技能";
 	L["Color of the actionbutton when not usable."] = "当按钮不可使用时的颜色";
 	L["Color of the actionbutton when usable."] = "当按钮可以使用时的颜色";
 	L["Not Usable"] = "不可用";
@@ -816,6 +827,8 @@ L['ABOVE_THREAT_FORMAT'] = '%s: %.0f%% [%.0f%% above |cff%02x%02x%02x%s|r]'
 
 --UNITFRAMES
 do
+	L["PvP & Prestige Icon"] = "PvP 和 声望图标";
+	L["PvP Text"] = "PvP 文字";
 	L["Attach Text To"] = "文字附着于"
 	L["Target Class Icon"] = "目标职业图标";
 	L["Player Portrait"] = "玩家头像";
@@ -1407,6 +1420,8 @@ end
 
 --Datatext
 do
+	L["Saved Raid(s)"] = "已有进度的副本"
+	L["Saved Dungeon(s)"] = "已有进度的地下城";
 	L["Displayed Currency"] = "显示货币";
 	L["Orderhall"] = "职业大厅资源";
 	L["Gold:"] = "金币:";
@@ -1600,6 +1615,8 @@ end
 
 --Tooltip
 do
+	L["Loot Item Level: "] = "掉落物品等级: "
+	L["Weekly Chest Item Level: "] = "周常箱子物品等级: "
 	L["Inspect Info"] = "观察信息";
 	L["Display the players talent spec and item level in the tooltip, this may not immediately update when mousing over a unit."] = "显示玩家的天赋和物品等级在鼠标提示上."
 	L["Header Font Size"] = "头部字体尺寸";
@@ -1867,7 +1884,8 @@ do
 	L['Enable/Disable the loot roll frame.'] = "启用/禁用增强LOOT框体";
 	L['Loot'] = "拾取框";
 	L['Enable/Disable the loot frame.'] = "启用/禁用拾取框";
-
+	L["Use Position Override"] = "位置重写";
+	L["When enabled it will use the Anchor Point setting to determine growth direction, otherwise it will be determined by where the bar is positioned."] = "当启用时,它将使用锚点位置来确定增长方向,否则将取决于其自身的位置";
 	L['Exp/Rep Position'] = "经验/声望条位置";
 	L['Change the position of the experience/reputation bar.'] = "改变经验/声望条位置";
 	L['Top Screen'] = "屏幕顶端";
@@ -1879,6 +1897,11 @@ end
 
 --Bags
 do
+	L["Use Tooltip Scanning"] = "使用鼠标扫描"
+	L["This makes the item level display more reliable but uses more resources. If this is disabled then upgraded items will not show the correct item level."] = "使用鼠标扫描获得更加可靠的信息,关闭的话只能得到基本信息"
+	L["Disable Bag Sort"] = "禁用背包排序";
+	L["Disable Bank Sort"] = "禁用银行排序";
+	L["Clear Search On Close"] = "关闭时清空搜索"
 	L["Temporary Move"] = '移动背包';
 	L["Hold Control + Right Click:"] = '按住 Ctrl 并按鼠标右键：'
 	L["Reset Position"] = "重设位置"
@@ -1959,6 +1982,9 @@ The following search keywords can also be used:
 	L['The display format of the currency icons that get displayed below the main bag. (You have to be watching a currency for this to display)'] = "背包底部的货币显示格式. (你需要在货币页中勾选显示)";
 	L["Icons Only"] = "图标";
 	L["Icons and Text"] = "图标和文字";
+	L["Global"] = "全局";
+	L["Ignored Items and Search Syntax (Global)"] = "忽略物品和搜索语法(全局)";
+	L["Ignored Items and Search Syntax (Profile)"] = "忽略物品和搜索语法(配置)";
 	L['Already Running.. Bailing Out!'] = "已在运行";
 	L['You must be at a bank.'] = "你必需在银行";
 	L['Confused.. Try Again!'] = "重试";
@@ -2143,6 +2169,9 @@ end
 
 --singleFunc
 do
+	L['AngryKeystones'] = "大秘境计时";
+	L['Show AngryKeystones Option'] = "显示大秘境计时设置";
+	L["WorldQuestTracker"] = "世界任务追踪"
 	L['singleFunc'] = '单体插件管理';
 	L['singleFunc_desc'] = '集中管理、自动更新、按需加载、设置方便';
 	L['BigFootBank'] = '离线黑市';
@@ -2154,6 +2183,7 @@ do
 	L['ExtraCD'] = '内置CD监视';
 	L['Show ExtraCD Config'] = '显示内置CD监视设置';
 	L['HandyNotes_DraenorTreasures'] = '德拉诺宝箱显示';
+	L["HandyNotes_LegionRaresTreasures"] = "破碎群岛宝藏显示"
 	L['Show HandyNotes_DraenorTreasures Config'] = '显示德拉诺宝箱设置';
 	L['MikScrollingBattleText'] = 'MSBT战斗文字';
 	L['Show MikScrollingBattleText Config'] = '显示MSBT设置';
@@ -2163,9 +2193,9 @@ do
 	L['OffileDataCenter'] = '离线数据中心';
 	L['Show OfflineDataCenter Frame'] = '打开离线数据中心窗口';
 	L['Show OfflineDataCenter Config Frame'] = '打开离线数据中心设置';
-	L['RaidBuilder'] = '集合石';
-	L['Show RaidBuilder Config Frame'] = '显示集合石窗口';
-	L['Toggle RaidBuilder BrokerPanel'] = '开关集合石数据窗'
+	L['MeetingStone'] = '集合石';
+	L['Show MeetingStone Config Frame'] = '显示集合石窗口';
+	L['Toggle MeetingStone BrokerPanel'] = '开关集合石数据窗'
 	L['Skada'] = 'Skada战斗统计';
 	L['Show Skada Config Frame'] = '显示Skada设置窗口';
 	L['Toggle Skada Window'] = '开关Skada窗口';
@@ -2226,6 +2256,13 @@ end
 
 --euiscript
 do
+	L["Blz ClassBar"] = "暴雪职业条";
+	L["DRTracker"] = "递减追踪"
+	L["ElvUF_Arena1"] = "EUI竞技场框体1";
+	L["ElvUF_Arena2"] = "EUI竞技场框体2";
+	L["ElvUF_Arena3"] = "EUI竞技场框体3";
+	L["ElvUF_Arena4"] = "EUI竞技场框体4";
+	L["ElvUF_Arena5"] = "EUI竞技场框体5";
 	L["Character Stats Enhance"] = "角色面板属性增强";
 	L["CharacterStats List"] = "属性列表";
 	L["HEALTH"] = "生命";
@@ -2477,6 +2514,8 @@ do
 		L["idQuestAutomation_desc"] = "按住Shift可禁用自动交接"
 	L["Auto Choise BestValue Item"] = "自动选择最贵奖励";
 	L["raidcd"] = "团队技能冷却监视"
+	L["raidcccd"] = "团队控制技能监视"
+		L["CC Spell"] = "控制技能"
 		L["raidcd_width"] = "冷却条宽度"
 		L["raidcd_height"] = "冷却条高度"
 		L["raidcd_maxbars"] = "最大条数"
@@ -2544,6 +2583,7 @@ end
 
 --Mover
 do
+	L["Zone Ability"] = "区域技能"
 	L["MirrorTimer"] = "镜像时间";
 	L['BodyGuard Frame'] = "保镖框体";
 	L["Loot / Alert Frames"] = "拾取 / 成就框";

@@ -84,11 +84,29 @@ local unitConfiguration = {
 		max = 50,
 		step = 1,
 	},
+	opacityFaded = {
+		name = L.UnitOpacityFaded,
+		desc = L.UnitOpacityFadedDesc,
+		type = 'range',
+		order = 3,
+		min = 0,
+		max = 1,
+		step = 0.05,
+	},
+	opacityNoTarget = {
+		name = L.UnitOpacityNoTarget,
+		desc = L.UnitOpacityNoTargetDesc,
+		type = 'range',
+		order = 4,
+		min = 0,
+		max = 1,
+		step = 0.05,
+	},
 	groupHeaderText = {
 		name = L.UnitHeaderTextHeader,
 		type = 'group',
 		inline = true,
-		order = 3,
+		order = 5,
 		args = {
 			headerFont = {
 				name = L.UnitHeaderTextFont,
@@ -139,19 +157,32 @@ local unitConfiguration = {
 		name = L.UnitCollapseHeader,
 		type = 'group',
 		inline = true,
-		order = 4,
+		order = 6,
 		args = {
+			collapseAllUnits = {
+				name = L.UnitCollapseAllUnits,
+				desc = L.UnitCollapseAllUnitsDesc,
+				type = 'toggle',
+				order = 1,
+				width = 'full',
+			},
 			collapsePlayer = {
 				name = L.UnitCollapsePlayer,
 				desc = L.UnitCollapsePlayerDesc,
 				type = 'toggle',
-				order = 1,
+				order = 2,
+				disabled = function()
+					return Ellipsis.db.profile.units.collapseAllUnits
+				end,
 			},
 			collapseNoTarget = {
 				name = L.UnitCollapseNoTarget,
 				desc = L.UnitCollapseNoTargetDesc,
 				type = 'toggle',
-				order = 2,
+				order = 3,
+				disabled = function()
+					return Ellipsis.db.profile.units.collapseAllUnits
+				end,
 			},
 		}
 	},
@@ -189,4 +220,8 @@ function Ellipsis:UnitsSet(info, val, val2, val3, val4)
 	self:ConfigureUnits() -- configure localized unitObject settings
 
 	self:UpdateExistingUnits() -- apply changes to all existing Units
+
+	if (info[#info] == 'opacityFaded') then -- special case for setting opacity of units
+		self:ConfigureControl()
+	end
 end

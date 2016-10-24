@@ -9,7 +9,7 @@ local format = format
 --WoW API / Variables
 local UnitHonor, UnitHonorMax, UnitHonorLevel, GetMaxPlayerHonorLevel, CanPrestige = UnitHonor, UnitHonorMax, UnitHonorLevel, GetMaxPlayerHonorLevel, CanPrestige
 local UnitLevel = UnitLevel
-local MAX_PLAYER_LEVEL = 110 --Hardcoded until Legion is released properly, then use MAX_PLAYER_LEVEL
+local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 local PVP_HONOR_PRESTIGE_AVAILABLE = PVP_HONOR_PRESTIGE_AVAILABLE
 local HONOR = HONOR
 local MAX_HONOR_LEVEL = MAX_HONOR_LEVEL
@@ -33,6 +33,8 @@ function mod:UpdateHonor(event, unit)
 		local level = UnitHonorLevel("player");
         local levelmax = GetMaxPlayerHonorLevel();
 
+		--Guard against division by zero, which appears to be an issue when zoning in/out of dungeons
+		if max == 0 then max = 1 end
 
         if (level == levelmax) then
 			-- Force the bar to full for the max level

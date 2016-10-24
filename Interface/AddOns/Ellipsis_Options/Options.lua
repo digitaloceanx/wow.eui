@@ -1,5 +1,6 @@
 local Ellipsis = _G['Ellipsis']
 local L			= LibStub('AceLocale-3.0'):GetLocale('Ellipsis_Options')
+local LUG		= LibStub('AceLocale-3.0'):GetLocale('Ellipsis')
 local LSM		= LibStub('LibSharedMedia-3.0')
 
 Ellipsis.OptionsAddonLoaded = true
@@ -188,6 +189,11 @@ function Ellipsis:UpdateEntireConfiguration()
 	self:InitializeUnits()
 	self:UpdateExistingUnits()
 
+	self:InitializeCooldowns()
+	self.Cooldown:Configure()
+	self.Cooldown:ApplyOptionsTimerRestrictions()
+	self.Cooldown:UpdateExistingTimers()
+
 	self:InitializeControl()
 	self:ApplyOptionsAuraRestrictions()
 	self:ApplyOptionsUnitGroups()
@@ -197,6 +203,10 @@ function Ellipsis:UpdateEntireConfiguration()
 	for _, anchor in pairs(self.anchors) do
 		anchor:Configure()
 		anchor:UpdateDisplay(true)
+	end
+
+	if (not self.db.profile.locked) then
+		self:UnlockInterface() -- ensure that until locked, user can see anchor overlays for positioning
 	end
 end
 
@@ -381,7 +391,7 @@ function Ellipsis:SpawnExampleAuras()
 
 
 	-- spawn notarget unit + auras
-	unit = activeUnits['notarget'] or Unit:New(currentTime + 3, 'notarget', false, 'notarget', 'notarget', false, 0)
+	unit = activeUnits['notarget'] or Unit:New(currentTime + 3, 'notarget', false, 'notarget', LUG.UnitName_NoTarget, false, 0)
 
 	aura = unit.auras[-100001] or false
 	if (aura) then
@@ -484,7 +494,7 @@ function Ellipsis:OpenOptions()
 
 		-- create options table
 		LibStub('AceConfigRegistry-3.0'):RegisterOptionsTable('Ellipsis', options, true)
-		LibStub('AceConfigDialog-3.0'):SetDefaultSize('Ellipsis', 620, 450)
+		LibStub('AceConfigDialog-3.0'):SetDefaultSize('Ellipsis', 620, 460)
 
 		registered = true
 	end

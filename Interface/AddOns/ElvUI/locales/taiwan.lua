@@ -14,6 +14,7 @@ if not L then return end
 ]]
 --Static Popup
 do
+	L["Are you sure you want to apply this font to all ElvUI elements?"] = "你確認你想應用此字體到所有EUI模組?"
 	L["Find BigFoot or DuoWan is loaded! please delete its."] = "發現大腳或魔盒被載入！請刪除它們後再使用EUI!";
 	L["ElvUI needs to perform database optimizations please be patient."] = "你想體驗2014愚人節彩蛋麼？";
 	L["Do you enjoy the new ElvUI?"] = "你喜歡新的EUI配色麼?";
@@ -52,8 +53,14 @@ L["Lowest Allowed UI Scale"] = "最低允許的UI縮放比例";
 L["Disable Tutorial Buttons"] = "禁用教程按鈕"
 L["Talking Head Scale"] = "特寫框體縮放"
 L["Hide In Vehicle"] = "載具時隱藏"
+L["Current Level:"] = "當前等級:"
+L["Honor XP:"] = "榮譽值:"
+L["Honor Remaining:"] = "榮譽值剩餘:"
+L["Bars"] = "條"
+L["Honor Bar"] = "榮譽條"
 
 --Minimap
+L["Reset Zoom"] = "縮放復位";
 L['Always Display'] = '總是顯示';
 L['Location Text'] = '地區文字';
 L["Minimap Buttons"] = '小地图按钮';
@@ -442,6 +449,8 @@ end
 
 --NamePlate Config
 do
+	L["Detection"] = "檢測";
+	L["Suramar Detection"] = " 蘇拉瑪檢測";
 	L["Clickable Height"] = "可點擊高度";
 	L["Clickable Width"] = "可點擊寬度";
 	L["Controls how big of an area on the screen will accept clicks to target unit."] = "控制螢幕上多大的區域可以點擊到目標單位";
@@ -681,6 +690,9 @@ end
 
 --ACTIONBARS
 do
+	L["Shows a swipe animation when a spell is recharging but still has charges left."] = "顯示轉圈動畫當充能法術仍有可用數時";
+	L["Use Draw Swipe"] = "使用轉圈動畫";
+	L["Zone Ability"] = "區域技能";
 	L["Color of the actionbutton when not usable."] = "當按鈕不可使用時的顏色";
 	L["Color of the actionbutton when usable."] = "當按鈕可以使用時的顏色";
 	L["Not Usable"] = "不可用";
@@ -816,6 +828,8 @@ L['ABOVE_THREAT_FORMAT'] = '%s: %.0f%% [%.0f%% above |cff%02x%02x%02x%s|r]'
 
 --UNITFRAMES
 do
+	L["PvP & Prestige Icon"] = "PvP 和 聲望圖示";
+	L["PvP Text"] = "PvP 文字";
 	L["Attach Text To"] = "文字附著於"
 	L["Target Class Icon"] = "目標职业圖示";
 	L["Player Portrait"] = "玩家頭像";
@@ -1419,6 +1433,8 @@ end
 
 --Datatext
 do
+	L["Saved Raid(s)"] = "已有進度的副本"
+	L["Saved Dungeon(s)"] = "已有進度的地下城";
 	L["Displayed Currency"] = "顯示貨幣";
 	L["Orderhall"] = "職業大廳資源";
 	L["Gold:"] = "金幣:";
@@ -1614,6 +1630,8 @@ end
 
 --Tooltip
 do
+	L["Loot Item Level: "] = "掉落物品等級: "
+	L["Weekly Chest Item Level: "] = "周常箱子物品等級: "
 	L["Inspect Info"] = "觀察資訊";
 	L["Display the players talent spec and item level in the tooltip, this may not immediately update when mousing over a unit."] = "顯示玩家的天賦和物品等級在滑鼠提示上."
 	L["Bags/Bank"] = "背包/銀行";
@@ -1883,10 +1901,17 @@ do
 	L["Map Alpha While Moving"] = "地圖透明度";
 	L['Controls what the transparency of the worldmap will be set to when you are moving.'] = "控制地圖移動時的透明度";
 	L['Font'] = "字體"
+	L["Use Position Override"] = "位置重寫";
+	L["When enabled it will use the Anchor Point setting to determine growth direction, otherwise it will be determined by where the bar is positioned."] = "當啟用時,它將使用錨點位置來確定增長方向,否則將取決於其自身的位置";
 end
 
 --Bags
 do
+	L["Use Tooltip Scanning"] = "使用滑鼠掃描"
+	L["This makes the item level display more reliable but uses more resources. If this is disabled then upgraded items will not show the correct item level."] = "使用滑鼠掃描獲得更加可靠的資訊,關閉的話只能得到基本資訊"
+	L["Disable Bag Sort"] = "禁用背包排序";
+	L["Disable Bank Sort"] = "禁用銀行排序";
+	L["Clear Search On Close"] = "關閉時清空搜索"
 	L["Temporary Move"] = '移動背包';
 	L["Hold Control + Right Click:"] = '按住 Ctrl 並按滑鼠右鍵：'
 	L["Reset Position"] = "重設位置"
@@ -1964,6 +1989,9 @@ The following search keywords can also be used:
 	L['The display format of the currency icons that get displayed below the main bag. (You have to be watching a currency for this to display)'] = "背包底部的貨幣顯示格式. (你需要在貨幣頁中勾選顯示)";
 	L["Icons Only"] = "圖標";
 	L["Icons and Text"] = "圖標和文字";
+	L["Global"] = "全域";
+	L["Ignored Items and Search Syntax (Global)"] = "忽略物品和搜索語法(全域)";
+	L["Ignored Items and Search Syntax (Profile)"] = "忽略物品和搜索語法(配置)";	
 	L['Bag Width'] = '背包寬度';
 	L['Bank Width'] = '銀行寬度';
 	L['Already Running.. Bailing Out!'] = "已在運行";
@@ -2155,6 +2183,9 @@ end
 
 --singleFunc
 do
+	L['AngryKeystones'] = "大秘境計時";
+	L['Show AngryKeystones Option'] = "顯示大秘境計時設置";
+	L["WorldQuestTracker"] = "世界任務追蹤"
 	L['singleFunc'] = '單體插件管理';
 	L['singleFunc desc'] = '集中管理、自動更新、按需加載、設置方便';
 	L['BigFootBank'] = '離線黑市';
@@ -2164,17 +2195,18 @@ do
 	L["Hold CTRL while clicking the bodyguard, show DiagFrame"] = "按Ctrl點擊保鏢顯示對話方塊";	
 	L['Show BigFootBank UI'] = "开/关 离线黑市窗口";
 	L['HandyNotes_DraenorTreasures'] = '德拉諾寶箱顯示';
+	L["HandyNotes_LegionRaresTreasures"] = "破碎群島宝藏显示"
 	L['MikScrollingBattleText'] = 'MSBT戰鬥文字';
 	L['Show MikScrollingBattleText Config'] = '顯示MSBT設置';	
 	L['Disable Blz CombatText'] = '禁用暴雪浮動戰鬥信息';
 	L['DBM-Core'] = 'DBM報警模塊';
 	L['Show DBM Config'] = '顯示DBM設置';
-	L['OffileDataCenter'] = '離線數據中心';
+	L['OfflineDataCenter'] = '離線數據中心';
 	L['Show OfflineDataCenter Frame'] = '打開離線數據中心窗口';
 	L['Show OfflineDataCenter Config Frame'] = '打開離線數據中心設置';
-	L['RaidBuilder'] = '集合石';
-	L['Show RaidBuilder Config Frame'] = '顯示集合石窗口';
-	L['Toggle RaidBuilder BrokerPanel'] = '開關集合石數據窗'
+	L['MeetingStone'] = '集合石';
+	L['Show MeetingStone Config Frame'] = '顯示集合石窗口';
+	L['Toggle MeetingStone BrokerPanel'] = '開關集合石數據窗'
 	L['Skada'] = 'Skada戰鬥統計';
 	L['Show Skada Config Frame'] = '顯示Skada設置窗口';
 	L['Toggle Skada Window'] = '開關Skada窗口';
@@ -2237,6 +2269,13 @@ end
 
 --euiscript
 do
+	L["Blz ClassBar"] = "暴雪職業條";
+	L["DRTracker"] = "遞減追蹤"
+	L["ElvUF_Arena1"] = "EUI競技場框體1";
+	L["ElvUF_Arena2"] = "EUI競技場框體2";
+	L["ElvUF_Arena3"] = "EUI競技場框體3";
+	L["ElvUF_Arena4"] = "EUI競技場框體4";
+	L["ElvUF_Arena5"] = "EUI競技場框體5";
 	L["Character Stats Enhance"] = "角色面板屬性增強";
 	L["CharacterStats List"] = "屬性清單";
 	L["HEALTH"] = "生命";
@@ -2483,6 +2522,8 @@ do
 		L["idQuestAutomation_desc"] = "按住Shift可禁用自動交接"
 	L["Auto Choise BestValue Item"] = "自動選擇最貴獎勵"
 	L["raidcd"] = "團隊技能冷卻監視"
+	L["raidcccd"] = "團隊控制技能監視"
+		L["CC Spell"] = "控制技能"
 		L["raidcd_width"] = "冷卻條寬度"
 		L["raidcd_height"] = "冷卻條高度"
 		L["raidcd_maxbars"] = "最大條數"
@@ -2549,6 +2590,7 @@ end
 
 --Mover
 do
+	L["Zone Ability"] = "區域技能"
 	L["MirrorTimer"] = "鏡像時間";
 	L['BodyGuard Frame'] = '保鏢框體';
 	L["Loot / Alert Frames"] = "拾取 / 成就框";

@@ -9,23 +9,22 @@ function UF:Construct_Portrait(frame, type)
 	local portrait
 
 	if type == 'texture' then
-		local backdrop = CreateFrame('Frame',nil,frame)
+		local backdrop = CreateFrame('Frame', nil, frame)
 		portrait = frame:CreateTexture(nil, 'OVERLAY')
-		portrait:SetTexCoord(0.15,0.85,0.15,0.85)
+		portrait:SetTexCoord(0.15, 0.85, 0.15, 0.85)
 		backdrop:SetOutside(portrait)
 		backdrop:SetFrameLevel(frame:GetFrameLevel())
 		backdrop:SetTemplate('Default')
 		portrait.backdrop = backdrop
 	else
 		portrait = CreateFrame("PlayerModel", nil, frame)
-		portrait:SetFrameStrata('LOW')
 		portrait:CreateBackdrop('Default', nil, nil, self.thinBorders)
 	end
 
 	portrait.PostUpdate = self.PortraitUpdate
 
 	portrait.overlay = CreateFrame("Frame", nil, frame)
-	portrait.overlay:SetFrameLevel(frame:GetFrameLevel() - 1)
+	portrait.overlay:SetFrameLevel(frame.Health:GetFrameLevel() + 5) --Set to "frame.Health:GetFrameLevel()" if you don't want portrait cut off.
 
 	return portrait
 end
@@ -86,7 +85,9 @@ function UF:Configure_Portrait(frame, dontHide)
 			portrait:SetInside(portrait.backdrop, frame.BORDER)
 		elseif frame.USE_PORTRAIT_OVERLAY then
 			if db.portrait.style == '3D' then
-				portrait:SetFrameLevel(frame.Health:GetFrameLevel() + 1)
+				portrait:SetFrameLevel(frame.Health:GetFrameLevel())
+			else
+				portrait:SetParent(frame.Health)
 			end
 
 			portrait:SetAllPoints(frame.Health)
@@ -103,6 +104,8 @@ function UF:Configure_Portrait(frame, dontHide)
 			portrait.backdrop:Show()
 			if db.portrait.style == '3D' then
 				portrait:SetFrameLevel(frame.Health:GetFrameLevel() -4) --Make sure portrait is behind Health and Power
+			else
+				portrait:SetParent(frame)
 			end
 
 			if frame.ORIENTATION == "LEFT" then

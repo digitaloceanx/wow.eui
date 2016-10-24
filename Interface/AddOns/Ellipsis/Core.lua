@@ -74,7 +74,8 @@ function Ellipsis:OnEnable()
 	self:RegisterEvent('PLAYER_TOTEM_UPDATE')
 	self:RegisterEvent('PLAYER_REGEN_ENABLED')
 
-	C_Timer.After(2, function() -- correct a pet being shown as Unknown right after first login
+	C_Timer.After(2, function()
+		-- correct a pet being shown as Unknown right after first login
 		if (UnitExists('pet')) then
 			local guid = UnitGUID('pet')
 			local pet = self.activeUnits[guid]
@@ -84,6 +85,9 @@ function Ellipsis:OnEnable()
 				pet:UpdateHeaderText()
 			end
 		end
+
+		-- force an event update for the player on login to ensure auras are properly tracked
+		self:UNIT_AURA('player')
 	end)
 end
 
@@ -91,7 +95,7 @@ function Ellipsis:UpdateVersion(major, minor, bugfix)
 	local newOptions = false
 
 
-	if (minor == '0') then -- addition of cooldown tracking
+	if (minor == '0' or minor == '1') then -- 0 = cooldown tracker, 1 = new options for display
 		newOptions = true
 	end
 
@@ -150,6 +154,8 @@ function Ellipsis:BlacklistRemove(spellID)
 		local name = GetSpellInfo(spellID)
 		self:Printf(L.BlacklistRemove, name or L.BlacklistUnknown, spellID)
 	end
+
+	self:UNIT_AURA('player') -- update player auras (only unit we can reliably assume may need it after a removal)
 end
 
 function Ellipsis:BlacklistCooldownAdd(group, timerID)

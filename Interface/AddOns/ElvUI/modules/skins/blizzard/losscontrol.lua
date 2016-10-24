@@ -46,4 +46,4 @@ local function LoadSkin()
 
 end
 
-S:RegisterSkin("ElvUI", LoadSkin)
+S:AddCallback("LossControl", LoadSkin)

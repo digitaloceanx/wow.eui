@@ -28,4 +28,7 @@ G['unitframe'] = {
 }
 G.gtData = {};
 G.gtTime = {};
-G['bags'] = {}
+
+G["bags"] = {
+	["ignoredItems"] = {},
+}

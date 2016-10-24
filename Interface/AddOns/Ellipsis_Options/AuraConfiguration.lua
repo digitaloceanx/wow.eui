@@ -11,6 +11,11 @@ local dropStyle = {
 	['BAR']			= L.AuraDropStyle_BAR,
 	['ICON']		= L.AuraDropStyle_ICON,
 }
+local dropTextFormat = {
+	['AURA']		= L.AuraDropTextFormat_AURA,
+	['UNIT']		= L.AuraDropTextFormat_UNIT,
+	['BOTH']		= L.AuraDropTextFormat_BOTH,
+}
 local dropTimeFormat = {
 	['ABRV']		= L.AuraDropTimeFormat_ABRV,
 	['TRUN']		= L.AuraDropTimeFormat_TRUN,
@@ -91,40 +96,41 @@ local auraConfiguration = {
 			},
 		}
 	},
-	interactive = {
-		name = L.AuraInteractive,
-		desc = L.AuraInteractiveDesc,
-		type = 'toggle',
-		order = 1,
-	},
-	tooltips = {
-		name = L.AuraTooltips,
-		desc = L.AuraTooltipsDesc,
-		type = 'select',
-		order = 2,
-		values = dropTooltips,
-		width = 'half',
-		disabled = function()
-			return not Ellipsis.db.profile.auras.interactive
-		end,
-	},
 	style = {
 		name = L.AuraStyle,
 		desc = L.AuraStyleDesc,
 		type = 'select',
-		order = 3,
+		order = 1,
+		width = 'half',
 		values = dropStyle,
 		set = function(info, val) -- configuration alters both Auras and Units
 			Ellipsis:AurasSet(info, val)
 			Ellipsis:UnitsSet(info, val)
 		end,
 	},
-	timeFormat = {
-		name = L.AuraTimeFormat,
-		desc = L.AuraTimeFormatDesc,
+	spacer1 = {
+		name = '',
+		type = 'description',
+		order = 2,
+		width = 'half',
+	},
+	interactive = {
+		name = L.AuraInteractive,
+		desc = L.AuraInteractiveDesc,
+		type = 'toggle',
+		order = 3,
+		width = 'half',
+	},
+	tooltips = {
+		name = L.AuraTooltips,
+		desc = L.AuraTooltipsDesc,
 		type = 'select',
 		order = 4,
-		values = dropTimeFormat,
+		values = dropTooltips,
+		width = 'half',
+		disabled = function()
+			return not Ellipsis.db.profile.auras.interactive
+		end,
 	},
 	barSize = {
 		name = L.AuraBarSize,
@@ -158,13 +164,41 @@ local auraConfiguration = {
 			return Ellipsis.db.profile.auras.style ~= 'ICON'
 		end,
 	},
+	timeFormat = {
+		name = L.AuraTimeFormat,
+		desc = L.AuraTimeFormatDesc,
+		type = 'select',
+		order = 6,
+		values = dropTimeFormat,
+	},
 	barTexture = {
 		name = L.AuraBarTexture,
 		desc = L.AuraBarTextureDesc,
 		type = 'select',
-		order = 6,
+		order = 7,
 		values = LSM:HashTable('statusbar'),
 		dialogControl = 'LSM30_Statusbar',
+		disabled = function()
+			return Ellipsis.db.profile.auras.style ~= 'BAR'
+		end,
+	},
+	textFormat = {
+		name = L.AuraTextFormat,
+		desc = L.AuraTextFormatDesc,
+		type = 'select',
+		order = 8,
+		width = 'half',
+		values = dropTextFormat,
+		disabled = function()
+			return Ellipsis.db.profile.auras.style ~= 'BAR'
+		end,
+	},
+	flipIcon = {
+		name = L.AuraFlipIcon,
+		desc = L.AuraFlipIconDesc,
+		type = 'toggle',
+		order = 9,
+		width = 'half',
 		disabled = function()
 			return Ellipsis.db.profile.auras.style ~= 'BAR'
 		end,
@@ -173,7 +207,7 @@ local auraConfiguration = {
 		name = L.AuraGhostingHeader,
 		type = 'group',
 		inline = true,
-		order = 7,
+		order = 10,
 		args = {
 			ghosting = {
 				name = L.Enabled,
@@ -199,7 +233,7 @@ local auraConfiguration = {
 		name = '',
 		type = 'group',
 		inline = true,
-		order = 8,
+		order = 11,
 		args = {
 			textFont = {
 				name = L.AuraTextFont,

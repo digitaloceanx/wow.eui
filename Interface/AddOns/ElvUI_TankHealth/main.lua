@@ -95,16 +95,19 @@ end
 
 local LL = {}
 if GetLocale() == 'zhCN' then
+	LL["title"] = "|cff00b3ff坦克血量增强|r"
 	LL["Healbar color"] = "血条颜色"
 	LL["Change the color of the potential self-heal on the healthbar."] = "改变自疗血量的颜色."
 	LL["Show overheal"] = "显示过量"
 	LL["Toggle expanding the potential amount healed past max health."] = "开关显示超过最大治疗量的血量."
 elseif GetLocale() == 'zhTW' then
+	LL["title"] = "|cff00b3ff坦克血量增強|r"
 	LL["Healbar color"] = "血條顏色"
 	LL["Change the color of the potential self-heal on the healthbar."] = "改變自療血量的顏色."
 	LL["Show overheal"] = "顯示過量"
 	LL["Toggle expanding the potential amount healed past max health."] = "開關顯示超過最大治療量的血量."
 else
+	LL["title"] = title
 	LL["Healbar color"] = "Healbar color"
 	LL["Change the color of the potential self-heal on the healthbar."] = "Change the color of the potential self-heal on the healthbar."
 	LL["Show overheal"] = "Show overheal"
@@ -116,7 +119,7 @@ function TH:InsertOptions()
     E.Options.args.TankHealth = {
         order = 100,
         type = "group",
-        name = title,
+        name = LL["title"],
         args = {
             color = {
                 order = 1,
@@ -405,6 +408,8 @@ function TH:CheckSpec()
 end
 
 function TH:Initialize()
+	if not E.UnitFrames then return; end
+
     E.UnitFrames.player:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", TH.CheckSpec)
     TH:CheckSpec()
     --Register plugin so options are properly inserted when config is loaded

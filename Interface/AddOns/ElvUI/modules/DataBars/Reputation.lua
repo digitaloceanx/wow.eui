@@ -33,7 +33,7 @@ function mod:UpdateReputation(event)
 		bar:Hide()
 	elseif name and (not self.db.reputation.hideInCombat or not InCombatLockdown()) then
 		bar:Show()
-		
+
 		if self.db.reputation.hideInVehicle then
 			E:RegisterObjectForVehicleLock(bar, E.UIParent)
 		else
@@ -50,7 +50,7 @@ function mod:UpdateReputation(event)
 
 		for i=1, numFactions do
 			local factionName, _, standingID,_,_,_,_,_,_,_,_,_,_, factionID = GetFactionInfo(i);
-			local friendID, friendRep, friendMaxRep, _, _, _, friendTextLevel = GetFriendshipReputation(factionID);
+			local friendID, _, _, _, _, _, friendTextLevel = GetFriendshipReputation(factionID);
 			if factionName == name then
 				if friendID ~= nil then
 					isFriend = true
@@ -111,14 +111,14 @@ end
 function mod:UpdateReputationDimensions()
 	self.repBar:Width(self.db.reputation.width)
 	self.repBar:Height(self.db.reputation.height)
-	self.repBar.statusBar:SetOrientation(self.db.reputation.orientation)	
-	self.repBar.statusBar:SetReverseFill(self.db.reputation.reverseFill)	
+	self.repBar.statusBar:SetOrientation(self.db.reputation.orientation)
+	self.repBar.statusBar:SetReverseFill(self.db.reputation.reverseFill)
 	self.repBar.text:FontTemplate(nil, self.db.reputation.textSize)
 	if self.db.reputation.mouseover then
 		self.repBar:SetAlpha(0)
 	else
 		self.repBar:SetAlpha(1)
-	end	
+	end
 end
 
 function mod:EnableDisable_ReputationBar()

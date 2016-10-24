@@ -927,7 +927,13 @@ function E:UpdateAll(ignoreInstall)
 	self.db.theme = nil;
 	self.db.install_complete = nil;
 
+	--The mover is positioned before it is resized, which causes issues for unitframes
+	--Allow movers to be "pushed" outside the screen, when they are resized they should be back in the screen area.
+	--We set movers to be clamped again at the bottom of this function.
+	self:SetMoversClampedToScreen(false)
+
 	self:SetMoversPositions()
+
 	self:UpdateMedia()
 	self:UpdateCooldownSettings()
 	if self.RefreshGUI then self:RefreshGUI() end --Refresh Config
@@ -944,6 +950,7 @@ function E:UpdateAll(ignoreInstall)
 	local AB = self:GetModule('ActionBars')
 	AB.db = self.db.actionbar
 	AB:UpdateButtonSettings()
+	AB:UpdatePetCooldownSettings()
 	AB:UpdateMicroPositionDimensions()
 	AB:Extra_SetAlpha()
 	AB:Extra_SetScale()
@@ -1040,7 +1047,9 @@ function E:UpdateAll(ignoreInstall)
 	LO:TopPanelVisibility()
 	LO:SetDataPanelStyle()
 
-	self:GetModule('Blizzard'):ObjectiveFrameHeight()
+	self:GetModule('Blizzard'):SetObjectiveFrameHeight()
+	
+	self:SetMoversClampedToScreen(true) --Go back to using clamp after resizing has taken place.
 
 	collectgarbage('collect');
 end
@@ -1503,8 +1512,16 @@ function E:Initialize()
 		local f = CreateFrame("Frame")
 		f:RegisterEvent("ADDON_LOADED")
 		f:SetScript("OnEvent", function(self, event, addon)
-			if addon == "Blizzard_OrderHallUI" then
+			if event == "ADDON_LOADED" and addon == "Blizzard_OrderHallUI" then
+				if InCombatLockdown() then
+					self:RegisterEvent("PLAYER_REGEN_ENABLED")
+				else
+					HandleCommandBar()
+				end
+				self:UnregisterEvent(event)
+			elseif event == "PLAYER_REGEN_ENABLED" then
 				HandleCommandBar()
+				self:UnregisterEvent(event)
 			end
 		end)
 	end

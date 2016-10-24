@@ -162,4 +162,4 @@ local function LoadSkin()
 	TradeSkillFrame.SearchBox:SetWidth(200)
 end
 
-S:RegisterSkin("Blizzard_TradeSkillUI", LoadSkin)
+S:AddCallbackForAddon("Blizzard_TradeSkillUI", "TradeSkill", LoadSkin)

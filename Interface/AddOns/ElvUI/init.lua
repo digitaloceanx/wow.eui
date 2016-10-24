@@ -39,6 +39,7 @@ Engine[4] = AddOn.DF["profile"];
 Engine[5] = AddOn.DF["global"];
 
 _G[AddOnName] = Engine;
+_G["EUI"] = Engine;
 Engine[1].UIName = "EUI"
 local tcopy = table.copy
 function AddOn:OnInitialize()

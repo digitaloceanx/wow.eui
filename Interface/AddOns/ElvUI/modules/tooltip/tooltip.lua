@@ -1,7 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local TT = E:NewModule('Tooltip', 'AceTimer-3.0', 'AceHook-3.0', 'AceEvent-3.0')
 local rc = LibStub("LibRangeCheck-2.0")
-local ItemUpgradeInfo = LibStub("LibItemUpgradeInfo-1.0")
 --Cache global variables
 --Lua functions
 local _G = _G
@@ -157,7 +156,7 @@ function TT:GameTooltip_ShowCompareItem(tt, shift)
 	if ( not tt ) then
 		tt = GameTooltip;
 	end
-	local item, link = tt:GetItem();
+	local _, link = tt:GetItem();
 	if ( not link ) then
 		return;
 	end
@@ -300,7 +299,6 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 			return
 		else
 			tt:SetOwner(parent, "ANCHOR_NONE")
-			tt:ClearAllPoints()
 			if(GameTooltipStatusBar.anchoredToTop) then
 				GameTooltipStatusBar:ClearAllPoints()
 				GameTooltipStatusBar:Point("TOPLEFT", GameTooltip, "BOTTOMLEFT", E.Border, -(E.Spacing * 3))
@@ -311,26 +309,59 @@ function TT:GameTooltip_SetDefaultAnchor(tt, parent)
 		end
 	end
 
-	if(not E:HasMoverBeenMoved('TooltipMover')) then
-		if ElvUI_ContainerFrame and ElvUI_ContainerFrame:IsShown() then
-			tt:Point('BOTTOMRIGHT', ElvUI_ContainerFrame, 'TOPRIGHT', 0, 18)
-		elseif RightChatPanel:GetAlpha() == 1 and RightChatPanel:IsShown() then
-			tt:Point('BOTTOMRIGHT', RightChatPanel, 'TOPRIGHT', 0, 18)
+	local _, anchor = tt:GetPoint()
+	if (anchor == nil or (ElvUI_ContainerFrame and anchor == ElvUI_ContainerFrame) or anchor == RightChatPanel or anchor == TooltipMover or anchor == UIParent or anchor == E.UIParent) then
+		tt:ClearAllPoints()
+		if(not E:HasMoverBeenMoved('TooltipMover')) then
+			if ElvUI_ContainerFrame and ElvUI_ContainerFrame:IsShown() then
+				tt:Point('BOTTOMRIGHT', ElvUI_ContainerFrame, 'TOPRIGHT', 0, 18)
+			elseif RightChatPanel:GetAlpha() == 1 and RightChatPanel:IsShown() then
+				tt:Point('BOTTOMRIGHT', RightChatPanel, 'TOPRIGHT', 0, 18)
+			else
+				tt:Point('BOTTOMRIGHT', RightChatPanel, 'BOTTOMRIGHT', 0, 18)
+			end
 		else
-			tt:Point('BOTTOMRIGHT', RightChatPanel, 'BOTTOMRIGHT', 0, 18)
-		end
-	else
-		local point = E:GetScreenQuadrant(TooltipMover)
-		if point == "TOPLEFT" then
-			tt:Point("TOPLEFT", TooltipMover, "BOTTOMLEFT", 1, -4)
-		elseif point == "TOPRIGHT" then
-			tt:Point("TOPRIGHT", TooltipMover, "BOTTOMRIGHT", -1, -4)
-		elseif point == "BOTTOMLEFT" or point == "LEFT" then
-			tt:Point("BOTTOMLEFT", TooltipMover, "TOPLEFT", 1, 18)
-		else
-			tt:Point("BOTTOMRIGHT", TooltipMover, "TOPRIGHT", -1, 18)
+			local point = E:GetScreenQuadrant(TooltipMover)
+			if point == "TOPLEFT" then
+				tt:Point("TOPLEFT", TooltipMover, "BOTTOMLEFT", 1, -4)
+			elseif point == "TOPRIGHT" then
+				tt:Point("TOPRIGHT", TooltipMover, "BOTTOMRIGHT", -1, -4)
+			elseif point == "BOTTOMLEFT" or point == "LEFT" then
+				tt:Point("BOTTOMLEFT", TooltipMover, "TOPLEFT", 1, 18)
+			else
+				tt:Point("BOTTOMRIGHT", TooltipMover, "TOPRIGHT", -1, 18)
+			end
 		end
 	end
+end
+
+function TT:GetAvailableTooltip()
+	for i=1, #GameTooltip.shoppingTooltips do
+		if(not GameTooltip.shoppingTooltips[i]:IsShown()) then
+			return GameTooltip.shoppingTooltips[i]
+		end
+	end
+end
+
+function TT:ScanForItemLevel(itemLink)
+	local tooltip = self:GetAvailableTooltip();
+	tooltip:SetOwner(UIParent, "ANCHOR_NONE");
+	tooltip:SetHyperlink(itemLink);
+	tooltip:Show();
+
+	local itemLevel = 0;
+	for i = 2, tooltip:NumLines() do
+		local text = _G[ tooltip:GetName() .."TextLeft"..i]:GetText();
+		if(text and text ~= "") then
+			local value = tonumber(text:match(S_ITEM_LEVEL));
+			if(value) then
+				itemLevel = value;
+			end
+		end
+	end
+
+	tooltip:Hide();
+	return itemLevel
 end
 
 function TT:GetItemLvL(unit)
@@ -342,8 +373,8 @@ function TT:GetItemLvL(unit)
 	
 	itemM = GetInventoryItemLink(unit, 16)
 	itemS = GetInventoryItemLink(unit, 17)
-	itemMlv = itemM and ItemUpgradeInfo:GetUpgradedItemLevel(itemM) or 0
-	itemSlv = itemS and ItemUpgradeInfo:GetUpgradedItemLevel(itemS) or 0
+	itemMlv = itemM and TT:ScanForItemLevel(itemM) or 0
+	itemSlv = itemS and TT:ScanForItemLevel(itemS) or 0
 	itemMMax = (itemMlv > itemSlv) and itemMlv or itemSlv
 
 	for i = 1, #SlotName do
@@ -359,8 +390,9 @@ function TT:GetItemLvL(unit)
 				if quality == 6 and ilvl == 750 and (SlotName[i] == "SecondaryHand" or SlotName[i] == "MainHand") then --修正神器副手itemLink字串不含升级物品信息的问题
 					total = total + itemMMax
 				else
-					total = total + ItemUpgradeInfo:GetUpgradedItemLevel(slotLink)
+					total = total + TT:ScanForItemLevel(slotLink)
 				end
+				
 			end
 
 			if ((SlotName[i] == 'SecondaryHand') or (SlotName[i] == 'MainHand' and ItemEquipLoc ~= "INVTYPE_2HWEAPON" and ItemEquipLoc ~= "INVTYPE_RANGED" and ItemEquipLoc ~= "INVTYPE_RANGEDRIGHT")) and not not2hand then
@@ -421,7 +453,7 @@ function TT:GetTalentSpec(unit, isPlayer)
 	end
 end
 
-function TT:INSPECT_READY(event, GUID)
+function TT:INSPECT_READY(_, GUID)
 	if(self.lastGUID ~= GUID) then return end
 
 	local unit = "mouseover"
@@ -728,7 +760,7 @@ function TT:GameTooltipStatusBar_OnValueChanged(tt, value)
 		end
 	end
 
-	local min, max = tt:GetMinMaxValues()
+	local _, max = tt:GetMinMaxValues()
 	if(value > 0 and max == 1) then
 		tt.text:SetFormattedText("%d%%", floor(value * 100))
 		tt:SetStatusBarColor(TAPPED_COLOR.r, TAPPED_COLOR.g, TAPPED_COLOR.b) --most effeciant?
@@ -741,6 +773,36 @@ end
 
 function TT:GameTooltip_OnTooltipCleared(tt)
 	tt.itemCleared = nil
+end
+
+local function MythicLootItemLevel(mlvl) --by eui.cc
+	if (mlvl == "2" or mlvl == "3") then
+		return "845"
+	elseif (mlvl == "4" or mlvl == "5") then
+		return "850"
+	elseif (mlvl == "6" or mlvl == "7") then
+		return "855"
+	elseif (mlvl == "8" or mlvl == "9") then
+		return "860"
+	else
+		return "865"
+	end
+end
+
+local function MythicWeeklyLootItemLevel(mlvl) --by eui.cc
+	if (mlvl == "0") then
+		return "860+"
+	elseif (mlvl == "2" or mlvl == "3") then
+		return "860"
+	elseif (mlvl == "4" or mlvl == "5") then
+		return "865"
+	elseif (mlvl == "6" or mlvl == "7") then
+		return "870"
+	elseif (mlvl == "8" or mlvl == "9") then
+		return "875"
+	else
+		return "880"
+	end
 end
 
 function TT:GameTooltip_OnTooltipSetItem(tt)
@@ -756,12 +818,13 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 	end
 
 	if not tt.itemCleared then
-		local item, link = tt:GetItem()
+		local _, link = tt:GetItem()
 		local num = GetItemCount(link)
 		local numall = GetItemCount(link,true)
 		local left = " "
 		local right = " "
 		local bankCount = " "
+		local itemid = link:match("item:(%d+)") or ""
 
 		if link ~= nil and self.db.spellID then
 			left = (("|cFFCA3C3C%s|r %s"):format(ID, link)):match(":(%w+)")
@@ -783,12 +846,21 @@ function TT:GameTooltip_OnTooltipSetItem(tt)
 		if bankCount ~= " " then
 			tt:AddDoubleLine(" ", bankCount)
 		end
+		
+		local ilvl = MythicLootItemLevel(mlvl)
+		local wlvl = MythicWeeklyLootItemLevel(mlvl)
+		
+		if (itemid == "138019") then -- Mythic Keystone		
+			tt:AddLine(" ")
+			tt:AddDoubleLine(L["Loot Item Level: "], "|cffff00ff" .. ilvl .. "+" .. "|r")
+			tt:AddDoubleLine(L["Weekly Chest Item Level: "], "|cffff00ff".. wlvl .."|r")
+		end		
 
 		tt.itemCleared = true
 	end
 end
 
-function TT:GameTooltip_ShowStatusBar(tt, min, max, value, text)
+function TT:GameTooltip_ShowStatusBar(tt)
 	local statusBar = _G[tt:GetName().."StatusBar"..tt.shownStatusBars];
 	if statusBar and not statusBar.skinned then
 		statusBar:StripTextures()
@@ -806,7 +878,7 @@ function TT:SetStyle(tt)
 	tt:SetBackdropColor(r, g, b, self.db.colorAlpha)
 end
 
-function TT:MODIFIER_STATE_CHANGED(event, key)
+function TT:MODIFIER_STATE_CHANGED(_, key)
 	if((key == "LSHIFT" or key == "RSHIFT") and UnitExists("mouseover")) then
 		GameTooltip:SetUnit('mouseover')
 	end
@@ -874,7 +946,7 @@ function TT:GameTooltip_OnTooltipSetSpell(tt)
 	end
 end
 
-function TT:SetItemRef(link, text, button, chatFrame)
+function TT:SetItemRef(link)
 	if find(link,"^spell:") and self.db.spellID then
 		local id = sub(link,7)
 		ItemRefTooltip:AddLine(("|cFFCA3C3C%s|r %d"):format(ID, id))
@@ -882,7 +954,7 @@ function TT:SetItemRef(link, text, button, chatFrame)
 	end
 end
 
-function TT:RepositionBNET(frame, point, anchor, anchorPoint, xOffset, yOffset)
+function TT:RepositionBNET(frame, _, anchor)
 	if anchor ~= BNETMover then
 		BNToastFrame:ClearAllPoints()
 		BNToastFrame:SetPoint('TOPLEFT', BNETMover, 'TOPLEFT');
@@ -894,7 +966,8 @@ function TT:CheckBackdropColor()
 	r = E:Round(r, 1)
 	g = E:Round(g, 1)
 	b = E:Round(b, 1)
-	local red, green, blue, alpha = unpack(E.media.backdropfadecolor)
+	local red, green, blue = unpack(E.media.backdropfadecolor)
+	local alpha = self.db.colorAlpha
 
 	if(r ~= red or g ~= green or b ~= blue) then
 		GameTooltip:SetBackdropColor(red, green, blue, alpha)
@@ -991,7 +1064,7 @@ function TT:Initialize()
 	self:HookScript(GameTooltip, 'OnTooltipSetItem', 'GameTooltip_OnTooltipSetItem')
 	self:HookScript(GameTooltip, 'OnTooltipSetUnit', 'GameTooltip_OnTooltipSetUnit')
 	self:HookScript(GameTooltip, "OnSizeChanged", "CheckBackdropColor")
-
+	self:HookScript(GameTooltip, "OnUpdate", "CheckBackdropColor") --There has to be a more elegant way of doing this.
 	self:HookScript(GameTooltipStatusBar, 'OnValueChanged', 'GameTooltipStatusBar_OnValueChanged')
 
 	self:RegisterEvent("MODIFIER_STATE_CHANGED")
@@ -1001,6 +1074,14 @@ function TT:Initialize()
 		self:HookScript(tt, 'OnShow', 'SetStyle')
 		if tt.BackdropFrame then tt.BackdropFrame:Kill() end
 	end
+
+	--World Quest Reward Icon
+	WorldMapTooltip.ItemTooltip.IconBorder:SetAlpha(0)
+	WorldMapTooltip.ItemTooltip.Icon:SetTexCoord(unpack(E.TexCoords))
+	WorldMapTooltip.ItemTooltip:CreateBackdrop()
+	WorldMapTooltip.ItemTooltip.backdrop:SetOutside(WorldMapTooltip.ItemTooltip.Icon)
+	WorldMapTooltip.ItemTooltip.Count:ClearAllPoints()
+	WorldMapTooltip.ItemTooltip.Count:SetPoint("BOTTOMRIGHT", WorldMapTooltip.ItemTooltip.Icon, "BOTTOMRIGHT", 0, 2)
 
 	--Variable is localized at top of file, then set here when we're sure the frame has been created
 	--Used to check if keybinding is active, if so then don't hide tooltips on actionbars

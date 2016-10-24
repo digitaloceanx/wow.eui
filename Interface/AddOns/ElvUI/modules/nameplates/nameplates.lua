@@ -108,6 +108,9 @@ function mod:PLAYER_ENTERING_WORLD()
 			self.CheckHealerTimer = nil;
 		end
 	end
+	if self.db.units.PLAYER.alwaysShow then
+		mod:UpdateVisibility()
+	end
 end
 
 function mod:ClassBar_Update(frame)
@@ -231,7 +234,7 @@ function mod:SetTargetFrame(frame)
 			self:ConfigureElement_Glow(frame)	
 			self:ConfigureElement_TargetArrow(frame.UnitFrame) -- by eui.cc
 			self:ConfigureElement_Elite(frame)
-
+			self:ConfigureElement_Detection(frame)
 			self:ConfigureElement_Level(frame)
 			self:ConfigureElement_Name(frame)
 			self:ConfigureElement_NPCTitle(frame)
@@ -303,6 +306,8 @@ function mod:CheckUnitType(frame)
 	elseif(role ~= "HEALER" and frame.UnitType == "HEALER") then
 		self:UpdateAllFrame(frame)
 	elseif frame.UnitType == "FRIENDLY_PLAYER" then
+		--This line right here is likely the cause of the fps drop when entering world
+		--CheckUnitType is being called about 1000 times because the "UNIT_FACTION" event is being triggered this amount of times for some insane reason
 		self:UpdateAllFrame(frame)
 	elseif(frame.UnitType == "FRIENDLY_NPC" or frame.UnitType == "HEALER") then
 		if(CanAttack) then
@@ -369,6 +374,7 @@ function mod:NAME_PLATE_UNIT_ADDED(event, unit, frame)
 	self:ConfigureElement_Name(frame.UnitFrame)
 	self:ConfigureElement_NPCTitle(frame.UnitFrame)
 	self:ConfigureElement_Elite(frame.UnitFrame)
+	self:ConfigureElement_Detection(frame.UnitFrame)
 	self:RegisterEvents(frame.UnitFrame, unit)
 	self:UpdateElement_All(frame.UnitFrame, unit)
 
@@ -412,6 +418,7 @@ function mod:NAME_PLATE_UNIT_REMOVED(event, unit, frame, ...)
 	frame.UnitFrame.NPCTitle:SetText("")
 	frame.UnitFrame.Name:SetText("")
 	frame.UnitFrame.Elite:Hide()
+	frame.UnitFrame.DetectionModel:Hide()
 	frame.UnitFrame:Hide()
 	frame.UnitFrame.isTarget = nil
 	frame.UnitFrame.displayedUnit = nil
@@ -512,7 +519,8 @@ function mod:UpdateElement_All(frame, unit, noTargetFrame)
 	mod:UpdateElement_Level(frame)
 	mod:UpdateElement_NPCTitle(frame)
 	mod:UpdateElement_Elite(frame)
-	
+	mod:UpdateElement_Detection(frame)
+
 	if(not noTargetFrame) then --infinite loop lol
 		mod:SetTargetFrame(frame)
 	end
@@ -539,13 +547,21 @@ function mod:NAME_PLATE_CREATED(event, frame)
 	
 	frame.UnitFrame.arrowIndicator, frame.UnitFrame.doubleArrowIndicator = self.ConstructElement_TargetArrow(frame.UnitFrame) --by eui.cc
 	frame.UnitFrame.Elite = self:ConstructElement_Elite(frame.UnitFrame)
+	frame.UnitFrame.DetectionModel = self:ConstructElement_Detection(frame.UnitFrame)
 end
 
 function mod:OnEvent(event, unit, ...)
+	if (unit and self.displayedUnit and (not UnitIsUnit(unit, self.displayedUnit) and not ((unit == "vehicle" or unit == "player") and (self.displayedUnit == "vehicle" or self.displayedUnit == "player")))) then 
+		return
+	end
+
 	if(event == "UNIT_HEALTH" or event == "UNIT_HEALTH_FREQUENT") then
 		mod:UpdateElement_Health(self)
 		mod:UpdateElement_HealPrediction(self)
 		mod:UpdateElement_Glow(self)
+		if unit == "vehicle" or unit == "player" then
+			mod:UpdateVisibility()
+		end
 		mod:UpdateElement_TargetArrow(self) --by eui.cc
 	elseif(event == "UNIT_ABSORB_AMOUNT_CHANGED" or event == "UNIT_HEAL_ABSORB_AMOUNT_CHANGED" or event == "UNIT_HEAL_PREDICTION") then
 		mod:UpdateElement_HealPrediction(self)
@@ -567,6 +583,7 @@ function mod:OnEvent(event, unit, ...)
 		mod:SetTargetFrame(self)
 		mod:UpdateElement_Glow(self)
 		mod:UpdateElement_HealthColor(self)
+		mod:UpdateVisibility()
 		mod:UpdateElement_TargetArrow(self) --by eui.cc
 	elseif(event == "UNIT_AURA") then
 		mod:UpdateElement_Auras(self)
@@ -741,6 +758,9 @@ function mod:PLAYER_REGEN_DISABLED()
 		SetCVar("nameplateShowEnemies", 0);
 	end
 
+	if self.db.units.PLAYER.alwaysShow then
+		self:UpdateVisibility()
+	end
 end
 
 function mod:PLAYER_REGEN_ENABLED()
@@ -754,6 +774,26 @@ function mod:PLAYER_REGEN_ENABLED()
 		SetCVar("nameplateShowEnemies", 0);
 	elseif(self.db.showEnemyCombat == "TOGGLE_OFF") then
 		SetCVar("nameplateShowEnemies", 1);
+	end
+	self:UpdateVisibility()
+end
+
+function mod:UpdateVisibility()
+	local frame = self.PlayerFrame__
+	if self.db.units.PLAYER.alwaysShow then
+		local target, dead = UnitExists("target"), UnitIsDead("target")
+		local combat = UnitAffectingCombat("player")
+		local curHP, maxHP = UnitHealth("player"), UnitHealthMax("player")
+		local CanAttack = UnitCanAttack("player", "target")
+		if self.db.units.PLAYER.combatFade and (curHP ~= maxHP or combat or (target and CanAttack and not dead)) then
+			frame.UnitFrame:Show()
+		elseif not self.db.units.PLAYER.combatFade then
+			frame.UnitFrame:Show()
+		else
+			frame.UnitFrame:Hide()
+		end
+	else
+		frame.UnitFrame:Hide()
 	end
 end
 

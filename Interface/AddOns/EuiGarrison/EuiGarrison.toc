@@ -46,10 +46,11 @@ Broker.lua
 
 #FollowerAssign.lua
 
-#Misc\Data.lua
-#Misc\Localization.lua
-#Misc\DataAPI.lua
-#Misc\LoadWithGarrisonUI.lua
-#Override.lua
-#SmartRecruiter.lua
-#FollowerTooltip.lua
+Misc\Data.lua
+Misc\Localization.lua
+Misc\DataAPI.lua
+Misc\LoadWithGarrisonUI.lua
+Misc\Override.lua
+
+SmartRecruiter.lua
+FollowerTooltip.lua

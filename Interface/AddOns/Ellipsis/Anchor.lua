@@ -96,7 +96,7 @@ function Anchor:UpdateDisplay(sortFirst)
 		tsort(self.unitsSorted, SortUnits)
 	end
 
-	local prevUnit
+	local prevUnit = false
 
 	for i, unit in ipairs(self.unitsSorted) do
 		unit:ClearAllPoints()
@@ -112,7 +112,7 @@ function Anchor:UpdateDisplay(sortFirst)
 end
 
 function Anchor:AddUnit(unit)
-	if (self.units[unit.guid]) then return end
+	if (self.units[unit.guid]) then return end -- trying to add existing unit to anchor (bad)
 
 	-- unit now belongs here, update its parent
 	unit:SetParent(self)
@@ -125,7 +125,7 @@ function Anchor:AddUnit(unit)
 end
 
 function Anchor:RemoveUnit(guid)
-	self.units[guid] = nil
+	if (not self.units[guid]) then return end -- unit not attached to this anchor, abort
 
 	for i, unit in ipairs(self.unitsSorted) do
 		if (unit.guid == guid) then
@@ -133,6 +133,8 @@ function Anchor:RemoveUnit(guid)
 			break
 		end
 	end
+
+	self.units[guid] = nil
 
 	if (#self.unitsSorted > 0) then -- units remain, update display (no need to sort, order won't have changed)
 		self:UpdateDisplay(false)

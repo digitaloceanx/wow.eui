@@ -22,6 +22,7 @@ local anchorLookup, priorityLookup
 
 -- variables configured by user options
 local unitWidth, headerAnchor
+local opacityFaded, opacityNoTarget
 local auraSize, auraPaddingY, auraSetPoint, auraSetPointInv, auraOffsetX, auraOffsetY
 local wrapAuras, wrapNumber
 local SortAuras, UpdateDisplay -- function refs set by user options
@@ -213,11 +214,15 @@ function Unit:New(currentTime, groupBase, override, guid, unitName, unitClass, u
 	if (groupBase == 'notarget') then -- special case Unit, configured differently from others
 		new.headerText:SetTextColor(unpack(unitDB.colourHeader))
 		new.headerText:SetFormattedText(L.UnitName_NoTarget)
-		new:UpdateHeader(unitDB.collapseNoTarget)
+		new:UpdateHeader(unitDB.collapseNoTarget or unitDB.collapseAllUnits)
+
+		new:SetAlpha(opacityNoTarget)
 	else
 		new:UpdateHeaderColour()
 		new:UpdateHeaderText()
-		new:UpdateHeader((groupBase == 'player' and unitDB.collapsePlayer)) -- will only collapse if is player and option enabled
+		new:UpdateHeader((groupBase == 'player' and unitDB.collapsePlayer) or unitDB.collapseAllUnits)
+
+		new:SetAlpha((group == 'target') and 1 or opacityFaded)
 	end
 
 	activeUnits[guid] = new -- add new unit to primary unit lookup
@@ -239,9 +244,9 @@ function Unit:Release()
 
 	self:Hide()
 
-	activeUnits[self.guid] = nil -- remove self from unit lookup
-
 	self.parentAnchor:RemoveUnit(self.guid)	-- tell parent Anchor to remove ourselves
+
+	activeUnits[self.guid] = nil -- remove self from unit lookup
 
 	tinsert(unitPool, self) -- add self back into the unitPool
 end
@@ -349,6 +354,8 @@ end
 
 function Ellipsis:ConfigureUnits()
 	unitWidth		= unitDB.width
+	opacityFaded	= unitDB.opacityFaded
+	opacityNoTarget	= unitDB.opacityNoTarget
 
 	-- configure aura sorting function to use (fallback to NAME_ASC if any problems)
 	SortAuras = Unit['SortAuras_' .. controlDB.auraSorting] or Unit.SortAuras_NAME_ASC
@@ -405,11 +412,15 @@ function Ellipsis:UpdateExistingUnits()
 
 		if (unit.groupBase == 'notarget') then
 			unit.headerText:SetTextColor(unpack(unitDB.colourHeader))
-			unit:UpdateHeader(unitDB.collapseNoTarget)
+			unit:UpdateHeader(unitDB.collapseNoTarget or unitDB.collapseAllUnits)
+
+			unit:SetAlpha(opacityNoTarget)
 		else
 			unit:UpdateHeaderColour()
 			unit:UpdateHeaderText()
-			unit:UpdateHeader((unit.groupBase == 'player' and unitDB.collapsePlayer)) -- will only collapse if is player and option enabled
+			unit:UpdateHeader((unit.groupBase == 'player' and unitDB.collapsePlayer) or unitDB.collapseAllUnits)
+
+			unit:SetAlpha((unit.group == 'target') and 1 or opacityFaded)
 		end
 
 		unit:UpdateDisplay(true)	-- update display of auras

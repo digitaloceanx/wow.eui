@@ -1,4 +1,5 @@
 local Ellipsis		= _G['Ellipsis']
+local L				= LibStub('AceLocale-3.0'):GetLocale('Ellipsis')
 
 local anchors		= Ellipsis.anchors
 local activeAuras	= Ellipsis.activeAuras
@@ -13,6 +14,7 @@ local isUniqueAura
 local durationMin, durationMax, blockPassive
 local trackPlayer, trackPet
 
+local opacityFaded
 
 local UnitAura			= UnitAura
 local UnitCanAttack		= UnitCanAttack
@@ -74,8 +76,10 @@ function Ellipsis:ConfigureControl()
 		priorityLookup[group]	= (controlDB.unitPrioritize) and options.priority or 0	-- if not prioritizing, give all units the same priority
 	end
 
-	trackPlayer	= (anchorLookup['player'])	and true or false
-	trackPet	= (anchorLookup['pet'])		and true or false
+	trackPlayer		= (anchorLookup['player'])	and true or false
+	trackPet		= (anchorLookup['pet'])		and true or false
+
+	opacityFaded	= self.db.profile.units.opacityFaded
 end
 
 
@@ -169,7 +173,7 @@ do ------------------------
 
 					local currentTime = GetTime()
 
-					local unit = activeUnits['notarget'] or Unit:New(GetTime(), 'notarget', false, 'notarget', 'notarget', false, 0)
+					local unit = activeUnits['notarget'] or Unit:New(GetTime(), 'notarget', false, 'notarget', L.UnitName_NoTarget, false, 0)
 
 					if (unit.auras[arg1]) then -- aura already exists, update it
 						unit.auras[arg1]:Update(currentTime, duration, currentTime + duration, 0)
@@ -271,7 +275,9 @@ function Ellipsis:PLAYER_TOTEM_UPDATE(slot)
 	if (blacklist[spellID] or duration <= durationMin or duration >= durationMax) then return end
 
 	if (startTime > 0) then -- totem in this slot
-		local unit			= activeUnits['notarget']
+		if (duration == 0) then return end -- totem in this slot, but no duration (nothing to track)
+
+		local unit			= activeUnits['notarget'] or false
 		local toRelease		= false -- tracking active 'totem' in this slot (dont want to release til replacement is ready)
 		local currentTime	= GetTime()
 
@@ -280,7 +286,7 @@ function Ellipsis:PLAYER_TOTEM_UPDATE(slot)
 				toRelease = totemData[slot] -- release after new totem made or 'notarget' unit might Release
 			end
 		else -- need to create notarget unit
-			unit = Unit:New(currentTime, 'notarget', false, 'notarget', 'notarget', false, 0)
+			unit = Unit:New(currentTime, 'notarget', false, 'notarget', L.UnitName_NoTarget, false, 0)
 		end
 
 		-- create the aura for this totem (new or otherwise)
@@ -300,7 +306,10 @@ function Ellipsis:PLAYER_TOTEM_UPDATE(slot)
 		unit:UpdateDisplay(true)
 	else -- no totem in this slot, clear totem aura if present
 		if (totemData[slot]) then
-			totemData[slot]:Release()
+			if (activeAuras[totemData[slot].auraID]) then -- active aura (handles user clicking aura off, or 'malformed' spawns)
+				totemData[slot]:Release()
+			end
+
 			totemData[slot] = nil
 		end
 
@@ -343,8 +352,10 @@ end
 -- PLAYER_TARGET_CHANGED
 -- ------------------------
 function Ellipsis:PLAYER_TARGET_CHANGED()
+	local unit
+
 	if (targetGUID) then -- we had a previous target
-		local unit = activeUnits[targetGUID]
+		unit = activeUnits[targetGUID] or false
 
 		if (unit) then -- we have auras on the previous target
 			unit.group		= (unit.guid == focusGUID) and 'focus' or unit.groupBase -- new group is either focus or its base grouping
@@ -358,13 +369,15 @@ function Ellipsis:PLAYER_TARGET_CHANGED()
 			else
 				anchor:UpdateDisplay(true) -- update display of its current anchor
 			end
+
+			unit:SetAlpha(opacityFaded)
 		end
 	end
 
 	if (UnitExists('target')) then -- we have a new target
 		targetGUID = UnitGUID('target')
 
-		local unit = activeUnits[targetGUID]
+		unit = activeUnits[targetGUID] or false
 
 		if (unit) then -- we have auras on this unit
 			unit.group		= 'target'
@@ -378,6 +391,8 @@ function Ellipsis:PLAYER_TARGET_CHANGED()
 			else
 				anchor:UpdateDisplay(true) -- update display on its current anchor
 			end
+
+			unit:SetAlpha(1)
 		end
 
 		self:UNIT_AURA('target') -- scan new target
@@ -391,8 +406,10 @@ end
 -- PLAYER_FOCUS_CHANGED
 -- ------------------------
 function Ellipsis:PLAYER_FOCUS_CHANGED()
+	local unit
+
 	if (focusGUID) then -- we had a previous focus
-		local unit = activeUnits[focusGUID]
+		unit = activeUnits[focusGUID] or false
 
 		if (unit) then -- we have auras on the previous focus
 			unit.group		= (unit.guid == targetGUID) and 'target' or unit.groupBase -- new group is either target or its base grouping
@@ -414,7 +431,7 @@ function Ellipsis:PLAYER_FOCUS_CHANGED()
 
 		if (focusGUID == targetGUID) then return end -- we don't update the data if the focus is the target (it has precedence)
 
-		local unit = activeUnits[focusGUID]
+		unit = activeUnits[focusGUID] or false
 
 		if (unit) then -- we have auras on this unit
 			unit.group		= 'focus'
@@ -469,7 +486,7 @@ function Ellipsis:UNIT_AURA(unitTag)
 
 				-- handle notarget redirects for auras that appear on the player but make more sense to appear in notarget
 				if (noTargetRedirect[spellID]) then -- spell needs to be redirected to notarget unit
-					local noTarget = activeUnits['notarget'] or Unit:New(currentTime, 'notarget', false, 'notarget', 'notarget', false, 0)
+					local noTarget = activeUnits['notarget'] or Unit:New(currentTime, 'notarget', false, 'notarget', L.UnitName_NoTarget, false, 0)
 					local noTargetChanged = false -- same as the global 'changed' (unlikely to be more than one redirected aura per unit)
 
 					aura = noTarget.auras[spellID]

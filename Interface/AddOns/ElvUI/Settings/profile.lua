@@ -16,7 +16,7 @@ P['general'] = {
 	['bottomPanel'] = true,
 	['hideErrorFrame'] = true,
 	['enhancedPvpMessages'] = true,
-	['objectiveFrameHeight'] = 680, --by eui.cc
+	['objectiveFrameHeight'] = 620, --by eui.cc
 	['bonusObjectivePosition'] = "LEFT",
 	["talkingHeadFrameScale"] = 0.9,
 
@@ -33,6 +33,13 @@ P['general'] = {
 	['minimap'] = {
 		['size'] = 176,
 		['locationText'] = 'MOUSEOVER',
+		["locationFontSize"] = 12,
+		["locationFontOutline"] = "OUTLINE",
+		["locationFont"] = "EUI",
+		["resetZoom"] = {
+			["enable"] = false,
+			["time"] = 3,
+		},
 		['icons'] = {
 			['classHall'] = {
 				['scale'] = 0.8,
@@ -172,6 +179,7 @@ P['bags'] = {
 	["junkIcon"] = false,
 	['ignoredItems'] = {},
 	['itemLevel'] = true,
+	["useTooltipScanning"] = true,
 	['itemLevelThreshold'] = 1,
 	['itemLevelFont'] = 'EUI',
 	['itemLevelFontSize'] = 10,
@@ -181,11 +189,15 @@ P['bags'] = {
 	["countFontOutline"] = "OUTLINE",
 	["countFontColor"] = {r = 1, g = 1, b = 1},
 	["reverseLoot"] = false,
+	["clearSearchOnClose"] = false,
+	["disableBagSort"] = false,
+	["disableBankSort"] = false,
 	['bagBar'] = {
 		['growthDirection'] = 'VERTICAL',
 		['sortDirection'] = 'ASCENDING',
 		['size'] = 30,
 		['spacing'] = 4,
+		["backdropSpacing"] = 4,
 		['showBackdrop'] = false,
 		['mouseover'] = false,
 	},
@@ -194,9 +206,9 @@ P['bags'] = {
 --NamePlate
 P["nameplates"] = {
 	["statusbar"] = "ElvUI Norm",
-	['font'] = 'Homespun',
+	['font'] = 'EUI',
 	['fontSize'] = 8,
-	['fontOutline'] = 'MONOCHROMEOUTLINE',
+	['fontOutline'] = 'OUTLINE',
 	['useTargetScale'] = true,
 	['targetScale'] = 1.15,
 	['nonTargetTransparency'] = 0.35,
@@ -244,6 +256,7 @@ P["nameplates"] = {
 			['enable'] = false,
 			["alwaysShow"] = false,
 			["clickthrough"] = false,
+			["combatFade"] = false,
 			['healthbar'] = {
 				['enable'] = true,
 				['height'] = 10,
@@ -578,13 +591,16 @@ P["nameplates"] = {
 				['xOffset'] = 15,
 				['yOffset'] = 0,
 			},
+			["detection"] = {
+				["enable"] = true,
+			},
 		},
 	},
 };
 
 --Auras
 P['auras'] = {
-	['font'] = 'Homespun',
+	['font'] = 'EUI',
 	['fadeThreshold'] = 5,
 	['buffs'] = {
 		['growthDirection'] = 'LEFT_DOWN',
@@ -597,7 +613,7 @@ P['auras'] = {
 		['seperateOwn'] = 1,
 		['size'] = 32,
 		['fontSize'] = 10,
-		['fontOutline'] = 'MONOCHROMEOUTLINE',
+		['fontOutline'] = 'OUTLINE',
 		['countYOffset'] = 0,
 		['countXOffset'] = 0,
 		['timeYOffset'] = 0,
@@ -747,7 +763,7 @@ P['tooltip'] = {
 	['healthBar'] = {
 		['text'] = true,
 		['height'] = 7,
-		['font'] = 'Homespun',
+		['font'] = 'EUI',
 		['fontSize'] = 10,
 	},
 	["useCustomFactionColors"] = false,
@@ -766,9 +782,9 @@ P['tooltip'] = {
 P['unitframe'] = {
 	['smoothbars'] = false,
 	['statusbar'] = "ElvUI Norm",
-	['font'] = 'Homespun',
+	['font'] = 'EUI',
 	['fontSize'] = 10,
-	['fontOutline'] = 'MONOCHROMEOUTLINE',
+	['fontOutline'] = 'OUTLINE',
 	['OORAlpha'] = 0.35,
 	['debuffHighlighting'] = 'FILL',
 	["smartRaidFilter"] = true,
@@ -907,6 +923,13 @@ P['unitframe'] = {
 				['text_format'] = '||cFFB04F4F[pvptimer][mouseover]||r',
 				['xOffset'] = 0,
 				['yOffset'] = 0,
+			},
+			["pvpIcon"] = {
+				["enable"] = false,
+				["anchorPoint"] = "CENTER",
+				["xOffset"] = 0,
+				["yOffset"] = 0,
+				["scale"] = 1,
 			},
 			['portrait'] = {
 				['enable'] = false,
@@ -1080,6 +1103,13 @@ P['unitframe'] = {
 				['xOffset'] = 0,
 				['yOffset'] = 0,
 				['attachTextTo'] = 'Health',
+			},
+			["pvpIcon"] = {
+				["enable"] = false,
+				["anchorPoint"] = "CENTER",
+				["xOffset"] = 0,
+				["yOffset"] = 0,
+				["scale"] = 1,
 			},
 			['portrait'] = {
 				['enable'] = false,
@@ -2193,8 +2223,8 @@ P['unitframe'] = {
 				['enable'] = false,
 				["showDispellableDebuff"] = true,
 				['fontSize'] = 10,
-				["font"] = "Homespun",
-				["fontOutline"] = "MONOCHROMEOUTLINE",
+				["font"] = "EUI",
+				["fontOutline"] = "OUTLINE",
 				['size'] = 26,
 				['xOffset'] = 0,
 				['yOffset'] = 0,
@@ -2385,8 +2415,8 @@ P['unitframe'] = {
 				['enable'] = true,
 				["showDispellableDebuff"] = true,
 				['fontSize'] = 10,
-				["font"] = "Homespun",
-				["fontOutline"] = "MONOCHROMEOUTLINE",
+				["font"] = "EUI",
+				["fontOutline"] = "OUTLINE",
 				['size'] = 26,
 				['xOffset'] = 0,
 				['yOffset'] = 0,
@@ -2543,8 +2573,8 @@ P['unitframe'] = {
 				['enable'] = false,
 				["showDispellableDebuff"] = true,
 				['fontSize'] = 10,
-				["font"] = "Homespun",
-				["fontOutline"] = "MONOCHROMEOUTLINE",
+				["font"] = "EUI",
+				["fontOutline"] = "OUTLINE",
 				['size'] = 22,
 				['xOffset'] = 0,
 				['yOffset'] = 0,
@@ -2698,8 +2728,8 @@ P['unitframe'] = {
 				['enable'] = true,
 				["showDispellableDebuff"] = true,
 				['fontSize'] = 10,
-				["font"] = "Homespun",
-				["fontOutline"] = "MONOCHROMEOUTLINE",
+				["font"] = "EUI",
+				["fontOutline"] = "OUTLINE",
 				['size'] = 26,
 				['xOffset'] = 0,
 				['yOffset'] = 2,
@@ -2788,8 +2818,8 @@ P['unitframe'] = {
 				['enable'] = true,
 				["showDispellableDebuff"] = true,
 				['fontSize'] = 10,
-				["font"] = "Homespun",
-				["fontOutline"] = "MONOCHROMEOUTLINE",
+				["font"] = "EUI",
+				["fontOutline"] = "OUTLINE",
 				['size'] = 26,
 				['xOffset'] = 0,
 				['yOffset'] = 0,
@@ -2879,8 +2909,8 @@ P['unitframe'] = {
 				['enable'] = true,
 				["showDispellableDebuff"] = true,
 				['fontSize'] = 10,
-				["font"] = "Homespun",
-				["fontOutline"] = "MONOCHROMEOUTLINE",
+				["font"] = "EUI",
+				["fontOutline"] = "OUTLINE",
 				['size'] = 26,
 				['xOffset'] = 0,
 				['yOffset'] = 0,
@@ -2922,9 +2952,9 @@ P["cooldown"] = {
 
 --Actionbar
 P["actionbar"] = {
-	['font'] = 'Homespun',
+	['font'] = 'EUI',
 	['fontSize'] = 10,
-	['fontOutline'] = 'MONOCHROMEOUTLINE',
+	['fontOutline'] = 'OUTLINE',
 	['fontColor'] = { r = 1, g = 1, b = 1 },
 
 	["macrotext"] = false,
@@ -2947,6 +2977,8 @@ P["actionbar"] = {
 
 	['globalFadeAlpha'] = 0,
 	["lockActionBars"] = true,
+	["hideCooldownBling"] = false,
+	["useDrawSwipeOnCharges"] = false,
 
 	['bar1'] = {
 		['enabled'] = true,
@@ -3093,6 +3125,7 @@ P["actionbar"] = {
 		["backdropSpacing"] = 2,
 		['alpha'] = 1,
 		['inheritGlobalFade'] = false,
+		["usePositionOverride"] = true,
 	},
 	['extraActionButton'] = {
 		['alpha'] = 1,
