@@ -44,6 +44,7 @@ local newIcon = " \124TInterface\\OptionsFrame\\UI-OptionsFrame-NewFeatureIcon:1
 		8 = Pet Filters
 		9 = Toolbar Options
 		10 = Team Options
+		11 = Confirmation Options
 ]]
 
 panel.opts = {
@@ -115,17 +116,19 @@ panel.opts = {
 	{ "check", "QueueAutoLearn", L["Automatically Level New Pets"], L["When you capture or learn a pet, automatically add it to the leveling queue."] },
 	{ "check", "QueueAutoLearnOnly", L["Only Pets Without A 25"], L["Only automatically level pets which don't have a version already at 25 or in the queue."], "QueueAutoLearn" },
 	{ "check", "QueueAutoLearnRare", L["Only Rare Pets"], L["Only automatically level rare quality pets."], "QueueAutoLearn" },
-	{ "header", L["Pet Filter Options"]..newIcon, 8 },
+	{ "header", L["Pet Filter Options"], 8 },
 	{ "check", "ResetFilters", L["Reset Filters On Login"], L["When logging in, start with all pets listed and no filters active."] },
 	{ "check", "ResetSortWithFilters", L["Reset Sort With Filters"], L["When clearing filters, also reset the sort back to the default: Sort by Name, Favorites First."], nil, true },
 	{ "check", "ResetExceptSearch", L["Don't Reset Search With Filters"], L["When manually clearing filters, don't clear the search box too.\n\nSome actions, such as logging in or Find Similar, will always clear search regardless of this setting."] },
 	{ "check", "SortByNickname", L["Sort By Chosen Name"], L["When pets are sorted by name, sort them by the name given with the Rename option instead of their original name."], nil, true },
-	{ "check", "DontSortByRelevance", L["Don't Sort By Relevance"]..newIcon, L["When searching for something by name in the search box, do not sort the results by relevance.\n\nWhen sorted by relevance, pets with the search term in their name are listed first, followed by terms in notes, then abilities and then source text last."], nil, true },
+	{ "check", "DontSortByRelevance", L["Don't Sort By Relevance"], L["When searching for something by name in the search box, do not sort the results by relevance.\n\nWhen sorted by relevance, pets with the search term in their name are listed first, followed by terms in notes, then abilities and then source text last."], nil, true },
+	{ "header", L["Confirmation Options"]..newIcon, 11 },
+	{ "check", "DontWarnMissing", L["Don't Warn About Missing Pets"], L["Don't display a popup when a team loads and a pet within the team can't be found."] },
+	{ "check", "DontConfirmHidePets", L["Don't Ask When Hiding Pets"], L["Don't ask for confirmation when hiding a pet.\n\nYou can view hidden pets in the 'Other' pet filter."] },
+	{ "check", "NoBackupReminder", L["Don't Remind About Backups"]..newIcon, L["Don't show a popup offering to backup teams every once in a while. Generally, the popup appears sometime after the number of teams increases by 50."] },
 	{ "header", L["Miscellaneous Options"], 6 },
 	{ "check", "ShowAfterBattle", L["Show After Pet Battle"], L["Show the Rematch window after leaving a pet battle."] },
 	{ "check", "DisableShare", L["Disable Sharing"], L["Disable the Send button and also block any incoming pets sent by others. Import and Export still work."] },
-	{ "check", "DontWarnMissing", L["Don't Warn About Missing Pets"], L["Don't display a popup when a team loads and a pet within the team can't be found."] },
-	{ "check", "DontConfirmHidePets", L["Don't Ask When Hiding Pets"], L["Don't ask for confirmation when hiding a pet.\n\nYou can view hidden pets in the 'Other' pet filter."] },
 	{ "check", "UseMinimapButton", L["Use Minimap Button"], L["Place a button on the minimap to toggle Rematch and load favorite teams."], nil, true, true },
 	{ "check", "KeepSummoned", L["Keep Companion"], L["After a team is loaded, summon back the companion that was at your side before the load; or dismiss the pet if you had none summoned."] },
 	{ "check", "HideTooltips", L["Hide Tooltips"], L["Hide the more common tooltips in Rematch."] },

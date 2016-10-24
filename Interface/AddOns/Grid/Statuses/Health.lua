@@ -1,12 +1,12 @@
 --[[--------------------------------------------------------------------
 	Grid
 	Compact party and raid unit frames.
-	Copyright (c) 2006-2014 Kyle Smith (Pastamancer), Phanx
-	All rights reserved.
-	See the accompanying README and LICENSE files for more information.
+	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+	All rights reserved. See the accompanying LICENSE file for details.
+	https://github.com/Phanx/Grid
+	https://mods.curse.com/addons/wow/grid
 	http://www.wowinterface.com/downloads/info5747-Grid.html
-	http://www.wowace.com/addons/grid/
-	http://www.curse.com/addons/wow/grid
 ------------------------------------------------------------------------
 	Health.lua
 	Grid status module for unit health.
@@ -17,7 +17,7 @@ local L = Grid.L
 local GridRoster = Grid:GetModule("GridRoster")
 
 local GridStatusHealth = Grid:NewStatusModule("GridStatusHealth")
-GridStatusHealth.menuName = L["Health"]
+GridStatusHealth.menuName = L["Health and Death"]
 
 GridStatusHealth.defaultDB = {
 	unit_health = {
@@ -29,7 +29,7 @@ GridStatusHealth.defaultDB = {
 		useClassColors = true,
 	},
 	unit_healthDeficit = {
-		enable = true,
+		enable = false,
 		color = { r = 1, g = 1, b = 1, a = 1 },
 		priority = 30,
 		threshold = 80,
@@ -38,7 +38,7 @@ GridStatusHealth.defaultDB = {
 	},
 	alert_lowHealth = {
 		text = L["Low HP"],
-		enable = true,
+		enable = false,
 		color = { r = 1, g = 1, b = 1, a = 1 },
 		priority = 30,
 		threshold = 80,
@@ -47,14 +47,22 @@ GridStatusHealth.defaultDB = {
 	alert_death = {
 		text = L["DEAD"],
 		enable = true,
-		color = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
+		color = { r = 0.5, g = 0.5, b = 0.5, a = 1, ignore = true },
 		icon = "Interface\\TargetingFrame\\UI-TargetingFrame-Skull",
 		priority = 50,
 		range = false,
 	},
+    alert_ghost = {
+   		text = GetSpellInfo(8326),
+   		enable = true,
+   		color = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
+   		icon = "Interface\\Icons\\Ability_Vanish",
+   		priority = 80,
+   		range = false,
+   	},
 	alert_feignDeath = {
 		text = L["FD"],
-		enable = true,
+		enable = false,
 		color = { r = 0.5, g = 0.5, b = 0.5, a = 1 },
 		icon = "Interface\\Icons\\Ability_Rogue_FeignDeath",
 		priority = 55,
@@ -63,12 +71,14 @@ GridStatusHealth.defaultDB = {
 	alert_offline = {
 		text = L["Offline"],
 		enable = true,
-		color = { r = 1, g = 1, b = 1, a = 0.6, ignore = true },
-		icon = "Interface\\CharacterFrame\\Disconnect-Icon",
-		priority = 60,
+		color = { r = 0.5, g = 0.5, b = 0.5, a = 0.7, ignore = true },
+		icon = "Interface\\Buttons\\UI-GroupLoot-Pass-Up",
+		priority = 99,
 		range = false,
 	},
 }
+
+local ICON_TEX_COORDS = { left = 0.06, right = 0.94, top = 0.06, bottom = 0.94 }
 
 GridStatusHealth.extraOptions = {
 	deadAsFullHealth = {
@@ -148,9 +158,10 @@ function GridStatusHealth:PostInitialize()
 	self:RegisterStatus("unit_health", L["Unit health"], healthOptions)
 	self:RegisterStatus("unit_healthDeficit", L["Health deficit"], healthDeficitOptions)
 	self:RegisterStatus("alert_lowHealth", L["Low HP warning"], low_healthOptions)
-	self:RegisterStatus("alert_death", L["Death warning"], nil, true)
-	self:RegisterStatus("alert_feignDeath", L["Feign Death warning"], nil, true)
-	self:RegisterStatus("alert_offline", L["Offline warning"], nil, true)
+	self:RegisterStatus("alert_death", L["Death warning"], nil, nil)
+    self:RegisterStatus("alert_ghost", GridStatusHealth.defaultDB.alert_ghost.text, nil, nil)
+	--self:RegisterStatus("alert_feignDeath", L["Feign Death warning"], nil, true)
+	self:RegisterStatus("alert_offline", L["Offline warning"], nil, nil)
 end
 
 -- you can't disable the unit_health status, so no need to ever unregister
@@ -212,6 +223,7 @@ function GridStatusHealth:UpdateUnit(event, unitid, ignoreRange)
 
 	if UnitIsDeadOrGhost(unitid) then
 		self:StatusDeath(guid, true)
+        self:StatusGhost(guid, UnitIsGhost(unitid))
 		self:StatusFeignDeath(guid, false)
 		self:StatusLowHealth(guid, false)
 		if healthSettings.deadAsFullHealth then
@@ -219,6 +231,7 @@ function GridStatusHealth:UpdateUnit(event, unitid, ignoreRange)
 		end
 	else
 		self:StatusDeath(guid, false)
+        self:StatusGhost(guid, false)
 		self:StatusFeignDeath(guid, UnitIsFeignDeath(unitid))
 		self:StatusLowHealth(guid, (cur / max * 100) <= self.db.profile.alert_lowHealth.threshold)
 	end
@@ -317,10 +330,33 @@ function GridStatusHealth:StatusDeath(guid, gained)
 	end
 end
 
+function GridStatusHealth:StatusGhost(guid, gained)
+	local settings = self.db.profile.alert_ghost
+
+	if not guid then return end
+
+	-- return if this option isnt enabled
+	if not settings.enable then return end
+
+	if gained then
+		-- trigger death event for other modules as wow isnt firing a death event
+		self.core:SendStatusGained(guid, "alert_ghost",
+			settings.priority,
+			settings.range,
+			settings.color,
+			settings.text,
+			(self.db.profile.unit_health.deadAsFullHealth and 100 or 0),
+			100,
+			settings.icon, nil, nil, nil, ICON_TEX_COORDS)
+	else
+		self.core:SendStatusLost(guid, "alert_ghost")
+	end
+end
+
 function GridStatusHealth:StatusFeignDeath(guid, gained)
 	local settings = self.db.profile.alert_feignDeath
 
-	if not name then return end
+	if not guid then return end
 
 	-- return if this option isnt enabled
 	if not settings.enable then return end
@@ -333,7 +369,7 @@ function GridStatusHealth:StatusFeignDeath(guid, gained)
 			settings.text,
 			(self.db.profile.unit_health.deadAsFullHealth and 100 or 0),
 			100,
-			settings.icon)
+			settings.icon, nil, nil, nil, ICON_TEX_COORDS)
 	else
 		self.core:SendStatusLost(guid, "alert_feignDeath")
 	end

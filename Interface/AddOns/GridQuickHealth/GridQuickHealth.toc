@@ -1,0 +1,11 @@
+## Interface: 70000
+# Title: GridQuickHealth
+# Notes: 团队框体中的快速治疗功能
+## Author: yleaf, warbaby
+## Dependencies: Grid
+
+GridQuickHealth.lua
+
+## Title: |cffEEEE00[Warbaby]|r Grid快速血条变化
+## X-Vendor: NetEase
+## X-163UI-Version: 20160729110246

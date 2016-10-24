@@ -80,7 +80,7 @@
 				</Frames>
 			</Frame>
 
-			<!-- status bar that appears when queue is paused or actively sorted -->
+			<!-- status bar that appears when queue is actively sorted -->
 			<Frame parentKey="Status" inherits="RematchInsetFrameTemplate">
 				<Size x="280" y="26"/>
 				<Anchors>
@@ -144,7 +144,7 @@
 								<FontString parentKey="Help" inherits="GameFontNormal" justifyH="LEFT" justifyV="CENTER" hidden="true">
 									<Size x="200" y="300"/>
 									<Anchors>
-										<Anchor point="CENTER" x="0" y="16"/>
+										<Anchor point="CENTER" x="-8" y="16"/>
 									</Anchors>
 									<Color r="0.75" g="0.75" b="0.75"/>
 								</FontString>

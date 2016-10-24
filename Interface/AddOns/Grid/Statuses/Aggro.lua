@@ -1,12 +1,12 @@
 --[[--------------------------------------------------------------------
 	Grid
 	Compact party and raid unit frames.
-	Copyright (c) 2006-2014 Kyle Smith (Pastamancer), Phanx
-	All rights reserved.
-	See the accompanying README and LICENSE files for more information.
+	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+	All rights reserved. See the accompanying LICENSE file for details.
+	https://github.com/Phanx/Grid
+	https://mods.curse.com/addons/wow/grid
 	http://www.wowinterface.com/downloads/info5747-Grid.html
-	http://www.wowace.com/addons/grid/
-	http://www.curse.com/addons/wow/grid
 ------------------------------------------------------------------------
 	Aggro.lua
 	Grid status module for aggro/threat.
@@ -19,7 +19,7 @@ local GridStatus = Grid:GetModule("GridStatus")
 local GridRoster = Grid:GetModule("GridRoster")
 
 local GridStatusAggro = Grid:NewStatusModule("GridStatusAggro")
-GridStatusAggro.menuName = L["Aggro"]
+GridStatusAggro.menuName = L["Aggro Status"]
 
 local function getthreatcolor(status)
 	local r, g, b = GetThreatStatusColor(status)
@@ -28,7 +28,7 @@ end
 
 GridStatusAggro.defaultDB = {
 	alert_aggro = {
-		text =  L["Aggro"],
+		text =  L["Aggro Status"],
 		enable = true,
 		color = { r = 1, g = 0, b = 0, a = 1 },
 		priority = 99,
@@ -71,7 +71,8 @@ local aggroDynamicOptions = {
 		args = {
 			["1"] = {
 				type = "color",
-				name = L["High Threat"],
+				name = L["High State"],
+                desc = L["not tanking, higher threat than tank."],
 				order = 100,
 				width = "double",
 				hasAlpha = true,
@@ -80,7 +81,8 @@ local aggroDynamicOptions = {
 			},
 			["2"] = {
 				type = "color",
-				name = L["Aggro"],
+				name = L["Aggro State"],
+                desc = L["insecurely tanking, another unit have higher threat but not tanking."],
 				order = 101,
 				width = "double",
 				hasAlpha = true,
@@ -89,7 +91,8 @@ local aggroDynamicOptions = {
 			},
 			["3"] = {
 				type = "color",
-				name = L["Tanking"],
+				name = L["Tanking State"],
+                desc = L["securely tanking, highest threat."],
 				order = 102,
 				width = "double",
 				hasAlpha = true,
@@ -133,7 +136,7 @@ local aggroOptions = {
 }
 
 function GridStatusAggro:PostInitialize()
-	self:RegisterStatus("alert_aggro", L["Aggro"], aggroOptions, true)
+	self:RegisterStatus("alert_aggro", L["Aggro Status"], aggroOptions, true)
 	setupmenu()
 end
 

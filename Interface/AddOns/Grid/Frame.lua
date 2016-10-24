@@ -1,12 +1,12 @@
 --[[--------------------------------------------------------------------
 	Grid
 	Compact party and raid unit frames.
-	Copyright (c) 2006-2014 Kyle Smith (Pastamancer), Phanx
-	All rights reserved.
-	See the accompanying README and LICENSE files for more information.
+	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+	All rights reserved. See the accompanying LICENSE file for details.
+	https://github.com/Phanx/Grid
+	https://mods.curse.com/addons/wow/grid
 	http://www.wowinterface.com/downloads/info5747-Grid.html
-	http://www.wowace.com/addons/grid/
-	http://www.curse.com/addons/wow/grid
 ----------------------------------------------------------------------]]
 
 local GRID, Grid = ...
@@ -294,12 +294,12 @@ GridFrame.defaultDB = {
 			alert_lowMana = true,
 			player_target = true,
 		},
-		corner4 = { -- Top Left
+		corner4 = { -- Top Right
 			leader = true,
 			assistant = true,
 			master_looter = true,
 		},
-		corner3 = { -- Top Right
+		corner3 = { -- Top Left
 			role = true,
 		},
 		corner1 = { -- Bottom Left
@@ -345,7 +345,7 @@ local reloadHandle
 
 function GridFrame:Grid_ReloadLayout()
 	if reloadHandle then
-		reloadHandle = self:CancelTimer(reloadHandle) -- returns nil
+		self:CancelTimer(reloadHandle) reloadHandle = nil --163ui returns true
 	end
 	self:SendMessage("Grid_ReloadLayout")
 end
@@ -639,8 +639,9 @@ function GridFrame:OnEnable()
 	self:RegisterMessage("Grid_StatusGained")
 	self:RegisterMessage("Grid_StatusLost")
 
-	self:RegisterMessage("Grid_StatusRegistered", "UpdateOptionsMenu")
-	self:RegisterMessage("Grid_StatusUnregistered", "UpdateOptionsMenu")
+    --slow when turn on taintLog
+	self:RegisterBucketMessage("Grid_StatusRegistered", 0.2, "UpdateOptionsMenu")
+	self:RegisterBucketMessage("Grid_StatusUnregistered", 0.2, "UpdateOptionsMenu")
 
 	self:RegisterMessage("Grid_ColorsChanged", "UpdateAllFrames")
 

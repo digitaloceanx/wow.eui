@@ -209,15 +209,15 @@ end
 -- returns true if the key,data team matches the searchText
 function panel:TeamMatchesSearch(key,data)
 	-- look for match in team name
-	if rematch:GetTeamTitle(key):match(searchText) then
+	if rematch:match(rematch:GetTeamTitle(key),searchText) then
 		return true
 	end
 	-- look for match with npc name
-	if type(key)=="number" and rematch:GetNameFromNpcID(key):match(searchText) then
+	if type(key)=="number" and rematch:match(rematch:GetNameFromNpcID(key),searchText) then
 		return true
 	end
 	-- look for match in notes
-	if data.notes and data.notes:match(searchText) then
+	if data.notes and rematch:match(data.notes,searchText) then
 		return true
 	end
 	-- look for match in pet names
@@ -226,14 +226,14 @@ function panel:TeamMatchesSearch(key,data)
 		local idType = rematch:GetIDType(petID)
 		if idType=="pet" then
 			local _,customName,_,_,_,_,_,name = C_PetJournal.GetPetInfoByPetID(petID)
-			if customName and customName:match(searchText) then
+			if customName and rematch:match(customName,searchText) then
 				return true
-			elseif name and name:match(searchText) then
+			elseif name and rematch:match(name,searchText) then
 				return true
 			end
 		elseif idType=="species" then
 			local name = C_PetJournal.GetPetInfoBySpeciesID(petID)
-			if name and name:match(searchText) then
+			if name and rematch:match(name,searchText) then
 				return true
 			end
 		elseif idType=="leveling" and (L["Leveling"]):match(searchText) then
@@ -541,4 +541,13 @@ function panel:TeamOnLeave()
 	self.Backplate:SetColorTexture(0.15,0.15,0.15)
 	rematch:HideTooltip()
 	rematch:HighlightTeamTab() -- unlock all highlights
+end
+
+-- returns the number of teams saved
+function rematch:GetNumTeams()
+	local numTeams = 0
+	for k,v in pairs(saved) do
+		numTeams = numTeams + 1
+	end
+	return numTeams
 end

@@ -1,8 +1,8 @@
 --[[
 
-Learning Aid version 1.12 Beta 1
-Compatible with World of Warcraft version 6.0.2
-Learning Aid is copyright © 2008-2015 Jamash (Kil'jaeden US Horde)
+Learning Aid version 1.13 Alpha 1
+Compatible with World of Warcraft version 7.0.3
+Learning Aid is copyright Â© 2008-2016 Jamash (Kil'jaeden US Horde)
 Email: jamashkj@gmail.com
 
 LearningAid.lua is part of Learning Aid.
@@ -40,6 +40,12 @@ local addonName, private = ...
 private.debug = 0
 private.debugCount = 0
 private.debugLimit = 10000 -- how many lines of log to keep before deleting earliest line
+-- FIXME TODO -- Have a way to configure this
+private.debugWindow = ChatFrame6
+private.debugWindow:SetMaxLines(private.debugLimit)
+-- FIXME TODO --
+-- FIXME TODO --
+
 private.logAllEvents = false
 private.shadow = { }
 private.wrappers = { }
@@ -49,11 +55,11 @@ private.noLog = { -- do not log calls to these functions even when call logging 
   GetVisible = true,
   GetText = true,
   ListJoin = true,
+  UnlinkSpell = true,
+  RealSpellBookItemInfo = true
   --SpellInfo = true,
   --SpellBookInfo = true,
-  -- MOP -- PLAYER_GUILD_UPDATE = true,
-  -- MOP -- UpdateGuild = true,
-  -- PANDARIA -- COMPANION_UPDATE = true
+
 }
 
 local LA = { 
@@ -63,7 +69,7 @@ local LA = {
   titleHeight = 40, -- pixels
   frameWidth = 200, -- pixels
   framePadding = 10, -- pixels
-  verticalSpacing = 5, -- pixels
+  verticalSpacing = 13, -- pixels
   horizontalSpacing = 153, -- pixels
   buttonSize = 37, -- pixels
   width = 1, -- button columns
@@ -86,13 +92,15 @@ local LA = {
     -- add tradeskill learning stuff here
   },
   defaults = { -- default savedvariables contents
-    macros = true,
-    totem = true,
     enabled = true,
     restoreActions = true,
-    filterSpam = 1, -- FILTER_SUMMARIZE
     debugFlags = { },
-    ignore = { }
+    ignore = { },
+    -- Search options
+    macros = true, -- Search inside macro bodies
+    totem = true, -- Search for totem spells (Shaman only)
+    autoAttack = false, -- Search for Auto Attack, Auto Shot and Shoot
+    shapeshift = true -- Search for shapeshifts, stances, auras, presences, etc.
   },
   menuHideDelay = 5, -- seconds
   pendingBuyCount = 0,
@@ -105,8 +113,11 @@ local LA = {
 --  petLearning = false,
   activatePrimarySpec = 63645, -- global spellID
   activateSecondarySpec = 63644, -- global spellID
-  racialSpell = 20549, -- War Stomp (Tauren)
-  racialPassiveSpell = 20550, -- Endurance (Tauren)
+  autoAttack = 6603, -- global spellID
+  autoShot = 75, -- global spellID
+  shootWand = 5019, -- global spellID
+  racialSpell = 20549, -- War Stomp (Tauren). Used to determine the subName text for racials.
+  racialPassiveSpell = 20550, -- Endurance (Tauren). Used to determine the subName text for racial passives.
   ridingSpells = {
     [33388] = true,  -- Apprentice (60% ground speed)
     [33391] = true,  -- Journeyman (100% ground speed)
@@ -285,7 +296,11 @@ function LA:Init()
       end
     end
   )
-
+  --[[
+  Due to lack of foresight, some options have negative implications.
+  shapeshift, if true, 
+  
+  ]]
   self.options = {
     handler = self,
     type = "group",
@@ -308,6 +323,7 @@ function LA:Init()
         width = "full",
         order = 30
       },
+--[[ No longer needed as of patch 6.2.0!
       filter = {
         name = self:GetText("showLearnSpam"),
         desc = self:GetText("showLearnSpamHelp"),
@@ -333,6 +349,7 @@ function LA:Init()
         get = function(info) return self.saved.filterSpam end,
         order = 20,
       },
+--]]
       reset = {
         name = self:GetText("resetPosition"),
         desc = self:GetText("resetPositionHelp"),
@@ -354,6 +371,15 @@ function LA:Init()
             func = "FindMissingActions",
             -- width = "full",
             order = 1
+          },
+          autoattack = {
+            name = self:GetText("findAutoAttack"),
+            desc = self:GetText("findAutoAttackHelp"),
+            type = "toggle",
+            set = function(info, val) self.saved.autoAttack = val end,
+            get = function(info) return self.saved.autoAttack end,
+            width = "full",
+            order = 2
           },
           shapeshift = {
             name = self:GetText("findShapeshift"),
@@ -493,12 +519,13 @@ function LA:Init()
                 desc = "The Kitchen Sink",
                 type = "execute",
                 func = function ()
-                  local i = 1
-                  local spellName = GetSpellBookItemName(i, BOOKTYPE_SPELL)
-                  while spellName do
-                    self:AddButton(self.Spell.Book[i])
-                    i = i + 1
-                    spellName = GetSpellBookItemName(i, BOOKTYPE_SPELL)
+                  local spec, icon, first, count = GetSpellTabInfo(2) -- main spec
+                  local spell
+                  for i = 1, first + count do
+                    spell = self.Spell.Book[i]
+                    if spell and ("SPELL" == spell.Status) and spell.Known and (not spell.Passive) then
+                      self:AddButton(spell)
+                    end
                   end
                 end
               }
@@ -549,9 +576,8 @@ function LA:Init()
     self:DebugPrint("ConfirmTalentWipe")
     self:SaveActionBars()
     self.state.untalenting = true
-    --self.spellsUnlearned = {}
     self:RegisterEvent("ACTIONBAR_SLOT_CHANGED", "OnEvent")
-    self:RegisterEvent("PLAYER_TALENT_UPDATE", "OnEvent")
+    --self:RegisterEvent("PLAYER_TALENT_UPDATE", "OnEvent")
     -- self:RegisterEvent("UI_ERROR_MESSAGE", "OnEvent")
   end)
   --[[ PANDARIA
@@ -600,27 +626,19 @@ function LA:Init()
   ]]-- TODO FIXME Rewrite entire talent handling code FIXME TODO --
   self:RegisterChatCommand("la", "AceSlashCommand")
   self:RegisterChatCommand("learningaid", "AceSlashCommand")
-  --self:SetEnabledState(self.saved.enabled)
-  --self.saved.enabled = true
-  --self:DebugPrint("OnEnable()")
   local baseEvents = {
     "ACTIVE_TALENT_GROUP_CHANGED",
     "ADDON_LOADED",
-    "CHAT_MSG_SYSTEM",
-    -- PANDARIA -- "COMPANION_LEARNED",
-    -- PANDARIA -- "COMPANION_UPDATE",
     "PET_TALENT_UPDATE",
     "PLAYER_LEAVING_WORLD",
     "PLAYER_LEVEL_UP",
     "PLAYER_LOGIN",
     "PLAYER_LOGOUT",
--- MOP --    "PLAYER_GUILD_UPDATE",
     "PLAYER_REGEN_DISABLED",
     "PLAYER_REGEN_ENABLED",
 --    "SPELLS_CHANGED", -- wait until PLAYER_LOGIN
     "UNIT_SPELLCAST_START",
     "UI_SCALE_CHANGED",
---    "UPDATE_BINDINGS", -- PANDARIA -- not needed because of companion/mount removal
     "VARIABLES_LOADED"
 --[[
     "CURRENT_SPELL_CAST_CHANGED",
@@ -630,22 +648,13 @@ function LA:Init()
     "UNIT_SPELLCAST_SUCCEEDED"
 --]]
   }
-  --if private.logAllEvents then
-  --  self.frame:RegisterAllEvents()
-  --else
-    for i, event in ipairs(baseEvents) do
-      self:RegisterEvent(event, "OnEvent")
-    end
-  --end
-  --self:UpdateSpellBook()
-  --PANDARIA
-  --self:UpdateCompanions()
+  for i, event in ipairs(baseEvents) do
+    self:RegisterEvent(event, "OnEvent")
+  end
+
   self:DiffActionBars()
   self:SaveActionBars()
-  if self.saved.filterSpam ~= LA.FILTER_SHOW_ALL then
-    self:DebugPrint("Initially adding chat filter for CHAT_MSG_SYSTEM")
-    ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", private.spellSpamFilter)
-  end
+
   if self.saved.locked then
     self.menuTable[1].text = self:GetText("unlockPosition")
   else
@@ -653,41 +662,6 @@ function LA:Init()
   end
   if self.saved.frameStrata then
     self.frame:SetFrameStrata(self.saved.frameStrata)
-  end
-end
-
--- this is a function
-function private.spellSpamFilter(...) return LA:spellSpamFilter(...) end
-
--- this is a method
-function LA:spellSpamFilter(chatFrame, event, message, ...)
-  local spell
-  local patterns = self.patterns
-  if (self.saved.filterSpam ~= self.FILTER_SHOW_ALL) and (
-    --(
-      --self.state.untalenting or
-      --self.state.retalenting or
-     --(self.pendingTalentCount > 0) or
-     --(self.saved.filterSpam == self.FILTER_SHOW_NONE) or
-      --self.state.learning or
---      self.petLearning or
-      --(self.pendingBuyCount > 0)
-    --) and (
-      string.match(message, patterns.learnSpell) or 
-      string.match(message, patterns.learnAbility) or
-      string.match(message, patterns.learnPassive) or
-      string.match(message, patterns.unlearnSpell) or
---    )
-  --) or
-    string.match(message, patterns.petLearnAbility) or
-    string.match(message, patterns.petLearnSpell) or
-    string.match(message, patterns.petUnlearnSpell)
-  ) then
-    self:DebugPrint("Suppressing message")
-    return true -- do not display the message
-  else
-    self:DebugPrint("Allowing message")
-    return false, message, ... -- pass the message along
   end
 end
 
@@ -904,6 +878,7 @@ function LA:ProcessQueue()
     wipe(self.queue)
   end
 end
+-- Possibly obsolete as of 6.2.0
 function LA:FormatSpells(t)
   local str = ""
   for i, spell in ipairs(t) do
@@ -918,28 +893,37 @@ end
 local function spellCompare (a,b)
   return a.SpecName < b.SpecName
 end
+--[[ No longer needed as of patch 6.2.0!
+
 function LA:PrintPending()
   local learned = self.spellsLearned
   local unlearned = self.spellsUnlearned
+  self:DebugPrint('Learned '..(#learned)..', unlearned '..#unlearned)
   if self.saved.filterSpam == self.FILTER_SUMMARIZE then
     -- lots of work just to remove stuff that's unlearned and then immediately relearned
     if #learned > 0 and #unlearned > 0 then
+      self:DebugPrint('Removing duplicate spells')
       local spells = { }
       local learnedDupes = { }
       local unlearnedDupes = { }
-      local name
+      local specName
+      -- Create a lookup table of "SpellSpecName" = n for each index in 
+      -- LA.spellsLearned[] and LA.spellsUnlearned[]
       for index, spell in ipairs(learned) do
         spells[spell.SpecName] = index
       end
       for index, spell in ipairs(unlearned) do
-        name = spell.SpecName
-        if spells[name] then
-          tinsert(learnedDupes, spells[name])
-          tinsert(unlearnedDupes, index) -- do not disturb the table while traversing it
+        specName = spell.SpecName
+        if spells[specName] then
+          -- do not disturb the table while traversing it
+          tinsert(learnedDupes, spells[specName])
+          tinsert(unlearnedDupes, index)
         end
       end
+      -- Ensure the indices are in order
       table.sort(learnedDupes)
-      for i = #learnedDupes, 1, -1 do -- go backwards so later indices don't change when removing earlier elements
+      -- go backwards so later indices don't change when removing earlier elements
+      for i = #learnedDupes, 1, -1 do 
         tremove(learned, learnedDupes[i])
       end
       table.sort(unlearnedDupes)
@@ -972,7 +956,7 @@ function LA:PrintPending()
   wipe(self.spellsUnlearned)
   wipe(self.pendingTalents)
 end
-
+--]]
 
 function LA:OnShow()
   -- PANDARIA -- self:RegisterEvent("COMPANION_UPDATE", "OnEvent")

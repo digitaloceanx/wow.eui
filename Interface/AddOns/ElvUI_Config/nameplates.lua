@@ -153,7 +153,7 @@ local function GetUnitSettings(unit, name)
 						order = 3,
 						name = L["Width"],
 						type = "range",
-						min = 50, max = 200, step = 1,
+						min = 50, max = 600, step = 1,
 					},
 					textGroup = {
 						order = 100,
@@ -562,6 +562,25 @@ local function GetUnitSettings(unit, name)
 				},
 			},
 		}
+		group.args.detection = {
+			order = 11,
+			name = L["Detection"],
+			type = "group",
+			get = function(info) return E.db.nameplates.units[unit].detection[ info[#info] ] end,
+			set = function(info, value) E.db.nameplates.units[unit].detection[ info[#info] ] = value; NP:ConfigureAll() end,
+			args = {
+				header = {
+					order = 0,
+					type = "header",
+					name = L["Suramar Detection"],
+				},
+				enable = {
+					order = 1,
+					name = L["Enable"],
+					type = "toggle",
+				},
+			},
+		}
 	elseif unit == "FRIENDLY_NPC" then
 		group.args.eliteIcon = {
 			order = 10,
@@ -838,7 +857,7 @@ E.Options.args.nameplate = {
 							type = "range",
 							name = L["Clickable Width"],
 							desc = L["Controls how big of an area on the screen will accept clicks to target unit."],
-							min = 50, max = 200, step = 1,
+							min = 50, max = 600, step = 1,
 							set = function(info, value) E.db.nameplates.clickableWidth = value; E:StaticPopup_Show("CONFIG_RL") end,
 						},
 						clickableHeight = {

@@ -1,0 +1,22 @@
+## Interface: 70000
+## Title: GridStatusRaidDebuff(WoD)
+## Notes: Debuff List for WoD
+## Author: Doadin (Malorne-US)
+## Version: 7.00
+## Grid Author: Pastamancer & Maia
+## Dependencies: GridStatusRaidDebuff
+## X-Curse-Packaged-Version: r85
+## X-Curse-Project-Name: GridStatusRD_WoD
+## X-Curse-Project-ID: gridstatusrd_wod
+## X-Curse-Repository-ID: wow/gridstatusrd_wod/mainline
+
+
+CheckCompat.lua
+BlackrockFoundry.lua
+Highmaul.lua
+HellfireCitadel.lua
+
+## Title: |cffEEEE00[Warbaby]|r Grid团队减益WoD
+## X-Vendor: NetEase
+
+## X-163UI-Version: 20160721135240

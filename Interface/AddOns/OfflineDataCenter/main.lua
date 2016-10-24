@@ -1,9 +1,9 @@
 local ODC = LibStub("AceAddon-3.0"):NewAddon("OfflineDataCenter", "AceHook-3.0", "AceEvent-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale("OfflineDataCenter")
-local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
+--local ldb = LibStub:GetLibrary("LibDataBroker-1.1")
 local icon = LibStub("LibDBIcon-1.0", true)
-local dataobj = ldb:NewDataObject("OfflineDataCenter", {label = L["Offline Data Center"], type = "data source", icon = "Interface\\Buttons\\Button-Backpack-Up", text = "n/a"})
-dataobj.text = L["Offline Data Center"]
+--local dataobj = ldb:NewDataObject("OfflineDataCenter", {label = L["Offline Data Center"], type = "data source", icon = "Interface\\Buttons\\Button-Backpack-Up", text = "n/a"})
+--dataobj.text = L["Offline Data Center"]
 
 local getn, tinsert = table.getn, table.insert
 local floor = math.floor
@@ -790,21 +790,21 @@ IN_DB structure:
 ]]
 
 --Data Broker begin --
-function dataobj:OnEnter()
-	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
-	GameTooltip:ClearLines()
-	GameTooltip:AddLine(L["Offline Data Center"])
-	GameTooltip:Show()
-end
+-- function dataobj:OnEnter()
+	-- GameTooltip:SetOwner(self, "ANCHOR_NONE")
+	-- GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT")
+	-- GameTooltip:ClearLines()
+	-- GameTooltip:AddLine(L["Offline Data Center"])
+	-- GameTooltip:Show()
+-- end
 
-function dataobj:OnLeave()
-	GameTooltip:Hide()
-end
+-- function dataobj:OnLeave()
+	-- GameTooltip:Hide()
+-- end
 
-function dataobj:OnClick(button)
-	ODC:ToggleWindow()
-end
+-- function dataobj:OnClick(button)
+	-- ODC:ToggleWindow()
+-- end
 --Data Broker end--
 
 function ODC:ChangeIcon()
@@ -835,9 +835,9 @@ function ODC:OnInitialize()
 	
 	-- if not ODC_Config.icon then ODC_Config.icon = {hide = false, radius = 80, minimapPos = 195}; end
 	-- Minimap button.
-	if icon and not icon:IsRegistered("OfflineDataCenter") then
-		icon:Register("OfflineDataCenter", dataobj, ODC_Config.icon)
-	end	
+--	if icon and not icon:IsRegistered("OfflineDataCenter") then
+--		icon:Register("OfflineDataCenter", dataobj, ODC_Config.icon)
+--	end	
 	
 	SLASH_OFFLINEDATACENTER1 = "/odc";
 	SlashCmdList["OFFLINEDATACENTER"] = function(param)

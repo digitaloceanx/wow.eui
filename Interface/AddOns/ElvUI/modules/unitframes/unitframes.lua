@@ -959,14 +959,20 @@ function UF:UpdateAllHeaders(event)
 
 	local _, instanceType = IsInInstance();
 	local ORD = ns.oUF_RaidDebuffs or oUF_RaidDebuffs
+	local filterName
 	if ORD then
 		ORD:ResetDebuffData()
-
+		
 		if instanceType == "party" or instanceType == "raid" then
-			ORD:RegisterDebuffs(E.global.unitframe.aurafilters.RaidDebuffs.spells)
+			filterName = E.global.unitframe.aurafilters.RaidDebuffs.spells
 		else
-			ORD:RegisterDebuffs(E.global.unitframe.aurafilters.CCDebuffs.spells)
+			filterName = E.global.unitframe.aurafilters.CCDebuffs.spells
 		end
+		
+		if ElvUI[1].db.unitframe.units.raid.rdebuffs.useFilter then
+			filterName = E.global.unitframe.aurafilters[ElvUI[1].db.unitframe.units.raid.rdebuffs.useFilter].spells
+		end
+		ORD:RegisterDebuffs(filterName)
 	end
 
 	if E.private["unitframe"]["disabledBlizzardFrames"].party then
@@ -1128,6 +1134,7 @@ end
 
 function UF:PLAYER_ENTERING_WORLD(event)
 	self:Update_AllFrames()
+	self:UnregisterEvent(event)
 end
 
 function UF:UnitFrameThreatIndicator_Initialize(_, unitFrame)
@@ -1189,7 +1196,7 @@ function UF:Initialize()
 	if not ORD then return end
 	ORD.ShowDispelableDebuff = true
 	ORD.FilterDispellableDebuff = true
-	ORD.MatchBySpellName = true
+	ORD.MatchBySpellName = false
 end
 
 function UF:ResetUnitSettings(unit)

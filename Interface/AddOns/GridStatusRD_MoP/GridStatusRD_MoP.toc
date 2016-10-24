@@ -1,0 +1,23 @@
+## Interface: 70000
+## Title: GridStatusRaidDebuff(MoP)
+## Notes: Debuff List for MoP
+## Author: Evilsithgirl (Reckoning-Mannoroth-US)
+## Version: 7.00
+## Grid Author: Pastamancer & Maia
+## Dependencies: GridStatusRaidDebuff
+## X-Curse-Packaged-Version: r33
+## X-Curse-Project-Name: GridStatusRD_MoP
+## X-Curse-Project-ID: gridstatusrd_mop
+## X-Curse-Repository-ID: wow/gridstatusrd_mop/mainline
+
+CheckCompat.lua
+MogushanVaults.lua
+HeartOfFear.lua
+ShaofAnger.lua
+TerraceofEndlessSpring.lua
+ThroneofThunder.lua
+SiegeofOrgrimmar.lua
+
+## Title: |cffEEEE00[Warbaby]|r Grid团队减益MoP
+## X-Vendor: NetEase
+## X-163UI-Version: 20160721135240

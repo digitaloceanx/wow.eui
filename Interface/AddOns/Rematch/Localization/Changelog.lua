@@ -5,6 +5,28 @@
 -- Template.lua is the "master file" with all current localization strings
 -- grouped by the file they're first encountered.
 
+-- New strings in 4.5.0
+	L["This is the leveling queue. Drag pets you want to level here.\n\nRight click any of the three battle pet slots and choose 'Put Leveling Pet Here' to mark it as a leveling slot you want controlled by the queue.\n\nWhile a leveling slot is active, the queue will fill the slot with the top-most pet in the queue. When this pet reaches level 25 (gratz!) it will leave the queue and the next pet in the queue will take its place.\n\nTeams saved with a leveling slot will reserve that slot for future leveling pets."] = nil
+	L["Don't show a popup offering to backup teams every once in a while. Generally, the popup appears sometime after the number of teams increases by 50."] = nil
+	L["Backup All Rematch Teams?"] = nil
+	L["Don't Remind About Backups"] = nil
+	L["Choosing Yes will export all teams to copy and paste in an email to yourself or someplace safe.\n\nYou can also do this at any time from the Teams button at the top of the Teams panel of Rematch."] = nil
+	L["Leveling Queue"] = nil
+	L["You have %s%d\124r Rematch teams.\n\nWould you like to back them up?"] = nil
+	L["Confirmation Options"] = nil
+	L["Stop Leveling This Slot"] = nil
+
+-- Strings removed in 4.5.0
+	L["Queue paused while in combat."] = nil
+	L["Queue paused."] = nil
+	L["Queue paused while queued for pet pvp."] = nil
+	L["This is already the top-most leveling pet."] = nil
+	L["The Leveling Queue is empty."] = nil
+	L["Save Without Leveling Slots"] = nil
+	L["Queue paused while in a pet battle."] = nil
+	L["Set Preferences"] = nil
+	L["Drag pets you want to level here.\n\nWhen a team is saved with one of these pets, the current leveling pet will take its place when the team is loaded.\n\nWhen a pet reaches level 25 (gratz!) it will leave the queue and the next pet in the queue will become the current leveling pet.\n\nSlots with a \124cffffd200gold\124r border are controlled by the leveling queue."] = nil
+
 -- New strings from 4.3.6 to 4.4.9
 	L["Val'sharah"] = nil
 	L["In addition to the filters in this menu, you can further refine the pet list with the search box. Some search examples:\n\nPets: %sBlack Tabby\124r\nZones: %sSilithus\124r\nAbilities: %sSandstorm\124r\nText in abilities: %sBleed\124r\nLevels: %slevel=21-23\124r\nStats: %sspeed>300\124r\n\nSearches in \"quotes\" will limit results to only complete matches.\n\nSearch results will be sorted by relevance unless the option %sDon't Sort By Relevance\124r is checked in the Options tab."] = nil
@@ -777,4 +799,3 @@
 	L["Toggle between one panel or two panels side by side."] = nil
 	L["Enable Rematch"] = nil
 	L["Check this to use Rematch in the pet journal."] = nil
-

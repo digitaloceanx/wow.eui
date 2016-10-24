@@ -61,7 +61,13 @@ function panel:Update()
 			end
 			button.HP:Show()
 			button.queueControl = rematch:IsSlotQueueControlled(i)
-			button.Leveling:SetShown(button.queueControl)
+			-- update leveling border if a slot is controlled by the queue
+			if rematch:IsSlotQueueControlled(i) then
+				button.Leveling:Show()
+				button.Leveling:SetDesaturated(not rematch:IsPetLeveling(petID))
+			else
+				button.Leveling:Hide()
+			end
 		else
 			button.XP:Hide()
 			button.HP:Hide()

@@ -658,13 +658,15 @@ E.Options.args.euiscript = {
 							order = 24,
 							type = 'toggle',
 							name = L["Talent Set Manager"],
-							set = function(info, value) E.db.euiscript.talentSetManager = value; TalentSetManager_Toggle(value); end,
+							set = function(info, value) E.db.euiscript.talentSetManager = value; E:StaticPopup_Show("CONFIG_RL"); end,
 							get = function(info) return E.db.euiscript.talentSetManager; end,
 						},
-						spacer = {
+						disable_talking = {
 							order = 25,
-							type = 'description',
-							name = '',
+							type = 'toggle',
+							name = DISABLE..L["TalkingHead"],
+							set = function(info, value) E.db.euiscript.disable_taling = value; E:GetModule("EuiScript").ToggleTalkingFrame(); end,
+							get = function(info) return E.db.euiscript.disable_taling; end,
 						},
 						poi = {
 							order = 26,

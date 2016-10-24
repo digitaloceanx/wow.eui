@@ -1,5 +1,5 @@
 local GNOME, _ = ...
-local L = LibStub("AceLocale-3.0"):GetLocale("GS-SE")
+local L = GSL
 
 StaticPopupDialogs["GSEConfirmReloadUI"] = {
   text = L["You need to reload the User Interface to complete this task.  Would you like to do this now?"],
@@ -55,7 +55,7 @@ local OptionsTable = {
         },
         saveAllMacrosLocal = {
           name = L["Only Save Local Macros"],
-          desc = L["GS-E can save all macros or only those versions that you have created locally.  Turning this off will cache all macros in your WTF\\GS-Core.lua variables file but will increase load times adn potentially cause colissions."],
+          desc = L["GS-E can save all macros or only those versions that you have created locally.  Turning this off will cache all macros in your WTF\\GS-Core.lua variables file but will increase load times and potentially cause colissions."],
           type = "toggle",
           set = function(info,val) GSMasterOptions.saveAllMacrosLocal = val end,
           get = function(info) return GSMasterOptions.saveAllMacrosLocal end,
@@ -75,7 +75,15 @@ local OptionsTable = {
           type = "toggle",
           set = function(info,val) GSMasterOptions.RealtimeParse = val end,
           get = function(info) return GSMasterOptions.RealtimeParse end,
-          order = 201
+          order = 202
+        },
+        resetOOC = {
+          name = L["Reset Macro when out of combat"],
+          desc = L["Resets macros back to the initial state when out of combat."],
+          type = "toggle",
+          set = function(info,val) GSMasterOptions.resetOOC = val end,
+          get = function(info) return GSMasterOptions.resetOOC end,
+          order = 300
         },
         deleteOrphanLogout = {
           name = L["Delete Orphaned Macros on Logout"],
@@ -83,7 +91,7 @@ local OptionsTable = {
           type = "toggle",
           set = function(info,val) GSMasterOptions.deleteOrphansOnLogout = val end,
           get = function(info) return GSMasterOptions.deleteOrphansOnLogout end,
-          order = 300
+          order = 301
         },
         overflowPersonalMacros = {
           name = L["Use Global Account Macros"],
@@ -91,7 +99,23 @@ local OptionsTable = {
           type = "toggle",
           set = function(info,val) GSMasterOptions.overflowPersonalMacros = val end,
           get = function(info) return GSMasterOptions.overflowPersonalMacros end,
-          order = 301
+          order = 302
+        },
+        autocreateclassstub = {
+          name = L["Auto Create Class Macro Stubs"],
+          desc = L["When loading or creating a sequence, if it is a macro of the same class automatically create the Macro Stub"],
+          type = "toggle",
+          set = function(info,val) GSMasterOptions.autoCreateMacroStubsClass = val end,
+          get = function(info) return GSMasterOptions.autoCreateMacroStubsClass end,
+          order = 303
+        },
+        autocreateglobalstub = {
+          name = L["Auto Create Global Macro Stubs"],
+          desc = L["When loading or creating a sequence, if it is a global or the macro has an unknown specID automatically create the Macro Stub in Account Macros"],
+          type = "toggle",
+          set = function(info,val) GSMasterOptions.autoCreateMacroStubsGlobal = val end,
+          get = function(info) return GSMasterOptions.autoCreateMacroStubsGlobal end,
+          order = 304
         },
         useQuestionMark = {
           name = L["Set Default Icon QuestionMark"],
@@ -197,7 +221,7 @@ local OptionsTable = {
           type = "toggle",
           set = function(info,val) GSMasterOptions.use2 = val GSReloadSequences() end,
           get = function(info) return GSMasterOptions.use2 end,
-          order = 590
+          order = 591
         },
         use6={
           name = L["Use Belt Item in Postmacro"],
@@ -205,7 +229,15 @@ local OptionsTable = {
           type = "toggle",
           set = function(info,val) GSMasterOptions.use6 = val GSReloadSequences() end,
           get = function(info) return GSMasterOptions.use6 end,
-          order = 590
+          order = 592
+        },
+        use1={
+          name = L["Use Head Item in Postmacro"],
+          desc = L["Incorporate the Head slot into the PostMacro. This is the equivalent of /use [combat] 1 in a PostMacro."],
+          type = "toggle",
+          set = function(info,val) GSMasterOptions.use1 = val GSReloadSequences() end,
+          get = function(info) return GSMasterOptions.use1 end,
+          order = 593
         },
       },
     },
@@ -482,8 +514,8 @@ local OptionsTable = {
           name = L["Display debug messages in Chat Window"],
           desc = L["This will display debug messages in the Chat window."],
           type = "toggle",
-          set = function(info,val) GSMasterOptions.sendDebugOutputToChat = val end,
-          get = function(info) return GSMasterOptions.sendDebugOutputToChat end,
+          set = function(info,val) GSMasterOptions.sendDebugOutputToChatWindow  = val end,
+          get = function(info) return GSMasterOptions.sendDebugOutputToChatWindow  end,
           order = 21
         },
         debugGSDebugOutput={
@@ -499,13 +531,21 @@ local OptionsTable = {
           name = L["Enable Debug for the following Modules"],
           order = 30
         },
+        debugGSSequenceExecution={
+          name = L["Debug Sequence Execution"],
+          desc = L["Output the action for each button press to verify StepFunction and spell availability."],
+          type = "toggle",
+          set = function(info,val) GSDebugSequenceEx = val end,
+          get = function(info) return GSDebugSequenceEx end,
+          order = 31
+        },
         debugmodcore={
           name = "GS-Core",
           desc = L["This will display debug messages for the Core of GS-E"],
           type = "toggle",
           set = function(info,val) GSMasterOptions.DebugModules["GS-Core"] = val end,
           get = function(info) return GSMasterOptions.DebugModules["GS-Core"] end,
-          order = 31
+          order = 32
         },
         debugmodtranslator={
           name = "GS-SequenceTranslator",
@@ -513,7 +553,7 @@ local OptionsTable = {
           type = "toggle",
           set = function(info,val) GSMasterOptions.DebugModules["GS-SequenceTranslator"] = val end,
           get = function(info) return GSMasterOptions.DebugModules["GS-SequenceTranslator"] end,
-          order = 31
+          order = 33
         },
         debugmodeditor={
           name = "GS-SequenceEditor",
@@ -521,7 +561,7 @@ local OptionsTable = {
           type = "toggle",
           set = function(info,val) GSMasterOptions.DebugModules["GS-SequenceEditor"] = val end,
           get = function(info) return GSMasterOptions.DebugModules["GS-SequenceEditor"] end,
-          order = 31
+          order = 34
         },
         debugmodtransmission={
           name = "GS-SequenceTransmission",
@@ -529,15 +569,15 @@ local OptionsTable = {
           type = "toggle",
           set = function(info,val) GSMasterOptions.DebugModules[GSStaticSourceTransmission] = val end,
           get = function(info) return GSMasterOptions.DebugModules[GSStaticSourceTransmission] end,
-          order = 31
+          order = 35
         },
       }
     }
   }
 }
 
-GSMasterOptions.sendDebugOutputToChat = true
-GSMasterOptions.sendDebugOutputGSDebugOutput = false
+
+
 
 function GSTtoggleTranslator (boole)
   if GSTranslatorAvailable then

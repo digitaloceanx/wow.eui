@@ -1,12 +1,12 @@
 --[[--------------------------------------------------------------------
 	Grid
 	Compact party and raid unit frames.
-	Copyright (c) 2006-2014 Kyle Smith (Pastamancer), Phanx
-	All rights reserved.
-	See the accompanying README and LICENSE files for more information.
+	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+	All rights reserved. See the accompanying LICENSE file for details.
+	https://github.com/Phanx/Grid
+	https://mods.curse.com/addons/wow/grid
 	http://www.wowinterface.com/downloads/info5747-Grid.html
-	http://www.wowace.com/addons/grid/
-	http://www.curse.com/addons/wow/grid
 ------------------------------------------------------------------------
 	GridLocale-zhTW.lua
 	Traditional Chinese localization
@@ -118,7 +118,7 @@ L["Throttle updates on group changes. This option may cause delays in updating f
 L["Toggle center icon's cooldown frame."] = "啟用/禁用圖示的冷卻時間框架。"
 L["Toggle center icon's stack count text."] = "啟用/禁用圖示的堆疊計數文字。"
 L["Toggle mouseover highlight."] = "啟用/禁用滑鼠懸停高亮。"
-L["Toggle status display."] = "啟用/禁用顯示狀態。"
+L["Toggle status display."] = "啟用/禁用顯示狀態。\n按住ALT點擊可配置此狀態的選項"
 L["Toggle the font drop shadow effect."] = "啟用/關閉 字型下拉陰影效果"
 L["Toggle the %s indicator."] = "啟用/禁用%s提示器。"
 L["Top Left Corner"] = "左上角"
@@ -265,10 +265,6 @@ L["None"] = "無"
 L["Click to toggle the frame lock."] = "點擊切換框架鎖定。"
 
 ------------------------------------------------------------------------
---	GridRoster
-
-
-------------------------------------------------------------------------
 --	GridStatus
 
 L["Color"] = "顏色"
@@ -286,6 +282,12 @@ L["Status"] = "狀態"
 L["Status: %s"] = "狀態: %s"
 L["Text"] = "文字"
 L["Text to display on text indicators"] = "顯示文字於文字提示器上"
+
+------------------------------------------------------------------------
+--	GridStatusAbsorbs
+
+-- L["Absorbs"] = ""
+-- L["Only show total absorbs greater than this percent of the unit's maximum health."] = ""
 
 ------------------------------------------------------------------------
 --	GridStatusAggro
@@ -309,7 +311,7 @@ L["Threat"] = "仇恨"
 L["Add Buff"] = "增加新的增益"
 L["Add Debuff"] = "增加新的減益"
 L["Auras"] = "光環"
-L["<buff name>"] = "<增益名稱>"
+L["<buff name>"] = "<增益名稱> 或 <增益ID>"
 L["Buff: %s"] = "增益: %s"
 L["Change what information is shown by the status color."] = "改變狀態顏色的顯示"
 L["Change what information is shown by the status color and text."] = "改變狀態顏色與文字的顯示"
@@ -322,7 +324,7 @@ L["Color when %s is below the low threshold value."] = "當%s低於低優先權�
 L["Create a new buff status."] = "增加一個新的增益至狀態模組中"
 L["Create a new debuff status."] = "增加一個新的減益至狀態模組中"
 L["Curse"] = "詛咒"
-L["<debuff name>"] = "<減益名稱>"
+L["<debuff name>"] = "<減益名稱> 或 <減益ID>"
 L["(De)buff name"] = "光環名稱"
 L["Debuff: %s"] = "減益: %s"
 L["Debuff type: %s"] = "減益類型: %s"
@@ -385,7 +387,7 @@ L["DEAD"] = "死亡"
 L["Death warning"] = "死亡警報"
 L["FD"] = "假死"
 L["Feign Death warning"] = "假死警報"
-L["Health"] = "生命力"
+L["Health and Death"] = "生命力及死亡"
 L["Health deficit"] = "損失生命力"
 L["Health threshold"] = "生命力臨界點"
 L["Low HP"] = "生命力不足"
@@ -471,3 +473,12 @@ L["In Vehicle"] = "載具上"
 
 L["Talking"] = "說話中"
 L["Voice Chat"] = "語音"
+
+------------------------------------------------------------------------
+-- Warbaby
+L["Icon X offset"] = "橫向偏移量"
+L["Adjust the offset of the X-axis for center icon."] = "調整中心圖示距離中心點的橫坐標偏移量，左側為負值，右側為正值"
+L["Icon Y offset"] = "縱向偏移量"
+L["Adjust the offset of the Y-axis for center icon."] = "調整中心圖示距離中心點的縱向偏移量，上方為正值，下方為負值"
+L["Force Layout"] = "強制佈局（此項選'無', 才按照組隊情況佈局）"
+L["Options for Indicator %s"] = "配置'%s'的樣式"

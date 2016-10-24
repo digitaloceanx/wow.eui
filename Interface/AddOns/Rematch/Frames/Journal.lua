@@ -127,6 +127,10 @@ function journal:OnHide()
   for _,region in pairs({CollectionsJournal:GetRegions()}) do
 		journal:ShowElement(region)
   end
+	-- if not in battle/combat/pvp, check if a backup reminder should be given
+	if not C_PetBattles.IsInBattle() and not InCombatLockdown() and not C_PetBattles.GetPVPMatchmakingInfo() then
+		rematch:CheckForBackupReminder()
+	end
 end
 
 -- this returns the standalone frame when the journal hides

@@ -93,12 +93,33 @@ function rematch:GetPetSpeciesID(petID)
 	end
 end
 
+-- DesensitizedText doesn't work for Russian clients; use the less efficient string:lower() compare
+local ruLocale = GetLocale()=="ruRU"
+
 -- DesensitizeText returns text in a literal (magic characters escaped) and case-insensitive format
 local function literal(c) return "%"..c end
 local function caseinsensitive(c) return format("[%s%s]",c:lower(),c:upper()) end
 function rematch:DesensitizeText(text)
 	if type(text)=="string" then
-		return text:gsub("[%(%)%.%%%+%-%*%?%[%]%^%$]",literal):gsub("%a",caseinsensitive)
+		if ruLocale then -- for ruRU clients use the lower case text
+			return text:lower()
+		else
+			return text:gsub("[%(%)%.%%%+%-%*%?%[%]%^%$]",literal):gsub("%a",caseinsensitive)
+		end
+	end
+end
+
+-- when doing a case-insensitive match, use this instead of a direct match; so it can handle ruRU matches
+function rematch:match(candidate,pattern)
+	if candidate and pattern then
+		if type(candidate)~="string" then
+			candidate=tostring(candidate)
+		end
+		if ruLocale then -- match the lower case candidate to the pattern (which is also lower case)
+			return candidate:lower():match(pattern)
+		else
+			return candidate:match(pattern)
+		end
 	end
 end
 
@@ -533,7 +554,8 @@ end
 -- returns the abilityList,levelList of a speciesID from a reusable table
 local rAbilityList,rAbilityLevels,rAbilitySpecies = {},{}
 function rematch:GetAbilities(speciesID)
-	if speciesID ~= rAbilitySpecies then
+	if not speciesID then return {},{} end -- if no species given, return empty ability tables
+	if speciesID and speciesID~=rAbilitySpecies then
 		C_PetJournal.GetPetAbilityList(speciesID,rAbilityList,rAbilityLevels)
 		rAbilitySpecies = speciesID
 	end

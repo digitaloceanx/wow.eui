@@ -78,9 +78,9 @@ end
 --Attempts to fix the Garrison's Shipyard Table unable to open bug.
 local doubleClick, lastRight = 0.75, 0
 WorldFrame:HookScript('OnMouseDown', function (self, button)
-	guid = UnitGUID('mouseover')
+	local guid = UnitGUID('mouseover')
 	if guid then
-		npc_id = select(6, strsplit('-', guid))
+		local npc_id = select(6, strsplit('-', guid))
 		if npc_id == '94398' then
 			if doubleClick + lastRight < GetTime() then
 				lastRight = GetTime()
@@ -175,7 +175,7 @@ function S:AutoInvite(...)
 			local totalBNet = BNGetNumFriends()
 			for i = 1, totalBNet do
 				local presenceID, presenceName, _,_,_,_,client,isOnline = BNGetFriendInfo(i)
-				if isOnline and presenceName == arg2 and client == 'WoW' then
+				if isOnline and presenceName == arg2 and client == 'WoW' and presenceID then
 					local _, charName, _, realmName = BNGetGameAccountInfo(presenceID)
 					if realmName ~= GetRealmName() then charName = charName..'-'..realmName end
 					InviteUnit(charName)
@@ -187,24 +187,6 @@ function S:AutoInvite(...)
 		end
 	end
 end
-
--- function S:AddEuiMenuButton()
-	-- local Button = CreateFrame("Button", "GameMenuButtonEUI", GameMenuFrame, "GameMenuButtonTemplate")
--- --	E.Skins:HandleButton(Button)
-	-- Button:SetSize(GameMenuButtonMacros:GetWidth(), GameMenuButtonMacros:GetHeight())
-	-- Button:SetText(E.ValColor..'EUI|r')
-	-- Button:SetScript("OnClick", function()
-		-- HideUIPanel(GameMenuFrame)
-		-- E:ToggleConfig()
-	-- end)
-	-- local height = GameMenuButtonMacros:GetHeight()
-	
-	-- GameMenuFrame:SetHeight(GameMenuFrame:GetHeight() + height + 16)
-	-- GameMenuFrame.SetHeight = E.noop
-	-- Button:Point("TOP", GameMenuButtonContinue, "BOTTOM", 0, -2)
-	-- if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.misc ~= true then return end
-	-- E:GetModule('Skins'):HandleButton(Button);
--- end
 
 --特殊技能通告
 function S:Announcements(...)
@@ -309,18 +291,6 @@ function S:AutoChangeLoot()
 	end
 	E:ScheduleTimer(changeLoot, 5)
 end
-
---[[ function S:RaidFinderFix() --修正暴雪默认LFR弹出窗口不显示已击杀BOSS进度信息
-	if IsAddOnLoaded('RaidFinderFix') then
-		self:UnregisterEvent("LFG_PROPOSAL_SHOW")
-		self:UnregisterEvent("LFG_PROPOSAL_UPDATE")
-		return
-	end
-	local _, _, _, _, _, _, _, _, _, completedEncounters, _, _, _, totalEncounters = GetLFGProposal(); 
-	if completedEncounters then
-		LFGDungeonReadyDialogInstanceInfoFrame.statusText:SetFormattedText(completedEncounters.." "..BOSS_DEAD)
-	end
-end ]]
 
 function S:GetGuildRanks()
 	local value = {}
@@ -453,13 +423,6 @@ local function PositionAndStyle(button)
 		end
 	end
 end
-
---Camera Distance
---function S:ModifyCamera()
---	SetCVar("cameraDistanceMoveSpeed", E.db.euiscript.cameraspeed or 15)
---	SetCVar("cameraDistanceMaxFactor", E.db.euiscript.camerafactor or 2);
---	SetCVar("cameraDistanceMax", E.db.euiscript.cameradistance or 20);	
---end
 
 local function buttonCollect()
 	local button = _G['EUIMinimapButton'] or CreateMinimapButton()
@@ -645,96 +608,6 @@ function S:ToggleEuiScriptPoi()
 	end
 end
 
-local function WorldMapZoom()
-    WorldMapScrollFrame:HookScript ("OnMouseWheel", function()
-		local HScroll = WorldMapScrollFrame:GetHorizontalScroll()
-		local VScroll = WorldMapScrollFrame:GetVerticalScroll()
-
-		if (MantainWorldMapZoomH ~= HScroll or MantainWorldMapZoomV ~= VScroll) then
-			MantainWorldMapZoomMouseX, MantainWorldMapZoomMouseY = GetCursorPosition()
-		end
-		MantainWorldMapZoomH = HScroll
-		MantainWorldMapZoomV = VScroll
-		MantainWorldMapZoomScale = WorldMapDetailFrame:GetScale();
-	end)
-
-	local MAX_ZOOM = 1.4950;
-
-	hooksecurefunc ("ToggleWorldMap", function()
-
-		if (WorldMapFrame:IsShown()) then
-		
-			if ((MantainWorldMapZoomV and MantainWorldMapZoomH) and (MantainWorldMapZoomH ~= 0 or MantainWorldMapZoomV ~= 0)) then
-
-				local last_opened = MantainWorldMapZoomLastOpened or time()
-				MantainWorldMapZoomLastOpened = time()
-				
-				if (last_opened+60 < time()) then
-					WorldMapScrollFrame_ResetZoom()
-					MantainWorldMapZoomMouseX, MantainWorldMapZoomMouseY = nil, nil
-					MantainWorldMapZoomH = nil
-					MantainWorldMapZoomV = nil
-					MantainWorldMapZoomScale = nil
-					return
-				end
-			
-				local scrollFrame = WorldMapScrollFrame;
-				local oldScrollH = MantainWorldMapZoomH
-				local oldScrollV = MantainWorldMapZoomV
-
-				-- get the mouse position on the frame, with 0,0 at top left
-				local cursorX, cursorY = MantainWorldMapZoomMouseX, MantainWorldMapZoomMouseY
-				local relativeFrame;
-				if ( WorldMapFrame_InWindowedMode() ) then
-					relativeFrame = UIParent;
-				else
-					relativeFrame = WorldMapFrame;
-				end
-				local frameX = cursorX / relativeFrame:GetScale() - scrollFrame:GetLeft();
-				local frameY = scrollFrame:GetTop() - cursorY / relativeFrame:GetScale();
-				
-				local oldScale = WorldMapDetailFrame:GetScale();
-				--local newScale = oldScale + delta * 0.3;
-				local newScale = MantainWorldMapZoomScale
-				newScale = max(WORLDMAP_SETTINGS.size, newScale); 
-				newScale = min(MAX_ZOOM, newScale);
-				WorldMapDetailFrame:SetScale(newScale);
-				QUEST_POI_FRAME_WIDTH = WorldMapDetailFrame:GetWidth() * newScale;
-				QUEST_POI_FRAME_HEIGHT = WorldMapDetailFrame:GetHeight() * newScale;
-
-				scrollFrame.maxX = QUEST_POI_FRAME_WIDTH - 1002 * WORLDMAP_SETTINGS.size;
-				scrollFrame.maxY = QUEST_POI_FRAME_HEIGHT - 668 * WORLDMAP_SETTINGS.size;
-				scrollFrame.zoomedIn = abs(WorldMapDetailFrame:GetScale() - WORLDMAP_SETTINGS.size) > 0.05;
-				scrollFrame.continent = GetCurrentMapContinent();
-				scrollFrame.mapID = GetCurrentMapAreaID();
-
-				-- figure out new scroll values
-				local scaleChange = newScale / oldScale;
-				local newScrollH = scaleChange * ( frameX + oldScrollH ) - frameX;
-				local newScrollV = scaleChange * ( frameY + oldScrollV ) - frameY;
-				-- clamp scroll values
-				newScrollH = min(newScrollH, scrollFrame.maxX);
-				newScrollH = max(0, newScrollH);
-				newScrollV = min(newScrollV, scrollFrame.maxY);
-				newScrollV = max(0, newScrollV);
-				
-				-- set scroll values
-				scrollFrame:SetHorizontalScroll(oldScrollH);
-				scrollFrame:SetVerticalScroll(oldScrollV);
-
-				WorldMapFrame_Update();
-				WorldMapScrollFrame_ReanchorQuestPOIs();
-			--	WorldMapBlobFrame_ResetHitTranslations();
-				WorldMapBlobFrame_DelayedUpdateBlobs();				
-				
-				
-			end
-		else
-			MantainWorldMapZoomLastOpened = time()
-		end
-	end)
-end
-
 function S:QuestLog()
 	----------------------------------------------------------------------------------------
 	--	Quest level
@@ -754,15 +627,49 @@ function S:QuestLog()
 	end)
 end
 
+local function OpenGrassionReport()
+	if not GarrisonLandingPageMinimapButton then return; end
+
+	GarrisonLandingPageMinimapButton:SetScript("OnClick", function(self, button, down)
+		if button == "LeftButton" then
+			if (GarrisonLandingPage and GarrisonLandingPage:IsShown()) then
+				HideUIPanel(GarrisonLandingPage);
+			else
+				ShowGarrisonLandingPage(C_Garrison.GetLandingPageGarrisonType());
+			end
+		elseif button == "RightButton" then
+			if (GarrisonLandingPage and GarrisonLandingPage:IsShown()) then
+				HideUIPanel(GarrisonLandingPage);
+			else
+				ShowGarrisonLandingPage(LE_GARRISON_TYPE_6_0);
+			end
+		end
+	end);
+	GarrisonLandingPageMinimapButton:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+end
+
+local function ToggleTalkingFrame()
+	if(TalkingHeadFrame and TalkingHeadFrame:IsVisible() and E.db.euiscript.disable_talking) then
+		TalkingHeadFrame.MainFrame.CloseButton:GetScript("OnClick")();
+	end
+end
+S.ToggleTalkingFrame = ToggleTalkingFrame
+
+local TalkingHooked = false
+function S:ToggleTalkingHead()
+	if not TalkingHooked and TalkingHeadFrame then
+		TalkingHeadFrame:HookScript("OnShow", ToggleTalkingFrame)
+		TalkingHooked = true
+	end
+end
+
 function S:Initialize()
- --   WorldMapZoom()
-    
 	CreateAutoQuestButton()
 	self:CreateVehicleExit()
 	self:AutoCollect()
---	self:AddEuiMenuButton()
 	self:ToggleEuiScriptPoi()
 	S:QuestLog()
+	OpenGrassionReport()
 
 	if not S.WorldState then S.WorldState = CreateFrame("Frame", "EuiWorldState", UIParent) end
 	S.WorldState:Point("TOP", UIParent, "TOP", -30, -60);
@@ -804,6 +711,8 @@ function S:Initialize()
 		EJMicroButtonAlert:Hide()
 	end	
 	
+	self:RegisterEvent("TALKINGHEAD_REQUESTED", "ToggleTalkingHead")
+
 	self:SecureHook('MerchantItemButton_OnModifiedClick', 'ByMaxNumber')
 
 	self:SecureHook("WorldStateAlwaysUpFrame_Update", 'WorldStateAlwaysUpFrame_Update')
@@ -814,7 +723,6 @@ function S:Initialize()
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "ButtonCollect")
 	self:RegisterEvent("CHAT_MSG_WHISPER", "AutoInvite")
 	self:RegisterEvent("CHAT_MSG_BN_WHISPER", "AutoInvite")
---	self:RegisterEvent("ZONE_CHANGED_NEW_AREA", "ModifyCamera")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED", "Announcements")
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", "AutoChangeLoot")
 	self:SecureHook(QUEST_TRACKER_MODULE, "AddProgressBar", "ObjectiveTracker_AddProgressBar")
@@ -822,9 +730,8 @@ function S:Initialize()
 	
 	self:RegisterEvent("TRADE_SHOW", "TradeTargetLevel")
 	self:RegisterEvent("TRADE_CLOSED", "TradeTargetLevel")
---	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "FixPriestTicks")
 
-	if E.db.euiscript.talentSetManager then E:TalentSetManager_Toggle(true) end
+--	if E.db.euiscript.talentSetManager then E:TalentSetManager_Toggle(true) end
 	if E.db.euiscript.CharacterStats then E:ToggleCharacterStats(true) end
 end
 

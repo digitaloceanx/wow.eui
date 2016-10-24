@@ -96,7 +96,7 @@ function rematch:SetSideline(key,team,loadout)
 	if loadout then
 		for i=1,3 do
 			local petID,ability1,ability2,ability3 = C_PetJournal.GetPetLoadOutInfo(i)
-			if rematch:IsPetLeveling(petID) then -- if loadout pet is leveling
+			if rematch:IsSlotQueueControlled(i) then -- if this is slot is queue controlled
 				sideline[key][i] = {0}
 			elseif petID then -- for normal pets, get its speciesID and add it too
 				local speciesID = C_PetJournal.GetPetInfoByPetID(petID)
@@ -171,7 +171,7 @@ function rematch:PushSideline()
 		-- this is the current pets being pushed, do anything related to loaded team here
 		settings.loadedTeam = key
 		-- Loadteam in case any funny business with imported/received teams (changed loaded team)
-		-- also a LoadTeam will wipe ManuallySlotted and run ProcessQueue
+		-- also a LoadTeam will reassert leveling slots and run ProcessQueue
 		rematch:LoadTeam(key)
 	end
 

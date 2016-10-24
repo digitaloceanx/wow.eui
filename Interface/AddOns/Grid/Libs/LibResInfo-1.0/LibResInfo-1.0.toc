@@ -1,9 +1,5 @@
-## Interface: 60000
-## Version: @project-revision@
-## X-Curse-Packaged-Version: r20160720154804
-## X-Curse-Project-Name: LibResInfo-1.0
-## X-Curse-Project-ID: libresinfo
-## X-Curse-Repository-ID: wow/libresinfo/mainline
+## Interface: 70000
+## Version: 2
 
 ## Title: Lib: ResInfo-1.0
 ## Notes: Library to provide information about resurrections in your group.
@@ -13,8 +9,12 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright (c) 2012-2014 Phanx. All rights reserved.
+## X-Category: Library
+## X-Copyright: Copyright (c) 2012-2016 Phanx. All rights reserved.
 ## X-Website: https://github.com/Phanx/LibResInfo
+
+## LoadOnDemand: 1
+## OptionalDependencies: LibStub, CallbackHandler-1.0
 
 LibStub\LibStub.lua
 CallbackHandler-1.0\CallbackHandler-1.0.lua

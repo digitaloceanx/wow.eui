@@ -140,7 +140,7 @@ E.Options.args.datatexts = {
 								E:GetModule('Layout'):ChangeSize(TopDataTextsBar1);
 								E:GetModule('Layout'):ChangeSize(TopDataTextsBar2);
 								E:GetModule('Layout'):ChangeSize(TopDataTextsBar3, 3);
-								E:GetModule('Layout'):ChangeSize(TopDataTextsBar4, 3);
+								E:GetModule('Layout'):ChangeSize(TopDataTextsBar4, 2);
 								E:GetModule('Layout'):ChangePositon()
 								DT:UpdateAllDimensions()
 							end,
@@ -156,7 +156,7 @@ E.Options.args.datatexts = {
 								E:GetModule('Layout'):ChangeSize(TopDataTextsBar1);
 								E:GetModule('Layout'):ChangeSize(TopDataTextsBar2);
 								E:GetModule('Layout'):ChangeSize(TopDataTextsBar3, 3);
-								E:GetModule('Layout'):ChangeSize(TopDataTextsBar4, 3);
+								E:GetModule('Layout'):ChangeSize(TopDataTextsBar4, 2);
 								E:GetModule('Layout'):ChangePositon()
 								DT:UpdateAllDimensions()
 							end,
@@ -334,12 +334,12 @@ E.Options.args.datatexts = {
 		currencies = {
 			order = 5,
 			type = "group",
-			name = "Currencies", --Name of datatext, which isn't localized
+			name = L["Currencies"], --Name of datatext, which isn't localized
 			args = {
 				header = {
 					order = 1,
 					type = "header",
-					name = "Currencies",
+					name = L["Currencies"],
 				},
 				displayedCurrency = {
 					order = 2,

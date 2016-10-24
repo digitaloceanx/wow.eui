@@ -203,6 +203,7 @@ rematch.notableNPCs = {
 	{ 106552, 18, 1897, 1898, 1899 }, -- Training with the Nightwatchers (Nightwatcher Merayl) quest 42159
 	{ 106417, 18, 1891 }, -- The Wine's Gone Bad (Vinu) quest 42148
 	{ 106542, 18, 1895, 1896 }, -- Help a Whelp (Wounded Azurewing Whelpling) quest 42154
+	{ 98489, 18, 1781, 1780, 1782 }, -- Shipwrecked Captive quest 40310 (from Sternfathom's Pet Journal)
 
 	-- Dalaran
 	{ 107489, 17, 1904, 1905, 1906 }, -- Fight Night: Amalia quest 42442

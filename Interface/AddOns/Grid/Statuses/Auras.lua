@@ -1,12 +1,13 @@
+local n2s,f2s,floor=n2s or tostring,f2s or function(time) return format("%.1f", time) end,floor
 --[[--------------------------------------------------------------------
 	Grid
 	Compact party and raid unit frames.
-	Copyright (c) 2006-2014 Kyle Smith (Pastamancer), Phanx
-	All rights reserved.
-	See the accompanying README and LICENSE files for more information.
+	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+	All rights reserved. See the accompanying LICENSE file for details.
+	https://github.com/Phanx/Grid
+	https://mods.curse.com/addons/wow/grid
 	http://www.wowinterface.com/downloads/info5747-Grid.html
-	http://www.wowace.com/addons/grid/
-	http://www.curse.com/addons/wow/grid
 ------------------------------------------------------------------------
 	Auras.lua
 	Grid status module for tracking buffs/debuffs.
@@ -43,18 +44,21 @@ local spell_names = {
 	["Life Cocoon"] = GetSpellInfo(116849),
 	["Renewing Mist"] = GetSpellInfo(115151),
 -- Paladin
+	["Beacon of Faith"] = GetSpellInfo(156910),
 	["Beacon of Light"] = GetSpellInfo(53563),
-	["Eternal Flame"] = GetSpellInfo(114163),
+	--["Eternal Flame"] = GetSpellInfo(114163), -- removed in 7.0
 	["Forbearance"] = GetSpellInfo(25771),
-	["Sacred Shield"] = GetSpellInfo(20925),
+	--["Sacred Shield"] = GetSpellInfo(20925), -- removed in 7.0
 -- Priest
-	["Grace"] = GetSpellInfo(77613),
+	["Atonement"] = GetSpellInfo(214206), -- new in 7.0, +healing mod, alternate spellid 214206
+	["Clarity of Will"] = GetSpellInfo(152118), -- new in 7.0, shield
+	--["Grace"] = GetSpellInfo(77613), -- removed in 7.0, replaced by Atonement
 	["Power Word: Shield"] = GetSpellInfo(17),
 	["Prayer of Mending"] = GetSpellInfo(33076),
 	["Renew"] = GetSpellInfo(139),
-	["Weakened Soul"] = GetSpellInfo(6788),
+	--["Weakened Soul"] = GetSpellInfo(6788), -- removed in 7.0 ?
 -- Shaman
-	["Earth Shield"] = GetSpellInfo(204288),
+	--["Earth Shield"] = GetSpellInfo(204288), -- pvp only in 7.0
 	["Riptide"] = GetSpellInfo(61295),
 }
 
@@ -93,7 +97,7 @@ local statusDefaultDB = {
 	color = { r = .5, g = .5, b = .5, a = 1 },
 	statusText = "name",
 	statusColor = "present",
-	refresh = 0.3,
+	refresh = 0.5,
 	durationTenths = false,
 	durationColorLow = { r = .15, g = .15, b = .15, a = 1 },
 	durationColorMiddle = { r = .35, g = .35, b = .35, a = 1 },
@@ -199,6 +203,7 @@ GridStatusAuras.defaultDB = {
 		countColorHigh = { r = 0, g = 1, b = 0, a = 1 },
 		countLow = 1,
 		countHigh = 2,
+		mine = true,
 	},
 	[GridStatusAuras:StatusForSpell("Regrowth", true)] = {
 		desc = format(L["Buff: %s"], spell_names["Regrowth"]),
@@ -208,6 +213,7 @@ GridStatusAuras.defaultDB = {
 		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
 		durationColorMiddle = { r =  .7, g = .49, b = .07, a = 1 },
 		durationColorHigh = { r =  1, g = .7, b = .1, a = 1 },
+		mine = true,
 	},
 	[GridStatusAuras:StatusForSpell("Rejuvenation", true)] = {
 		desc = format(L["Buff: %s"], spell_names["Rejuvenation"]),
@@ -217,6 +223,7 @@ GridStatusAuras.defaultDB = {
 		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
 		durationColorMiddle = { r =  0, g = .21, b = .49, a = 1 },
 		durationColorHigh = { r =  0, g = .3, b = .7, a = 1 },
+		mine = true,
 	},
 
 	-- Monk
@@ -242,6 +249,18 @@ GridStatusAuras.defaultDB = {
 	},
 
 	-- Paladin
+	[GridStatusAuras:StatusForSpell("Beacon of Faith", true)] = { -- new in 7.0
+		desc = format(L["Buff: %s"], spell_names["Beacon of Faith"]),
+		buff = spell_names["Beacon of Faith"],
+		text = GridStatusAuras:TextForSpell(spell_names["Beacon of Faith"]),
+		color = { r = .5, g = 0.7, b = 0.3, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = .49, g = .49, b = 0, a = 1 },
+		durationColorHigh = { r = .7, g = .7, b = 0, a = 1 },
+		durationLow = 5,
+		durationHigh = 10,
+		mine = true,
+	},
 	[GridStatusAuras:StatusForSpell("Beacon of Light", true)] = {
 		desc = format(L["Buff: %s"], spell_names["Beacon of Light"]),
 		buff = spell_names["Beacon of Light"],
@@ -252,6 +271,7 @@ GridStatusAuras.defaultDB = {
 		durationColorHigh = { r = .7, g = .7, b = 0, a = 1 },
 		durationLow = 5,
 		durationHigh = 10,
+		mine = true,
 	},
 	[GridStatusAuras:StatusForSpell("Forbearance")] = {
 		desc = format(L["Debuff: %s"], spell_names["Forbearance"]),
@@ -264,6 +284,22 @@ GridStatusAuras.defaultDB = {
 	},
 
 	-- Priest
+	[GridStatusAuras:StatusForSpell("Atonement", true)] = {
+		buff = spell_names["Atonement"],
+		desc = format(L["Buff: %s"], spell_names["Atonement"]),
+		text = GridStatusAuras:TextForSpell(spell_names["Atonement"]),
+		color = { r = 0.2, g = 0.8, b = 1, a = 1 },
+		mine = true,
+	},
+	[GridStatusAuras:StatusForSpell("Clarity of Will", true)] = {
+		desc = format(L["Buff: %s"], spell_names["Clarity of Will"]),
+		buff = spell_names["Clarity of Will"],
+		text = GridStatusAuras:TextForSpell(spell_names["Clarity of Will"]),
+		color = { r = .8, g = .8, b =  0, a = 1 },
+		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
+		durationColorMiddle = { r = .56, g = .56, b =  0, a = 1 },
+		durationColorHigh = { r = .8, g = .8, b =  0, a = 1 },
+	},
 	[GridStatusAuras:StatusForSpell("Power Word: Shield", true)] = {
 		desc = format(L["Buff: %s"], spell_names["Power Word: Shield"]),
 		buff = spell_names["Power Word: Shield"],
@@ -288,32 +324,10 @@ GridStatusAuras.defaultDB = {
 		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
 		durationColorMiddle = { r =  0, g = .49, b = .21, a = 1 },
 		durationColorHigh = { r =  0, g = .7, b = .3, a = 1 },
-	},
-	[GridStatusAuras:StatusForSpell("Weakened Soul")] = {
-		desc = format(L["Debuff: %s"], spell_names["Weakened Soul"]),
-		debuff = spell_names["Weakened Soul"],
-		text = GridStatusAuras:TextForSpell(spell_names["Weakened Soul"]),
-		color = { r = .5, g = .5, b = .5, a = 1 },
-		durationColorLow = { r = .15, g = .15, b = .15, a = 1 },
-		durationColorMiddle = { r = .35, g = .35, b = .35, a = 1 },
-		durationColorHigh = { r = .5, g = .5, b = .5, a = 1 },
+		mine = true,
 	},
 
 	-- Shaman
-	[GridStatusAuras:StatusForSpell("Earth Shield", true)] = {
-		desc = format(L["Buff: %s"], spell_names["Earth Shield"]),
-		buff = spell_names["Earth Shield"],
-		text = GridStatusAuras:TextForSpell(spell_names["Earth Shield"]),
-		color = { r = .5, g = 0.7, b = 0.3, a = 1 },
-		durationColorLow = { r = 1, g = 0, b = 0, a = 1 },
-		durationColorMiddle = { r = .35, g = .49, b = .21, a = 1 },
-		durationColorHigh = { r = .5, g = 0.7, b = 0.3, a = 1 },
-		countColorLow = { r = 1, g = 0, b = 0, a = 1 },
-		countColorMiddle = { r = .35, g = .49, b = .21, a = 1 },
-		countColorHigh = { r = .5, g = .7, b = .3, a = 1 },
-		countLow = 1,
-		countHigh = 4,
-	},
 	[GridStatusAuras:StatusForSpell("Riptide", true)] = {
 		desc = format(L["Buff: %s"], spell_names["Riptide"]),
 		buff = spell_names["Riptide"],
@@ -326,50 +340,39 @@ GridStatusAuras.defaultDB = {
 	},
 }
 
-if spell_names["Grace"] then -- removed in WOD
-	GridStatusAuras.defaultDB[ GridStatusAuras:StatusForSpell("Grace", true) ] = {
-		buff = spell_names["Grace"],
-		desc = format(L["Buff: %s"], spell_names["Grace"]),
-		text = GridStatusAuras:TextForSpell(spell_names["Grace"]),
-		color = { r = 0.2, g = 0.8, b = 1, a = 1 },
-		countLow = 1,
-		countHigh = 3,
-		mine = true,
-	}
-end
-
 local default_auras = {}
-do
-	for status, settings in pairs(GridStatusAuras.defaultDB) do
-		if type(settings) == "table" and settings.text then
-			GridStatusAuras:CopyDefaults(settings, statusDefaultDB)
-			default_auras[status] = true
-		end
-	end
-end
 
 GridStatusAuras.extraOptions = {}
 
 function GridStatusAuras:PostInitialize()
+    --163ui add AurasByClass and move default_auras setter from outside
+    if GridStatusAuras.UpdateDefaultAuras then GridStatusAuras:UpdateDefaultAuras() end
+    do
+    	for status, settings in pairs(GridStatusAuras.defaultDB) do
+    		if type(settings) == "table" and settings.text then
+    			GridStatusAuras:CopyDefaults(settings, statusDefaultDB)
+    			default_auras[status] = true
+    		end
+    	end
+    end
+
 	self:RegisterStatuses()
 
 	-- Wasn't supposed to be released yet, kill it with fire.
-	self.db.boss_aura = nil
+	self.db.profile.boss_aura = nil
 
-	-- Upgrade old localized default status keynames to new locale-independent ones:
-	for status, settings in pairs(GridStatusAuras.defaultDB) do
-		if spell_names[status] and (settings.buff or settings.debuff) then
-			local oldstatus = self:StatusForSpell(spell_names[status], settings.buff)
-			if self.db[oldstatus] then
-				self.db[status] = self.db[oldstatus]
-				self.db[oldstatus] = nil
-			end
-			for indicator, statuses in pairs(Grid:GetModule("GridFrame").db.profile.statusmap) do
-				if assigned[oldstatus] then
-					assigned[status] = true
-					assigned[oldstatus] = nil
-				end
-			end
+	-- Remove statuses for spells that were removed from the game in 7.0:
+	for name, isBuff in pairs({
+		["Grace"] = true,
+		["Earth Shield"] = true,
+		["Eternal Flame"] = true,
+		["Sacred Shield"] = true,
+		["Weakened Soul"] = true,
+	}) do
+		local status = self:StatusForSpell(name, isBuff)
+		if self.db.profile[status] then
+			self:Debug("Removed deprecated status:", name)
+			self.db.profile[status] = nil
 		end
 	end
 
@@ -448,7 +451,7 @@ end
 function GridStatusAuras:OnStatusEnable(status)
 	self:RegisterMessage("Grid_UnitJoined")
 	self:RegisterEvent("UNIT_AURA", "ScanUnitAuras")
-	self:RegisterEvent("PLAYER_TALENT_UPDATE", "UpdateDispellable")
+	self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
 
 	self:DeleteDurationStatus(status)
 	self:UpdateDispellable()
@@ -467,35 +470,9 @@ function GridStatusAuras:OnStatusDisable(status)
 	end
 end
 
-local upgrade121025 = {
-	debuff_curse   = "dispel_curse",
-	debuff_disease = "dispel_disease",
-	debuff_magic   = "dispel_magic",
-	debuff_poison  = "dispel_poison",
-}
-
 function GridStatusAuras:RegisterStatuses()
 	local profile = self.db.profile
-	for old, new in pairs(upgrade121025) do
-		--self:Debug("Looking for old dispel:", old, profile[old] ~= nil)
-		if profile[old] then
-			profile[new] = profile[old]
-			profile[old] = nil
-			self:Debug("Copied to new dispel:", new)
-			for indicator, statuses in pairs(Grid:GetModule("GridFrame").db.profile.statusmap) do
-				if type(statuses) == "table" then
-					if statuses[old] ~= nil then
-						statuses[new] = statuses[old]
-						statuses[old] = nil
-						self:Debug("Updated status name for indicator:", indicator)
-					elseif statuses[new] then
-						statuses[new] = nil
-						self:Debug("Removed status on default indicator:", indicator)
-					end
-				end
-			end
-		end
-	end
+
 	for status, settings in pairs(profile) do
 		if type(settings) == "table" then
 			if settings.desc then
@@ -531,6 +508,7 @@ function GridStatusAuras:RegisterStatuses()
 					local isBuff = not not settings.buff
 					local order = settings.order or (isBuff and 15 or 35)
 
+                if not isBuff or GridStatusAuras:ShouldRegisterByClass(settings.buff) then --163ui
 					self:Debug("Registering", status, desc)
 					if not self.defaultDB[status] then
 						self.defaultDB[status] = {}
@@ -538,6 +516,7 @@ function GridStatusAuras:RegisterStatuses()
 					end
 					self:CopyDefaults(settings, self.defaultDB[status])
 					self:RegisterStatus(status, desc, self:OptionsForStatus(status, isBuff), false, order)
+                end
 				end
 			else
 				-- Can't do this because it screws people who play in multiple languages.
@@ -551,7 +530,7 @@ end
 
 function GridStatusAuras:UnregisterStatuses()
 	for status, moduleName, desc in self.core:RegisteredStatusIterator() do
-		if moduleName == self.name then
+		if moduleName == self.moduleName then
 			self:UnregisterStatus(status)
 			self.options.args[status] = nil
 		end
@@ -952,6 +931,22 @@ function GridStatusAuras:AddAura(name, isBuff)
 		text = self:TextForSpell(name),
 		desc = desc,
 	}
+    --163ui support debuff spellId, originName is spellID
+    if name:find("^[0-9]+$") then
+        local spellID = tonumber(name)
+        name = GetSpellInfo(spellID)
+        if not name then
+            return DEFAULT_CHAT_FRAME:AddMessage("AddAura failed, no spell for id " .. name, 1, 0, 0)
+        elseif isBuff then
+            DEFAULT_CHAT_FRAME:AddMessage("Buff Auras can only be scan by name.", 1, 1, 0)
+        end
+        desc = isBuff and format(L["Buff: %s"], name) or format(L["Debuff: %s"], "ID-"..name)
+        settings.text = self:TextForSpell(name)
+        settings.desc = desc
+        if not isBuff then
+            settings.debuffID = spellID
+        end
+    end
 	if isBuff then
 		settings.buff = name
 	else
@@ -1000,44 +995,43 @@ end
 
 function GridStatusAuras:UpdateDispellable()
 	if PLAYER_CLASS == "DRUID" then
-		PlayerCanDispel.Curse   = IsPlayerSpell(88423) or IsPlayerSpell(2782) -- Nature's Cure / Remove Corruption
+		--  88423   Nature's Cure       Restoration                Curse, Poison, Magic
+		--   2782   Remove Corruption   Balance, Feral, Guardian   Curse, Poison
+		PlayerCanDispel.Curse   = IsPlayerSpell(88423) or IsPlayerSpell(2782)
 		PlayerCanDispel.Magic   = IsPlayerSpell(88423)
-		PlayerCanDispel.Poison  = IsPlayerSpell(88423) or IsPlayerSpell(2782) -- RC is base, but doesn't return true for NC
-
-		if GetSpecialization() == 4 then -- Restoration
-			self:RegisterEvent("SPELLS_CHANGED", "UpdateDispellable")
-		else
-			self:UnregisterEvent("SPELLS_CHANGED")
-		end
-
-	elseif PLAYER_CLASS == "MAGE" then
-		PlayerCanDispel.Curse   = IsPlayerSpell(475)    -- Remove Curse
+		PlayerCanDispel.Poison  = IsPlayerSpell(88423) or IsPlayerSpell(2782)
 
 	elseif PLAYER_CLASS == "MONK" then
-		PlayerCanDispel.Disease = IsPlayerSpell(115450) -- Detox
-		PlayerCanDispel.Magic   = IsPlayerSpell(115451) -- Internal Medicine (Mistweaver spec passive)
-		PlayerCanDispel.Poison  = IsPlayerSpell(115450) -- Detox
+		 -- 115450   Detox             Mistweaver                  Disease, Poison, Magic
+		 -- 218164   Detox             Brewmaster, Windwalker      Disease, Poison
+		PlayerCanDispel.Disease = IsPlayerSpell(115450) or IsPlayerSpell(218164)
+		PlayerCanDispel.Magic   = IsPlayerSpell(115450)
+		PlayerCanDispel.Poison  = IsPlayerSpell(115450) or IsPlayerSpell(218164)
 
 	elseif PLAYER_CLASS == "PALADIN" then
-		PlayerCanDispel.Disease = IsPlayerSpell(4987)   -- Cleanse
-		PlayerCanDispel.Magic   = IsPlayerSpell(53551)  -- Sacred Cleansing (Holy spec passive)
-		PlayerCanDispel.Poison  = IsPlayerSpell(4987)
+		 --   4987   Cleanse           Holy                        Disease, Poison, Magic
+		 -- 213644   Cleanse Toxins    Protection, Retribution     Disease, Poison
+		PlayerCanDispel.Disease = IsPlayerSpell(4987) or IsPlayerSpell(213644)
+		PlayerCanDispel.Magic   = IsPlayerSpell(4987)
+		PlayerCanDispel.Poison  = IsPlayerSpell(4987) or IsPlayerSpell(213644)
 
 	elseif PLAYER_CLASS == "PRIEST" then
-		PlayerCanDispel.Disease = IsPlayerSpell(527) -- Purify
-		PlayerCanDispel.Magic   = IsPlayerSpell(527) or IsPlayerSpell(32375) -- Purify or Mass Dispel
+		 --    527   Purify            Discipline, Holy            Disease, Magic
+		 -- 213634   Purify Disease    Shadow                      Disease
+		PlayerCanDispel.Disease = IsPlayerSpell(527) or IsPlayerSpell(213634)
+		PlayerCanDispel.Magic   = IsPlayerSpell(527)
 
 	elseif PLAYER_CLASS == "SHAMAN" then
-		PlayerCanDispel.Curse   = IsPlayerSpell(51886) -- Cleanse Spirit (also returns true for Purify Spirit)
-		PlayerCanDispel.Magic   = IsPlayerSpell(77130) -- Purify Spirit
+		--  77130   Purify Spirit      Restoration                 Curse, Magic
+		--  51886   Cleanse Spirit     Elemental, Enhancement      Curse
+		PlayerCanDispel.Curse   = IsPlayerSpell(77130) or IsPlayerSpell(51886)
+		PlayerCanDispel.Magic   = IsPlayerSpell(77130)
 
 	elseif PLAYER_CLASS == "WARLOCK" then
-		PlayerCanDispel.Magic   = IsPlayerSpell(115276, true) or IsPlayerSpell(89808, true) or IsPlayerSpell(132411)
-		-- Sear Magic (Fel Imp) or Singe Magic (Imp) or Singe Magic (via Grimoire of Sacrifice) -- NEEDS CHECK
-
+		-- 115276   Sear Magic (Fel Imp)
+		--  89808   Singe Magic (Imp)
+		PlayerCanDispel.Magic   = IsPlayerSpell(115276, true) or IsPlayerSpell(89808, true)
 	end
-
-	-- Grid_PlayerCanDispel = PlayerCanDispel -- debugging
 end
 
 -- Unit Aura Driver
@@ -1220,12 +1214,12 @@ function GridStatusAuras:StatusTextColor(settings, count, timeLeft)
 	if settings.statusText == "name" then
 		text = settings.text
 	elseif settings.statusText == "count" then
-		text = tostring(count)
+		text = n2s(count)
 	elseif settings.statusText == "duration" then
 		if settings.durationTenths then
-			text = format("%.1f", timeLeft)
+			text = f2s(timeLeft, 1)
 		else
-			text = format("%d", timeLeft)
+			text = n2s(floor(timeLeft+.5))
 		end
 	end
 
@@ -1295,7 +1289,7 @@ function GridStatusAuras:UnitGainedBuff(guid, class, name, rank, icon, count, de
 	settings.icon = icon
 
 	if settings.enable and not settings.missing then -- and settings[class] ~= false then -- ##DELETE
-		local start = expirationTime and (expirationTime - duration)
+		local start = expirationTime and settings.statusText ~= "count" and (expirationTime - duration)  --163ui GID Text force show timeleft
 		local timeLeft = expirationTime and expirationTime > now and (expirationTime - now) or 0
 		local text, color = self:StatusTextColor(settings, count, timeLeft)
 		if duration and expirationTime and duration > 0 and expirationTime > 0 then
@@ -1530,6 +1524,7 @@ function GridStatusAuras:UnitLostBossDebuff(guid, class, name)
 	self.core:SendStatusLost(guid, status)
 end
 
+local assigned = {} --163ui if an aura is assign to at least one indicator
 function GridStatusAuras:UpdateAuraScanList()
 	self:Debug("UpdateAuraScanList")
 
@@ -1537,8 +1532,17 @@ function GridStatusAuras:UpdateAuraScanList()
 	wipe(player_buff_names)
 	wipe(debuff_names)
 
+    wipe(assigned)
+    for indicator, tbl in pairs(GridFrame.db.profile.statusmap) do
+        for status, v in pairs(tbl) do
+            if v then
+                assigned[status] = true
+            end
+        end
+    end
+
 	for status, settings in pairs(self.db.profile) do
-		if type(settings) == "table" and settings.enable then
+		if type(settings) == "table" and settings.enable and assigned[status] then
 			local name = settings.buff or settings.debuff
 			self:Debug(status, name)
 
@@ -1555,7 +1559,7 @@ function GridStatusAuras:UpdateAuraScanList()
 					end
 				else
 					self:Debug("Added to debuff_names")
-					debuff_names[name] = status
+					debuff_names[settings.debuffID or name] = status --163ui
 				end
 			end
 		end
@@ -1623,8 +1627,11 @@ function GridStatusAuras:ScanUnitAuras(event, unit, guid)
 			local name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer = UnitAura(unit, index, "HARMFUL")
 			if not name then
 				break
-			end
-			if debuff_names[name] then
+            end
+            if debuff_names[spellID] then
+                debuff_names_seen[spellID] = true
+                self:UnitGainedDebuff(guid, class, spellID, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
+            elseif debuff_names[name] then
 				debuff_names_seen[name] = true
 				self:UnitGainedDebuff(guid, class, name, rank, icon, count, debuffType, duration, expirationTime, casterUnit, canStealOrPurge, shouldConsolidate, spellID, canApply, isBossAura, isCastByPlayer)
 			--[[

@@ -68,7 +68,7 @@ function rematch:LoadTeam(key)
 					local abilityID = team[i][j+1]
 					if abilityID and abilityID~=0 then
 						-- confirm the ability still exists in that slot for the species before marking it to be loaded
-						if speciesAbilities[j]==abilityID or speciesAbilities[j+3]==abilityID then
+						if not speciesAbilities[j] or speciesAbilities[j]==abilityID or speciesAbilities[j+3]==abilityID then
 							loadin[i][j+1] = abilityID
 						end
 					end
@@ -161,7 +161,7 @@ function rematch:LoadingDone(unsuccessful)
 	if rematch.LoadedTeamPanel:IsVisible() then
 		rematch.LoadedTeamPanel.Bling:Show()
 	end
-	wipe(settings.ManuallySlotted)
+	rematch:AssignLevelingSlots()
 	rematch:UpdateQueue() -- team change may mean leveling pet preferences changed; this also does an UpdateUI
 
 	-- ShowOnInjured to summon window if any loaded pets are injured
@@ -225,4 +225,5 @@ end
 -- use this to wipe loadedTeam instead of setting it directly
 function rematch:UnloadTeam()
 	settings.loadedTeam = nil
+	rematch:AssignLevelingSlots() -- will clear leveling slots
 end

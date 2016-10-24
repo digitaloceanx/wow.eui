@@ -31,7 +31,7 @@ rematch:InitModule(function()
 				rematch:ShowNotes("team",key,true)
 				rematch.Notes.Content.ScrollFrame.EditBox:SetFocus(true)
 			end },
-		{ text=L["Set Preferences"], hidden=function(self,key) for i=1,3 do if saved[key][i][1]==0 then return false end end return true end, func=function(self,key) rematch:ShowPreferencesDialog("team",key) end },
+		{ text=L["Leveling Preferences"], hidden=function(self,key) for i=1,3 do if saved[key][i][1]==0 then return false end end return true end, func=function(self,key) rematch:ShowPreferencesDialog("team",key) end },
 		{ text=L["Move To"], subMenu="TeamMove" },
 		{ spacer=true, hidden=rmf.NotSortable },
 		{ text=L["Move To Top"], hidden=rmf.NotSortable,stay=true, icon="Interface\\Buttons\\UI-MicroStream-Green", iconCoords={0.075,0.925,0.925,0.075}, disabled=rmf.TeamAtTop, dir=-2, func=rmf.MoveTeamWithinTab },

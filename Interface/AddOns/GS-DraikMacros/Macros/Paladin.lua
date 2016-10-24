@@ -64,20 +64,20 @@ PostMacro=[[
 Sequences['DB_Palla_Prot_AOE'] = {
 author="LNPV",
 specID=66,
-helpTxt = 'Talents: 2332233  This build is based in mastery, hast and crit (food is variable for boss).',
+helpTxt='Talents: 2332233  This build is based in mastery, hast and crit (food is variable for boss).',
 icon=236264,
 PreMacro=[[
 /targetenemy [noharm][dead]
 ]],
-"/cast Avenger's Shield,",
-"/cast Judgment,",
-"/cast Blessed Hammer,",
-"/cast Shield of the Righteous,",
-"/cast Consecration,",
-"/cast Light of the Protector,",
-"/cast Judgment,",
-"/cast Blessed Hammer,",
-"/cast Shield of the Righteous,",
+"/cast Avenger's Shield",
+"/cast Judgment",
+"/cast Blessed Hammer",
+"/cast Shield of the Righteous",
+"/cast Consecration",
+"/cast Light of the Protector",
+"/cast Judgment",
+"/cast Blessed Hammer",
+"/cast Shield of the Righteous",
 PostMacro=[[
 /cast Avenging Wrath
 /cast Divine Steed
@@ -115,37 +115,48 @@ PostMacro=[[
 -------------------
 
 Sequences['DB_Ret'] = {
-specID = 70,
-author = "Draik",
-helpTxt = "Retribution Single Target macro - 3311112.",
-icon = "INV_Sword_2H_AshbringerCorrupt",
-PreMacro = [[
+author="TimothyLuke",
+specID=70,
+helpTxt = "Talents: 1112111",
+StepFunction = GSStaticPriority,
+icon='INV_Sword_2H_AshbringerCorrupt',
+lang="enUS",
+PreMacro=[[
 /targetenemy [noharm][dead]
+/cast Avenging Wrath
+/cast Shield of Vengeance
 ]],
-'/cast Judgment',
-'/cast Crusader Strike',
-'/cast Blade of Justice',
-'/cast [combat]!Consecration',
-'/cast [combat] [talent:7/1] Crusade; Avenging Wrath',
-'/cast !Wake of Ashes',
+"/cast [talent:5/1] Justicar's Vengeance",
 "/cast Templar's Verdict",
+"/cast Blade of Justice",
+"/cast Judgment",
+"/cast Crusader Strike",
+"/cast Wake of Ashes",
+PostMacro=[[
+/startattack
+]],
 }
 
 Sequences['DB_RetAoE'] = {
 specID = 70,
-author = "Draik",
-helpTxt = "Retribution AoE macro - 3311112.",
+author = "TimothyLuke",
+helpTxt = "Retribution AoE macro - 1112111.",
+StepFunction = GSStaticPriority,
 icon = "Ability_Paladin_DivineStorm",
-PreMacro = [[
+PreMacro=[[
 /targetenemy [noharm][dead]
+/cast Avenging Wrath
+/cast Shield of Vengeance
 ]],
-'/cast Judgment',
-'/cast Crusader Strike',
-'/cast Blade of Justice',
-'/cast [combat]!Consecration',
-'/cast [combat]!Crusade',
-'/cast !Wake of Ashes',
+"/cast [talent:5/1] Justicar's Vengeance",
 "/cast Divine Storm",
+"/cast Blade of Justice",
+"/cast Judgment",
+"/cast Crusader Strike",
+"/cast Wake of Ashes",
+PostMacro=[[
+/startattack
+]],
 }
 
 
@@ -155,7 +166,7 @@ PreMacro = [[
 
 Sequences['DB_HolyDeeps'] = {
 specID = 65,
-author = "Draik",
+author = "TimothyLuke",
 helpTxt = "Holy DPS levelling macro - 3131123.",
 icon = "Ability_Paladin_InfusionofLight",
 PreMacro = [[

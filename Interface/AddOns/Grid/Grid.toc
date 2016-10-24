@@ -1,9 +1,5 @@
 ## Interface: 70000
-## Version: 7.0.0.2-1-gce9bd44
-## X-Curse-Packaged-Version: 7.0.0.2-1-gce9bd44
-## X-Curse-Project-Name: Grid
-## X-Curse-Project-ID: grid
-## X-Curse-Repository-ID: wow/grid/mainline
+## Version: 7.0.3.3 - WarbabyPack-20160911
 
 ## Title: Grid
 ## Notes: A compact grid of party/raid unit frames.
@@ -18,8 +14,10 @@
 
 ## Author: Phanx, Pastamancer, Maia
 ## X-Credits: Greltok, Jerry, jlam
-## X-Copyright: Copyright (c) 2006-2015 Pastamancer, Phanx. All rights reserved.
-## X-Website: http://www.wowace.com/addons/grid/
+## X-Copyright: Copyright (c) 2006-2016 Pastamancer, Phanx. All rights reserved.
+## X-Website: https://www.wowace.com/addons/grid/
+## X-Curse-Project-ID: grid
+## X-WoWI-ID: 5747
 
 ## OptionalDeps: Ace3, LibDBIcon-1.0, LibDualSpec-1.0, LibResInfo-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, UTF8, Clique
 ## SavedVariables: GridDB
@@ -46,6 +44,7 @@ Libs\LibResInfo-1.0\LibResInfo-1.0.lua
 Libs\LibSharedMedia-3.0\LibSharedMedia-3.0.lua
 Libs\AceGUI-3.0-SharedMediaWidgets\widget.xml
 Libs\UTF8\utf8.lua
+Libs\AceLocale-3.0\AceLocale-3.0.lua
 #@end-no-lib-strip@
 
 Locales\Locale-de.lua
@@ -64,7 +63,7 @@ Layout.lua
 Layouts.lua
 Frame.lua
 Status.lua
-Help.lua
+#Help.lua
 
 Indicators\Alpha.lua
 Indicators\Bar.lua
@@ -96,3 +95,10 @@ Statuses\VoiceComm.lua
 #@debug@
 # Statuses\new\GridAura.lua
 #@end-debug@
+
+Statuses\AurasByClass.lua
+_warbaby_.lua
+
+## Title: |cffEEEE00[Warbaby]|r Grid团队框架
+## Notes-zhCN: 强大的团队框体，支持多种功能。
+## X-Vendor: NetEase

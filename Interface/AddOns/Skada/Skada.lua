@@ -2010,7 +2010,6 @@ function Skada:UpdateDisplay(force)
 
 				-- View available modes.
 				for i, mode in ipairs(modes) do
-
 					local d = win.dataset[i] or {}
 					win.dataset[i] = d
 
@@ -2082,14 +2081,14 @@ function Skada:GetSets()
 	return self.char.sets
 end
 
-function Skada:GetModes()
-	return modes
+function Skada:GetModes(sortfunc)
+    return modes
 end
 
 -- Formats a number into human readable form.
 function Skada:FormatNumber(number)
-	if number and ElvUI then
-		return ElvUI[1]:ShortValue(number)
+	if number and EUI then
+		return EUI[1]:ShortValue(number)
 	end
 	if number then
 		if self.db.profile.numberformat == 1 then
@@ -2144,7 +2143,7 @@ function Skada:AddDisplaySystem(key, mod)
 end
 
 -- Register a mode.
-function Skada:AddMode(mode)
+function Skada:AddMode(mode, category)
 	-- Ask mode to verify our sets.
 	-- Needed in case we enable a mode and we have old data.
 	if self.total then
@@ -2157,6 +2156,10 @@ function Skada:AddMode(mode)
 		verify_set(mode, set)
 	end
 
+    -- Set mode category (used for menus)
+    mode.category = category or L['Other']
+    
+    -- Add to mode list
 	tinsert(modes, mode)
 
 	-- Set this mode as the active mode if it matches the saved one.
@@ -2183,7 +2186,7 @@ function Skada:AddMode(mode)
 	end
 
 	-- Sort modes.
-	table_sort(modes, function(a, b) return a.name < b.name end)
+	table_sort(modes, function(a, b) return a:GetName() < b:GetName() end)
 
 	-- Remove all bars and start over to get ordering right.
 	-- Yes, this all sucks - the problem with this and the above is that I don't know when
@@ -2696,11 +2699,11 @@ do
 
 	function Skada:OnInitialize()
 		-- Register some SharedMedia goodies.
-	--	media:Register("font", "Adventure",				[[Interface\Addons\Skada\media\fonts\Adventure.ttf]])
-	--	media:Register("font", "ABF",					[[Interface\Addons\Skada\media\fonts\ABF.ttf]])
-	--	media:Register("font", "Vera Serif",			[[Interface\Addons\Skada\media\fonts\VeraSe.ttf]])
-	--	media:Register("font", "Diablo",				[[Interface\Addons\Skada\media\fonts\Avqest.ttf]])
-	--	media:Register("font", "Accidental Presidency",	[[Interface\Addons\Skada\media\fonts\Accidental Presidency.ttf]])
+		media:Register("font", "Adventure",				[[Interface\Addons\Skada\media\fonts\Adventure.ttf]])
+		media:Register("font", "ABF",					[[Interface\Addons\Skada\media\fonts\ABF.ttf]])
+		media:Register("font", "Vera Serif",			[[Interface\Addons\Skada\media\fonts\VeraSe.ttf]])
+		media:Register("font", "Diablo",				[[Interface\Addons\Skada\media\fonts\Avqest.ttf]])
+		media:Register("font", "Accidental Presidency",	[[Interface\Addons\Skada\media\fonts\Accidental Presidency.ttf]])
 		media:Register("statusbar", "Aluminium",      [[Interface\Addons\Skada\media\statusbar\Aluminium]])
 		media:Register("statusbar", "Armory",         [[Interface\Addons\Skada\media\statusbar\Armory]])
 		media:Register("statusbar", "BantoBar",       [[Interface\Addons\Skada\media\statusbar\BantoBar]])
@@ -2717,9 +2720,9 @@ do
 		media:Register("statusbar", "Smooth",         [[Interface\Addons\Skada\media\statusbar\Smooth]])
 		media:Register("statusbar", "Round",          [[Interface\Addons\Skada\media\statusbar\Round]])
 		media:Register("statusbar", "TukTex",         [[Interface\Addons\Skada\media\statusbar\normTex]])
-	--	media:Register("border", "Glow",              [[Interface\Addons\Skada\media\border\glowTex]])
-	--	media:Register("border", "Roth",              [[Interface\Addons\Skada\media\border\roth]])
-	--	media:Register("background", "Copper",        [[Interface\Addons\Skada\media\background\copper]])
+		media:Register("border", "Glow",              [[Interface\Addons\Skada\media\border\glowTex]])
+		media:Register("border", "Roth",              [[Interface\Addons\Skada\media\border\roth]])
+		media:Register("background", "Copper",        [[Interface\Addons\Skada\media\background\copper]])
 
 		-- Some sounds (copied from Omen).
 		media:Register("sound", "Rubber Ducky",       [[Sound\Doodad\Goblin_Lottery_Open01.ogg]])

@@ -133,7 +133,7 @@ function rematch:PLAYER_LOGIN()
 	end
 	rematch:FindBreedSource()
 	local locale = GetLocale()
-	if locale=="deDE" or locale=="zhTW" or locale=="zhCN" then
+	if locale=="deDE" or locale=="frFR" then
 		rematch.localeSquish = true -- flag to make some room when locale has longer text
 	end
 
@@ -181,7 +181,6 @@ function rematch:PLAYER_LOGIN()
 	end
 	-- watch for player forfeiting a match (playerForfeit is nil'ed during PET_BATTLE_OPENING_START)
 	hooksecurefunc(C_PetBattles,"ForfeitGame",function() rematch.playerForfeit=true end)
-	rematch:ResumeQueue() -- if they're not in battle/combat/queued for pvp, clear QueuePaused if it's set from previous session
 end
 
 function rematch:InitSavedVars()
@@ -190,12 +189,15 @@ function rematch:InitSavedVars()
 	settings = RematchSettings
 	saved = RematchSaved
 	-- create settings sub-tables and default values if they don't exist
-	for k,v in pairs({"TeamGroups","Filters","FavoriteFilters","Sort","Sanctuary","LevelingQueue","ManuallySlotted","PetNotes","ScriptFilters"}) do
+	for k,v in pairs({"TeamGroups","Filters","FavoriteFilters","Sort","Sanctuary","LevelingQueue","PetNotes","ScriptFilters","LevelingSlots"}) do
 		if type(settings[v])~="table" then
 			if v=="TeamGroups" then -- TeamGroups starts with a default entry
 				settings[v] = {{GENERAL,"Interface\\Icons\\PetJournalPortrait"}}
 			elseif v=="Sort" then
 				settings[v] = {Order=1,FavoritesFirst=true}
+			elseif v=="LevelingSlots" then
+				settings[v] = {}
+				rematch:AssignLevelingSlots()
 			else
 				settings[v] = {}
 			end
@@ -327,7 +329,6 @@ end
 
 -- entering combat
 function rematch:PLAYER_REGEN_DISABLED()
-	rematch:PauseQueue("combat")
 	local frame = rematch.Frame
 	if frame:IsVisible() then
 		frame:Hide()
@@ -342,7 +343,6 @@ end
 -- entering a pet battle
 function rematch:PET_BATTLE_OPENING_START()
 	rematch:HideWidgets()
-	rematch:PauseQueue("battle")
 	rematch.pvpProposalAccepted = nil
 	if settings.LockWindow and not settings.StayForBattle and rematch.Frame:IsVisible() then
 		rematch.Frame.showAfterBattle = true
@@ -368,28 +368,27 @@ function rematch:PET_BATTLE_QUEUE_STATUS()
 	if status=="entry" then
 		rematch.pvpProposalAccepted = true
 	elseif status then
-		rematch:PauseQueue("pvp")
 		rematch:UpdateAutoLoadState(true)
+		rematch:UpdateUI()
 	elseif not rematch.pvpProposalAccepted then -- don't resume if flag set
-		rematch:ResumeQueue(true)
+		C_Timer.After(0,rematch.UpdateQueue)
 		rematch:UpdateAutoLoadState()
 	end
 end
 
 -- leaving battle
 function rematch:PLAYER_REGEN_ENABLED()
-	rematch:ResumeQueue(true)
 	local frame = rematch.Frame
 	if frame.showAfterCombat then
 		frame:Show()
 	end
+	C_Timer.After(0,rematch.UpdateQueue)
 	rematch:UpdateAutoLoadState()
 end
 
 -- leaving pet battle
 function rematch:PET_BATTLE_CLOSE()
 	if not C_PetBattles.IsInBattle() then
-		rematch:ResumeQueue(true)
 		rematch:RegisterEvent("PET_BATTLE_QUEUE_STATUS")
 		local frame = rematch.Frame
 		if frame.showAfterBattle then
@@ -399,6 +398,7 @@ function rematch:PET_BATTLE_CLOSE()
 			rematch:AutoShow() -- this is the "Show After Pet Battle" option
 		end
 		rematch:HideNotes()
+		C_Timer.After(0,rematch.UpdateQueue) -- waiting a frame (client thinks we can't swap pets right now)
 		rematch:UpdateAutoLoadState()
 	end
 end

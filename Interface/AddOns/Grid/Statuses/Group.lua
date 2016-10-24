@@ -1,12 +1,12 @@
 --[[--------------------------------------------------------------------
 	Grid
 	Compact party and raid unit frames.
-	Copyright (c) 2006-2014 Kyle Smith (Pastamancer), Phanx
-	All rights reserved.
-	See the accompanying README and LICENSE files for more information.
+	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+	All rights reserved. See the accompanying LICENSE file for details.
+	https://github.com/Phanx/Grid
+	https://mods.curse.com/addons/wow/grid
 	http://www.wowinterface.com/downloads/info5747-Grid.html
-	http://www.wowace.com/addons/grid/
-	http://www.curse.com/addons/wow/grid
 ------------------------------------------------------------------------
 	Group.lua
 	Grid status module for group leader, assistant, and master looter.
@@ -45,18 +45,35 @@ GridStatusName.defaultDB = {
 		color = { r = 1, g = 1, b = 0.4, a = 1, ignore = true },
 		hideInCombat = true,
 	},
+    main_tank = {
+        enable = true,
+        priority = 40,
+        text = "MT",
+        color = { r = 0.8, g = 0.6, b = 0.4, a = 1, ignore = true },
+        hideInCombat = false,
+    },
+    main_assist = {
+        enable = true,
+        priority = 40,
+        text = "MA",
+        color = { r = 1, g = 0.5, b = 0.75, a = 1, ignore = true },
+        hideInCombat = false,
+    },
 }
 
 function GridStatusName:PostInitialize()
 	self:RegisterStatus("leader", L["Group Leader"])
 	self:RegisterStatus("assistant", L["Group Assistant"])
 	self:RegisterStatus("master_looter", L["Master Looter"])
+    self:RegisterStatus("main_tank", MAIN_TANK)
+    self:RegisterStatus("main_assist", MAIN_ASSIST)
 end
 
 function GridStatusName:OnStatusEnable(status)
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", "UpdateAllUnits")
 	self:RegisterEvent("PARTY_LEADER_CHANGED", "UpdateAllUnits")
 	self:RegisterEvent("PARTY_LOOT_METHOD_CHANGED", "UpdateAllUnits")
+    self:RegisterEvent("PLAYER_ROLES_ASSIGNED", "UpdateAllUnits")
 
 	for status, settings in pairs(self.db.profile) do
 		if settings.hideInCombat then
@@ -91,6 +108,7 @@ function GridStatusName:OnStatusDisable(status)
 		self:UnregisterEvent("GROUP_ROSTER_UPDATE")
 		self:UnregisterEvent("PARTY_LEADER_CHANGED")
 		self:UnregisterEvent("PARTY_LOOT_METHOD_CHANGED")
+        self:UnregisterEvent("PLAYER_ROLES_ASSIGNED")
 	end
 
 	self.core:SendStatusLostAllUnits(status)
@@ -102,6 +120,8 @@ function GridStatusName:UpdateAllUnits()
 	local leaderDB = self.db.profile.leader
 	local assistantDB = self.db.profile.assistant
 	local looterDB = self.db.profile.master_looter
+    local mtDB = self.db.profile.main_tank
+    local maDB = self.db.profile.main_assist
 
 	local looter
 	if looterDB.enable and not (inCombat and looterDB.hideInCombat) then
@@ -160,6 +180,35 @@ function GridStatusName:UpdateAllUnits()
 			)
 		else
 			self.core:SendStatusLost(guid, "master_looter")
-		end
+        end
+
+        local isMainTank = GetPartyAssignment("MAINTANK", unit)
+        if mtDB.enable and isMainTank and not (inCombat and mtDB.hideInCombat) then
+            self.core:SendStatusGained(guid, "main_tank",
+                mtDB.priority,
+                nil,
+                mtDB.color,
+                mtDB.text,
+                nil,
+                nil,
+                "Interface\\GroupFrame\\UI-Group-MainTankIcon"
+            )
+        else
+            self.core:SendStatusLost(guid, "main_tank")
+        end
+
+        if maDB.enable and not isMainTank and GetPartyAssignment("MAINASSIST", unit) and not (inCombat and maDB.hideInCombat) then
+            self.core:SendStatusGained(guid, "main_assist",
+                maDB.priority,
+                nil,
+                maDB.color,
+                maDB.text,
+                nil,
+                nil,
+                "Interface\\GroupFrame\\UI-Group-MainAssistIcon"
+            )
+        else
+            self.core:SendStatusLost(guid, "main_assist")
+        end
 	end
 end

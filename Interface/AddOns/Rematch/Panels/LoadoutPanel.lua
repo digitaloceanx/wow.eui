@@ -84,12 +84,27 @@ function panel:UpdateLoadouts()
 				panel:FillAbilityButton(button.Abilities[j],petID,info[j])
 			end
 		end
-		button.queueControl = rematch:IsSlotQueueControlled(i) --rematch:IsPetLeveling(petID) and not settings.ManuallySlotted[petID]
+		button.queueControl = rematch:IsSlotQueueControlled(i)
 		-- update background
 		button.InsetBack:SetDesaturated(not petID)
-		button.Pet.Pet.Leveling:SetShown(rematch:IsSlotQueueControlled(i) and not settings.QueuePaused)
+		-- update leveling border if a slot is controlled by the queue
+		if rematch:IsSlotQueueControlled(i) then
+			button.Pet.Pet.Leveling:SetShown(not settings.QueuePaused)
+			button.Pet.Pet.Leveling:SetDesaturated(not rematch:IsPetLeveling(petID))
+		else
+			button.Pet.Pet.Leveling:Hide()
+		end
 
 		button.LockOverlay:SetShown((C_PetBattles.GetPVPMatchmakingInfo() or not C_PetJournal.IsJournalUnlocked()) and true)
+	end
+end
+
+-- returns the slot (other than the given slot) that already contains the petID
+function rematch:IsPetSlotted(slot,petID)
+	for i=1,3 do
+		if i~=slot and petID==C_PetJournal.GetPetLoadOutInfo(i) then
+			return i
+		end
 	end
 end
 
@@ -100,10 +115,17 @@ function panel:LoadoutButtonReceivePet()
 		ClearCursor()
 		local slot = self:GetParent()==rematch.MiniPanel and self:GetID() or self:GetParent():GetID()
 		if slot>=1 and slot<=3 then
+			local otherSlot = rematch:IsPetSlotted(slot,petID)
 			rematch:SlotPet(slot,petID)
-			if rematch:IsPetLeveling(petID) and settings.LevelingQueue[1]~=petID then
-				settings.ManuallySlotted[petID] = true
+			if otherSlot then
+				-- if an already-slotted pet is being slotted, swap its leveling slot status with the other slot
+				local otherLeveling = rematch:IsSlotQueueControlled(otherSlot)
+				rematch:SetLevelingSlot(otherSlot,rematch:IsSlotQueueControlled(slot))
+				rematch:SetLevelingSlot(slot,otherLeveling)
+			else
+				rematch:SetLevelingSlot(slot,nil)
 			end
+			rematch:UpdateQueue()
 			return true
 		end
 	end

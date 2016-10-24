@@ -1,12 +1,12 @@
 --[[--------------------------------------------------------------------
 	Grid
 	Compact party and raid unit frames.
-	Copyright (c) 2006-2014 Kyle Smith (Pastamancer), Phanx
-	All rights reserved.
-	See the accompanying README and LICENSE files for more information.
+	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+	All rights reserved. See the accompanying LICENSE file for details.
+	https://github.com/Phanx/Grid
+	https://mods.curse.com/addons/wow/grid
 	http://www.wowinterface.com/downloads/info5747-Grid.html
-	http://www.wowace.com/addons/grid/
-	http://www.curse.com/addons/wow/grid
 ----------------------------------------------------------------------]]
 
 local _, Grid = ...
@@ -43,7 +43,7 @@ local Layouts = {
 		name = L["By Class"],
 		defaults = {
 			groupBy = "CLASS",
-			groupingOrder = "WARRIOR,DEATHKNIGHT,ROGUE,MONK,PALADIN,DRUID,SHAMAN,PRIEST,MAGE,WARLOCK,HUNTER",
+			groupingOrder = "WARRIOR,DEATHKNIGHT,ROGUE,MONK,PALADIN,DRUID,SHAMAN,PRIEST,MAGE,WARLOCK,HUNTER,DEMONHUNTER",
 			sortMethod = "NAME",
 			unitsPerColumn = 5,
 		},
@@ -67,6 +67,8 @@ local Layouts = {
 --[===[@debug@
 GRIDLAYOUTS = Layouts
 --@end-debug@]===]
+
+Layout._defaultLayouts = Layouts --163ui
 
 --------------------------------------------------------------------------------
 
@@ -96,7 +98,7 @@ local function AddPetGroup(t, numGroups, groupFilter)
 
 	t.isPetGroup = true
 	t.groupBy = "CLASS"
-	t.groupingOrder = "HUNTER,WARLOCK,MAGE,DEATHKNIGHT,DRUID,PRIEST,SHAMAN,MONK,PALADIN,ROGUE,WARRIOR"
+	t.groupingOrder = "HUNTER,WARLOCK,MAGE,DEATHKNIGHT,DRUID,PRIEST,SHAMAN,MONK,PALADIN,ROGUE,WARRIOR,DEMONHUNTER"
 	-- t.sortMethod = "NAME"
 
 	return t
@@ -243,13 +245,17 @@ function Manager:UpdateLayouts(event)
 	lastShowPets = showPets
 
 	-- Update class and role layouts
+--[===[@debug@
 	if splitGroups then
 		UpdateSplitGroups(Layouts.ByClass,  numGroups, showPets)
 		UpdateSplitGroups(Layouts.ByRole,   numGroups, showPets)
 	else
+--@end-debug@]===]
 		UpdateMergedGroups(Layouts.ByClass, numGroups, showPets)
 		UpdateMergedGroups(Layouts.ByRole,  numGroups, showPets)
+--[===[@debug@
 	end
+--@end-debug@]===]
 
 	-- By group should always be split group
 	UpdateSplitGroups(Layouts.ByGroup, usedGroups, showPets)
@@ -259,4 +265,5 @@ function Manager:UpdateLayouts(event)
 
 	return true
 end
+
 

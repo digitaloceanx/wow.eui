@@ -40,6 +40,10 @@ local function PraseItemSet(text)
 end
 
 local function ScanItemTooltip(itemLink)
+	if not itemLink then
+		return 0, 0, 0, 0
+	end
+
 	tip:SetOwner(UIParent, "ANCHOR_NONE")
 	for i = 1,4 do
 		if _G[ tip:GetName() .."Texture"..i] then
@@ -165,7 +169,7 @@ function GearStatsSummary_UpdateAnchor(doll, insp)
 		if E~= nil then
 			GearStatsSummarySelfFrame:SetTemplate("Transparent")
 			GearStatsSummaryTargetFrame:SetFrameLevel(CharacterFrame:GetFrameLevel())
-			if E == 1 then
+			if E == 1 and ElvUI[1].private.skins.blizzard.enable then
 				ElvUI[1].Skins:HandleCloseButton(GearStatsSummarySelfFrameCloseButton)
 				ElvUI[1].Skins:HandleCloseButton(GearStatsSummaryTargetFrameCloseButton)
 			else

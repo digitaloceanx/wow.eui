@@ -110,7 +110,7 @@ function roster:FilterPetByPetID(petID)
 		petInfo.owned = true
 		petInfo.speciesID, petInfo.customName, petInfo.level, petInfo.xp, petInfo.maxXp, petInfo.displayID, petInfo.isFavorite, petInfo.name, petInfo.icon, petInfo.petType, petInfo.creatureID, petInfo.sourceText, petInfo.description, petInfo.isWild, petInfo.canBattle, petInfo.tradable, petInfo.unique, petInfo.obtainable = C_PetJournal.GetPetInfoByPetID(petID)
 		petInfo.petID = petID
-	else -- if this a pet user doesn't own
+	elseif type(petID)=="number" then -- if this a pet user doesn't own
 		petInfo.owned = false
 		petInfo.name, petInfo.icon, petInfo.petType, petInfo.creatureID, petInfo.sourceText, petInfo.description, petInfo.isWild, petInfo.canBattle, petInfo.tradable, petInfo.unique, petInfo.obtainable, petInfo.displayID = C_PetJournal.GetPetInfoBySpeciesID(petID)
 		petInfo.speciesID = petID
@@ -118,7 +118,7 @@ function roster:FilterPetByPetID(petID)
 	end
 
 	if not petInfo.name then
-		return false -- if this petID is no longre valid, don't list it
+		return -- if the pet no longer exists (was released)
 	end
 
 	-- hidden pets get special treatment outside of active filters
@@ -257,7 +257,7 @@ function filterFuncs.Other()
 	-- Other -> Current Zone
 	if GetFilter(self,"Other","CurrentZone") then
 		local source = petInfo.sourceText
-		if not source or not source:match(roster.currentZone) then
+		if not source or not rematch:match(source,roster.currentZone) then
 			return false
 		end
 	end
@@ -331,7 +331,7 @@ local speciesCache -- will be the SearchSpecies TempTable
 -- relevanceStart if there's an exact match and the relevanceStart+1 if just a regular
 -- match and nil if there is no match
 local function matchRelevance(speciesID,mask,candidate,relevanceStart)
-	if candidate and candidate:match(mask) then
+	if candidate and rematch:match(candidate,mask) then
 		local relevance = candidate:match("^"..mask.."$") and relevanceStart or relevanceStart+1
 		speciesCache[speciesID] = relevance
 		return relevance
@@ -343,7 +343,7 @@ function roster:RunSearchMatch(mask)
 	-- search for custom name first since that's potentially unique among all pets
 	-- customName match has a relevance of 1/2
 	local customName = petInfo.customName
-	if customName and customName:match(mask) then
+	if customName and rematch:match(customName,mask) then
 		return customName:match("^"..mask.."$") and 1 or 2
 	end
 

@@ -95,7 +95,7 @@ if GetLocale()=="????" then
 	L["Change Name Or Target"] = nil
 	L["Edit Team"] = nil
 	L["Set Notes"] = nil
-	L["Set Preferences"] = nil
+	L["Leveling Preferences"] = nil
 	L["Move To"] = nil
 	L["Move To Top"] = nil
 	L["Move Up"] = nil
@@ -149,8 +149,7 @@ if GetLocale()=="????" then
 	L["-- Collected battle pets that have no rare version.\n\nif not rares then\n  rares = {}\n  for petID in AllPetIDs() do\n    if select(5,C_PetJournal.GetPetStats(petID))==4 then\n      rares[C_PetJournal.GetPetInfoByPetID(petID)]=true\n    end\n  end\nend\n\nif canBattle and owned and not rares[speciesID] then\n  return true\nend"] = nil
 	L["Hybrid Counters"] = nil
 	L["-- Pets with three or more attack types different than their pet type.\n\nlocal count = 0\nfor _,abilityID in ipairs(abilityList) do\n  local abilityType,noHints = select(7, C_PetBattles.GetAbilityInfoByID(abilityID) )\n  if not noHints and abilityType~=petType then\n    count = count + 1\n  end\nend\n\nreturn count>=3\n"] = nil
-	L["The Leveling Queue is empty."] = nil
-	L["This is already the top-most leveling pet."] = nil
+	L["Stop Leveling This Slot"] = nil
 	L["Find Similar"] = nil
 	L["Enter a new name"] = nil
 	L["List %d Teams"] = nil
@@ -316,12 +315,8 @@ if GetLocale()=="????" then
 	L["Descending Level"] = nil
 	L["Median Level"] = nil
 	L["Type"] = nil
-	L["Queue paused."] = nil
-	L["Queue paused while in combat."] = nil
-	L["Queue paused while in a pet battle."] = nil
-	L["Queue paused while queued for pet pvp."] = nil
 	L["Queue"] = nil
-	L["Drag pets you want to level here.\n\nWhen a team is saved with one of these pets, the current leveling pet will take its place when the team is loaded.\n\nWhen a pet reaches level 25 (gratz!) it will leave the queue and the next pet in the queue will become the current leveling pet.\n\nSlots with a \124cffffd200gold\124r border are controlled by the leveling queue."] = nil
+	L["This is the leveling queue. Drag pets you want to level here.\n\nRight click any of the three battle pet slots and choose 'Put Leveling Pet Here' to mark it as a leveling slot you want controlled by the queue.\n\nWhile a leveling slot is active, the queue will fill the slot with the top-most pet in the queue. When this pet reaches level 25 (gratz!) it will leave the queue and the next pet in the queue will take its place.\n\nTeams saved with a leveling slot will reserve that slot for future leveling pets."] = nil
 	L["Sort by:"] = nil
 	L["Sort all pets in the queue from level 1 to level 24."] = nil
 	L["Sort all pets in the queue for levels closest to 10.5."] = nil
@@ -338,6 +333,7 @@ if GetLocale()=="????" then
 	L["Empty Queue"] = nil
 	L["Remove all leveling pets from the queue."] = nil
 	L["Are you sure you want to remove all pets from the leveling queue?"] = nil
+	L["Leveling Queue"] = nil
 	L["No Active Sort"] = nil
 	L["Turn off Active Sort. Queued pets can then be rearranged and will not automatically reorder themselves.\n\nTo turn Active Sort back on, check %sActive Sort\124r in the Queue menu."] = nil
 	L["Turn Off Active Sort?"] = nil
@@ -474,13 +470,16 @@ if GetLocale()=="????" then
 	L["When pets are sorted by name, sort them by the name given with the Rename option instead of their original name."] = nil
 	L["Don't Sort By Relevance"] = nil
 	L["When searching for something by name in the search box, do not sort the results by relevance.\n\nWhen sorted by relevance, pets with the search term in their name are listed first, followed by terms in notes, then abilities and then source text last."] = nil
+	L["Confirmation Options"] = nil
+	L["Don't display a popup when a team loads and a pet within the team can't be found."] = nil
+	L["Don't ask for confirmation when hiding a pet.\n\nYou can view hidden pets in the 'Other' pet filter."] = nil
+	L["Don't Remind About Backups"] = nil
+	L["Don't show a popup offering to backup teams every once in a while. Generally, the popup appears sometime after the number of teams increases by 50."] = nil
 	L["Miscellaneous Options"] = nil
 	L["Show After Pet Battle"] = nil
 	L["Show the Rematch window after leaving a pet battle."] = nil
 	L["Disable Sharing"] = nil
 	L["Disable the Send button and also block any incoming pets sent by others. Import and Export still work."] = nil
-	L["Don't display a popup when a team loads and a pet within the team can't be found."] = nil
-	L["Don't ask for confirmation when hiding a pet.\n\nYou can view hidden pets in the 'Other' pet filter."] = nil
 	L["Use Minimap Button"] = nil
 	L["Place a button on the minimap to toggle Rematch and load favorite teams."] = nil
 	L["Keep Companion"] = nil
@@ -549,7 +548,6 @@ if GetLocale()=="????" then
 	L["Save As.."] = nil
 	L["Save this team?"] = nil
 	L["Save Notes & Preferences Too"] = nil
-	L["Save Without Leveling Slots"] = nil
 	L["All teams must have a name."] = nil
 	L["This target already has a team."] = nil
 	L["A team already has this name."] = nil
@@ -571,7 +569,6 @@ if GetLocale()=="????" then
 	L["Allow low-health Magic and Mechanical pets to ignore the Minimum Health, since their racials allow them to often survive a hit that would ordinarily kill them."] = nil
 	L["Expected Damage Taken"] = nil
 	L["Tab"] = nil
-	L["Leveling Preferences"] = nil
 	L["Team Preferences"] = nil
 	L["Tab Preferences"] = nil
 	L["  For %s pets: %s%d%s"] = nil
@@ -648,6 +645,9 @@ if GetLocale()=="????" then
 	L["Please Wait..."] = nil
 	L["Note: These are just your teams and their notes and preferences. Tab information, sort orders, win records, specific breeds and other settings are not included.\n\nFor the most complete backup of all your addon data, please backup your Word of Warcraft\\WTF folder."] = nil
 	L["Press Ctrl+C to copy these teams to the clipboard. Then paste them into an email to yourself or a text file someplace safe.\n\nIf you ever need to restore your teams, paste them back in with Import Teams."] = nil
+	L["Backup All Rematch Teams?"] = nil
+	L["You have %s%d\124r Rematch teams.\n\nWould you like to back them up?"] = nil
+	L["Choosing Yes will export all teams to copy and paste in an email to yourself or someplace safe.\n\nYou can also do this at any time from the Teams button at the top of the Teams panel of Rematch."] = nil
 
 -- Dialogs\Tooltip.lua
 

@@ -44,24 +44,21 @@ rematch:InitModule(function()
 			hidden=function(entry,petID)
 				local parent = rematch:GetMenuParent():GetParent()
 				local ggparent = parent:GetParent():GetParent()
-				return (parent~=RematchLoadoutPanel and ggparent~=RematchLoadoutPanel and parent~=RematchMiniPanel)
-			end,
-			disabled=function(entry,petID)
-				return #settings.LevelingQueue==0 or settings.LevelingQueue[1]==petID
-			end,
-			disabledReason=function(entry,petID)
-				return #settings.LevelingQueue==0 and L["The Leveling Queue is empty."] or L["This is already the top-most leveling pet."]
+				return (parent~=RematchLoadoutPanel and ggparent~=RematchLoadoutPanel and parent~=RematchMiniPanel) or rematch:IsSlotQueueControlled(rematch:GetMenuParent():GetID())
 			end,
 			func=function(entry,petID)
-				local slot = rematch:GetMenuParent():GetID()
-				local numSlotted = 0
-				for i=1,3 do
-					local loadedPetID = C_PetJournal.GetPetLoadOutInfo(i)
-					if rematch:IsPetLeveling(loadedPetID) and not settings.ManuallySlotted[loadedPetID] then
-						numSlotted = numSlotted + 1
-					end
-				end
-				rematch:SlotPet(slot,rematch.topPicks[min(#rematch.topPicks,numSlotted+1)] or settings.LevelingQueue[1])
+				rematch:SetLevelingSlot(rematch:GetMenuParent():GetID(),true)
+				rematch:UpdateQueue()
+			end },
+		{ text=L["Stop Leveling This Slot"], -- for loadout slots only
+			hidden=function(entry,petID)
+				local parent = rematch:GetMenuParent():GetParent()
+				local ggparent = parent:GetParent():GetParent()
+				return (parent~=RematchLoadoutPanel and ggparent~=RematchLoadoutPanel and parent~=RematchMiniPanel) or not rematch:IsSlotQueueControlled(rematch:GetMenuParent():GetID())
+			end,
+			func=function(entry,petID)
+				rematch:SetLevelingSlot(rematch:GetMenuParent():GetID(),nil)
+				rematch:UpdateQueue()
 			end },
 		{ text=L["Set Notes"], func=function(self,petID)
 				rematch.Notes.locked = true
@@ -603,6 +600,7 @@ function rematch:UpdateScriptFilterMenu()
 		tinsert(menu,{spacer=true})
 	end
 	tinsert(menu,{text=L["New Script"],icon="Interface\\GuildBankFrame\\UI-GuildBankFrame-NewTab",func=rematch.ShowScriptFilterDialog,tooltipBody=L["Create a new pet filter."]})
+	tinsert(menu,{text=L["Help"],stay=true,hidden=rmf.HideMenuHelp,icon="Interface\\Common\\help-i",iconCoords={0.15,0.85,0.15,0.85}, tooltipTitle=L["Script Filters"], tooltipBody=L["This allows you to create custom pet filters with a little bit of Lua code. See the reference buttons at the top of the New Script dialog for details.\n\nTo view or edit an existing script, click the Gear icon beside the script in the menu above."]})
 	if #scripts>0 then
 		tinsert(menu,{text=RESET,group="Script",stay=true,func=rmf.ResetTypeGroup})
 	end

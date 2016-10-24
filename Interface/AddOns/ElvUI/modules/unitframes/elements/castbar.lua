@@ -36,7 +36,8 @@ local ticks = {}
 
 function UF:Construct_Castbar(frame, direction, moverName)
 	local castbar = CreateFrame("StatusBar", nil, frame)
-	castbar:SetFrameStrata("HIGH")
+	castbar:SetFrameStrata("MEDIUM")
+	castbar:SetFrameLevel(frame:GetFrameLevel() + 20)
 	self['statusbars'][castbar] = true
 	castbar.CustomDelayText = self.CustomCastDelayText
 	castbar.CustomTimeText = self.CustomTimeText
@@ -196,7 +197,7 @@ function UF:Configure_Castbar(frame)
 		local anchorPoint = db.castbar.iconPosition
 		castbar.Icon.bg:ClearAllPoints()
 		castbar.Icon.bg:Point(INVERT_ANCHORPOINT[anchorPoint], attachPoint, anchorPoint, db.castbar.iconXOffset, db.castbar.iconYOffset)
-		castbar.Icon.bg:SetFrameStrata("HIGH")
+		castbar.Icon.bg:SetFrameStrata("MEDIUM")
 	elseif(db.castbar.icon) then
 		castbar.Icon.bg:ClearAllPoints()
 		if frame.ORIENTATION == "RIGHT" then
@@ -207,9 +208,7 @@ function UF:Configure_Castbar(frame)
 	end
 
 	--Adjust tick heights
-	for i=1, #ticks do
-		ticks[i]:Height(castbar:GetHeight())
-	end	
+	castbar.tickHeight = castbar:GetHeight()
 	
 	if db.castbar.enable and not frame:IsElementEnabled('Castbar') then
 		frame:EnableElement('Castbar')
@@ -289,8 +288,9 @@ function UF:SetCastTicks(frame, numTicks, extraTickRatio)
 			E:RegisterStatusBar(ticks[i])
 			ticks[i]:SetVertexColor(0, 0, 0, 0.8)
 			ticks[i]:Width(1)
-			ticks[i]:Height(frame:GetHeight())
 		end
+
+		ticks[i]:Height(frame.tickHeight)
 
 		--[[if(ms ~= 0) then
 			local perc = (w / frame.max) * (ms / 1e5)

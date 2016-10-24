@@ -1,6 +1,6 @@
 --[[
 
-Learning Aid is copyright © 2008-2015 Jamash (Kil'jaeden US Horde)
+Learning Aid is copyright Â© 2008-2016 Jamash (Kil'jaeden US Horde)
 Email: jamashkj@gmail.com
 
 Spell.lua is part of Learning Aid.
@@ -119,7 +119,7 @@ function LA:UpdateSpellBook()
         end
       elseif "SPELL" == status then -- unknown spells would have status "FUTURESPELL"
         known[globalID] = slot
-        if specGlobalID ~= globalID then
+        if specGlobalID ~= nil and specGlobalID ~= globalID then
           -- sometimes it's difficult to tell which spells are which (Mangle in particular)
           s2g[specGlobalID] = globalID
           g2s[globalID] = specGlobalID

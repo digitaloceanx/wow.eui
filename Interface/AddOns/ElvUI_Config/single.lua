@@ -7,15 +7,46 @@ local EnableAddOn = EnableAddOn
 local IsAddOnLoaded = IsAddOnLoaded
 local SetCVar = SetCVar
 local InterfaceOptionsFrame_OpenToCategory = InterfaceOptionsFrame_OpenToCategory
+local ENABLE, DISABLE = ENABLE, DISABLE
 
-local tmpToggle, tmpToggle2, tmpToggle3, tmpToggle4, tmpToggle5
+local temToggle = {
+	["EuiGarrison"] = true,
+	["ExtraCD"] = true,
+	["HandyNotes_DraenorTreasures"] = true,
+	["HandyNotes_LegionRaresTreasures"] = true,
+	["MikScrollingBattleText"] = true,
+	["OfflineDataCenter"] = true,
+	["MeetingStone"] = true,
+	["Skada"] = true,
+	["Rematch"] = true,
+	["RareScanner"] = true,
+	["GearStatsSummary"] = true,
+	["Mapster"] = true,
+	["WorldQuestTracker"] = true,
+	["GottaGoFast"] = true,
+}
+for k, v in pairs(temToggle) do
+	temToggle[k] = IsAddOnLoaded(k)
+end
+
+local function ToggleAddOnMsg(info, value)
+	if value then
+		E:Print(ENABLE..L[info]);
+		EnableAddOn(info);
+	else
+		E:Print(DISABLE..L[info]);
+		DisableAddOn(info);
+	end
+	E:StaticPopup_Show("CONFIG_RL");
+end
+
 E.Options.args.singleFunc = {
 	type = "group",
-	name = E.ValColor..'15.'..L['singleFunc']..'|r',
+	name = '15.'..L['singleFunc'],
 	desc = L['singleFunc desc'],
 	childGroups = 'tree',
-	get = function(info) return E.db.single[ info[#info] ] end,
-	set = function(info, value) E.db.single[ info[#info] ] = value end,
+	get = function(info) return temToggle[ info[#info] ]; end,
+	set = function(info, value)	temToggle[ info[#info] ] = value; ToggleAddOnMsg(info[#info], value); end,
 	args = {
 		EuiGarrisonHeader = {
 			order = 0,
@@ -28,18 +59,6 @@ E.Options.args.singleFunc = {
 			name = L["EuiGarrison"],
 			desc = L["Enable/Disable"]..L["EuiGarrison"],
 			disabled = function() return not E:IsConfigurableAddOn('EuiGarrison'); end,
-			get = function() return not IsAddOnLoaded("EuiGarrison"); end,
-			set = function(info, value) 
-				if value then
-					E:Print(L['Disabled']..L["EuiGarrison"]);
-					DisableAddOn('EuiGarrison');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["EuiGarrison"]);
-					EnableAddOn('EuiGarrison');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
 		},
 		BodyGuardAway = {
 			order = 3,
@@ -63,18 +82,6 @@ E.Options.args.singleFunc = {
 			name = L["ExtraCD"],
 			desc = L["Enable/Disable"]..L["ExtraCD"],
 			disabled = function() return not E:IsConfigurableAddOn('ExtraCD'); end,
-			get = function() return IsAddOnLoaded("ExtraCD"); end,
-			set = function(info, value) 
-				if value then
-					E:Print(L['Disabled']..L["ExtraCD"]);
-					DisableAddOn('ExtraCD');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["ExtraCD"]);
-					EnableAddOn('ExtraCD');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
 		},
 		ShowExtraCDOpt = {
 			order = 8,
@@ -101,21 +108,16 @@ E.Options.args.singleFunc = {
 			name = L["HandyNotes_DraenorTreasures"],
 			desc = L["Enable/Disable"]..L["HandyNotes_DraenorTreasures"],
 			disabled = function() return not E:IsConfigurableAddOn('HandyNotes_DraenorTreasures'); end,
-			get = function() return IsAddOnLoaded("HandyNotes_DraenorTreasures"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["HandyNotes_DraenorTreasures"]);
-					DisableAddOn('HandyNotes_DraenorTreasures');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["HandyNotes_DraenorTreasures"]);
-					EnableAddOn('HandyNotes_DraenorTreasures');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
+		},
+		HandyNotes_LegionRaresTreasures = {
+			order = 11,
+			type = 'toggle',
+			name = L["HandyNotes_LegionRaresTreasures"],
+			desc = L["Enable/Disable"]..L["HandyNotes_LegionRaresTreasures"],
+			disabled = function() return not E:IsConfigurableAddOn('HandyNotes_LegionRaresTreasures'); end,
 		},
 		ShowHandyNotes_DraenorTreasuresCfg = {
-			order = 11,
+			order = 12,
 			type = 'execute',
 			name = L['Show HandyNotes_DraenorTreasures Config'],
 			disabled = function() return not IsAddOnLoaded('HandyNotes_DraenorTreasures'); end,
@@ -125,31 +127,19 @@ E.Options.args.singleFunc = {
 			end,
 		},	
 		MikScrollingBattleTextHeader = {
-			order = 12,
+			order = 13,
 			type = "header",
 			name = L['MikScrollingBattleText'],
 		},		
 		MikScrollingBattleText = {
-			order = 13,
+			order = 14,
 			type = 'toggle',
 			name = L["MikScrollingBattleText"],
 			desc = L["Enable/Disable"]..L["MikScrollingBattleText"],
 			disabled = function() return not E:IsConfigurableAddOn('MikScrollingBattleText'); end,
-			get = function() return IsAddOnLoaded("MikScrollingBattleText"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["MikScrollingBattleText"]);
-					DisableAddOn('MikScrollingBattleText');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["MikScrollingBattleText"]);
-					EnableAddOn('MikScrollingBattleText');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
 		},
 		ShowMSBTOpt = {
-			order = 14,
+			order = 15,
 			type = 'execute',
 			name = L['Show MikScrollingBattleText Config'],
 			disabled = function() return not IsAddOnLoaded('MikScrollingBattleText'); end,
@@ -168,7 +158,7 @@ E.Options.args.singleFunc = {
 			end,					
 		},		
 		ToggleBlzCombat = {
-			order = 15,
+			order = 16,
 			type = 'toggle',
 			name = L['Disable Blz CombatText'],
 			get = function(info) return E.db.euiscript.disableBLZCombatText; end,
@@ -182,7 +172,7 @@ E.Options.args.singleFunc = {
 			end,
 		},
 		DBM_CoreHeader = {
-			order = 16,
+			order = 17,
 			type = "header",
 			name = L['DBM-Core'],
 		},			
@@ -214,7 +204,7 @@ E.Options.args.singleFunc = {
 			end,
 		},]]
 		ShowDBMOpt = {
-			order = 17,
+			order = 18,
 			type = 'execute',
 			name = L['Show DBM Config'],
 			disabled = function() return not IsAddOnLoaded('DBM-Core'); end,
@@ -224,7 +214,7 @@ E.Options.args.singleFunc = {
 			end,					
 		},
 		TestDBMSound = {
-			order = 18,
+			order = 19,
 			type = 'execute',
 			name = L['Test DBM Sound'],
 			disabled = function() return not IsAddOnLoaded('DBM-Core'); end,
@@ -235,88 +225,64 @@ E.Options.args.singleFunc = {
 				end
 			end,
 		},	
-		OffileDataCenterHeader = {
-			order = 19,
-			type = "header",
-			name = L['OffileDataCenter'],
-		},		
-		OffileDataCenter = {
+		OfflineDataCenterHeader = {
 			order = 20,
+			type = "header",
+			name = L['OfflineDataCenter'],
+		},		
+		OfflineDataCenter = {
+			order = 21,
 			type = 'toggle',
-			name = L["OffileDataCenter"],
-			desc = L["Enable/Disable"]..L["OffileDataCenter"],
-			disabled = function() return not E:IsConfigurableAddOn('OffileDataCenter'); end,
-			get = function() return IsAddOnLoaded("OffileDataCenter"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["OffileDataCenter"]);
-					DisableAddOn('OffileDataCenter');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["OffileDataCenter"]);
-					EnableAddOn('OffileDataCenter');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
+			name = L["OfflineDataCenter"],
+			desc = L["Enable/Disable"]..L["OfflineDataCenter"],
+			disabled = function() return not E:IsConfigurableAddOn('OfflineDataCenter'); end,
 		},
 		ShowODCFrame = {
-			order = 21,
+			order = 22,
 			type = 'execute',
 			name = L['Show OfflineDataCenter Frame'],
-			disabled = function() return not IsAddOnLoaded('OffileDataCenter'); end,
+			disabled = function() return not IsAddOnLoaded('OfflineDataCenter'); end,
 			func = function()
 				AD:GetAddon("OfflineDataCenter"):ToggleWindow();
 				E:ToggleConfig();
 			end,
 		},
 		ShowODCCfg = {
-			order = 22,
+			order = 23,
 			type = 'execute',
 			name = L['Show OfflineDataCenter Config Frame'],
-			disabled = function() return not IsAddOnLoaded('OffileDataCenter'); end,
+			disabled = function() return not IsAddOnLoaded('OfflineDataCenter'); end,
 			func = function()
 				ODCFrameSettingSubFrame.configdialog:Click();
 				E:ToggleConfig();
 			end,
 		},
-		RaidBuilderHeader = {
-			order = 23,
-			type = "header",
-			name = L['RaidBuilder'],
-		},		
-		RaidBuilder = {
+		MeetingStoneHeader = {
 			order = 24,
-			type = 'toggle',
-			name = L["RaidBuilder"],
-			desc = L["Enable/Disable"]..L["RaidBuilder"],
-			disabled = function() return not E:IsConfigurableAddOn('MeetingStone'); end,
-			get = function() return IsAddOnLoaded("MeetingStone"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["RaidBuilder"]);
-					DisableAddOn('MeetingStone');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["RaidBuilder"]);
-					EnableAddOn('MeetingStone');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
-		},
-		ShowRaidBuilderFrame = {
+			type = "header",
+			name = L['MeetingStone'],
+		},		
+		MeetingStone = {
 			order = 25,
+			type = 'toggle',
+			name = L["MeetingStone"],
+			desc = L["Enable/Disable"]..L["MeetingStone"],
+			disabled = function() return not E:IsConfigurableAddOn('MeetingStone'); end,
+		},
+		ShowMeetingStoneFrame = {
+			order = 26,
 			type = 'execute',
-			name = L['Show RaidBuilder Config Frame'],
+			name = L['Show MeetingStone Config Frame'],
 			disabled = function() return not IsAddOnLoaded('MeetingStone'); end,
 			func = function()
 				AD:GetAddon('MeetingStone'):ToggleModule('MainPanel');
 				E:ToggleConfig();
 			end,
 		},
-		ToggleRaidBuilderBrokerPanel = {
-			order = 26,
+		ToggleMeetingStoneBrokerPanel = {
+			order = 27,
 			type = 'execute',
-			name = L['Toggle RaidBuilder BrokerPanel'],
+			name = L['Toggle MeetingStone BrokerPanel'],
 			disabled = function() return not IsAddOnLoaded('MeetingStone'); end,
 			func = function()
 				if AD:GetAddon('MeetingStone'):GetModule('DataBroker').BrokerPanel:IsShown() then
@@ -327,31 +293,19 @@ E.Options.args.singleFunc = {
 			end,
 		},		
 		SkadaHeader = {
-			order = 27,
+			order = 28,
 			type = "header",
 			name = L['Skada'],
 		},
 		Skada = {
-			order = 28,
+			order = 29,
 			type = 'toggle',
 			name = L["Skada"],
 			desc = L["Enable/Disable"]..L["Skada"],
 			disabled = function() return not E:IsConfigurableAddOn('Skada'); end,
-			get = function() return IsAddOnLoaded("Skada"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["Skada"]);
-					DisableAddOn('Skada');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["Skada"]);
-					EnableAddOn('Skada');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
 		},			
 		ShowSkadaConfig = {
-			order = 29,
+			order = 30,
 			type = 'execute',
 			name = L['Show Skada Config Frame'],
 			disabled = function() return not IsAddOnLoaded('Skada'); end,
@@ -362,7 +316,7 @@ E.Options.args.singleFunc = {
 			end,
 		},
 		ToggleSkadaWindow = {
-			order = 30,
+			order = 31,
 			type = 'execute',
 			name = L['Toggle Skada Window'],
 			disabled = function() return not IsAddOnLoaded('Skada'); end,
@@ -372,7 +326,7 @@ E.Options.args.singleFunc = {
 			end,
 		},
 		ResetSkadaProfile = {
-			order = 31,
+			order = 32,
 			type = 'execute',
 			width = 'full',
 			name = L['Reset Skada Profile'],
@@ -382,65 +336,17 @@ E.Options.args.singleFunc = {
 				E:ToggleConfig();
 			end,
 		},
-		HPetBattleAnyHeader = {
-			order = 41,
-			type = "header",
-			name = L["HPetBattleAny"],
-		},
-		HPetBattleAnyToggle = {
-			order = 42,
-			type = "toggle",
-			name = L["HPetBattleAny"],
-			desc = L["Enable/Disable"]..L["HPetBattleAny"],
-			disabled = function() return not E:IsConfigurableAddOn('HPetBattleAny'); end,
-			get = function() return IsAddOnLoaded("HPetBattleAny"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["HPetBattleAny"]);
-					DisableAddOn('HPetBattleAny');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["HPetBattleAny"]);
-					EnableAddOn('HPetBattleAny');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
-		},
-		HPetBattleAnyFrame = {
-			order = 43,
-			type = "execute",
-			name = L["HPetBattleAny Config Frame"],
-			disabled = function() return not IsAddOnLoaded('HPetBattleAny'); end,
-			func = function()
-				if E:IsConfigurableAddOn('HPetBattleAny') then
-					HPetOption:Toggle()
-					E:ToggleConfig();
-				end
-			end,
-		},
-		RematchAnyHeader = {
+		RematchHeader = {
 			order = 45,
 			type = "header",
 			name = L["Rematch"],
 		},
-		RematchToggle = {
+		Rematch = {
 			order = 46,
 			type = "toggle",
 			name = L["Rematch"],
 			desc = L["Enable/Disable"]..L["Rematch"],
 			disabled = function() return not E:IsConfigurableAddOn('Rematch'); end,
-			get = function() return IsAddOnLoaded("Rematch"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["Rematch"]);
-					DisableAddOn('Rematch');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["Rematch"]);
-					EnableAddOn('Rematch');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
 		},
 		RematchFrame = {
 			order = 47,
@@ -465,18 +371,6 @@ E.Options.args.singleFunc = {
 			name = L["RareScanner"],
 			desc = L["Enable/Disable"]..L["RareScanner"],
 			disabled = function() return not E:IsConfigurableAddOn('RareScanner'); end,
-			get = function() return IsAddOnLoaded("RareScanner"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["RareScanner"]);
-					DisableAddOn('RareScanner');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["RareScanner"]);
-					EnableAddOn('RareScanner');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
 		},	
 		RareScannerConfigFrame = {
 			order = 53,
@@ -502,66 +396,6 @@ E.Options.args.singleFunc = {
 			name = L["GearStatsSummary"],
 			desc = L["Enable/Disable"]..L["GearStatsSummary"],
 			disabled = function() return not E:IsConfigurableAddOn('GearStatsSummary'); end,
-			get = function() return IsAddOnLoaded("GearStatsSummary"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["GearStatsSummary"]);
-					DisableAddOn('GearStatsSummary');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["GearStatsSummary"]);
-					EnableAddOn('GearStatsSummary');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
-		},	
-		IskarAssistHeader = {
-			order = 59,
-			type = "header",
-			name = L['IskarAssist'],
-		},
-		IskarAssist = {
-			order = 60,
-			type = 'toggle',
-			name = L["IskarAssist"],
-			desc = L["Enable/Disable"]..L["IskarAssist"],
-			disabled = function() return not E:IsConfigurableAddOn('IskarAssist'); end,
-			get = function() return IsAddOnLoaded("IskarAssist"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["IskarAssist"]);
-					DisableAddOn('IskarAssist');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["IskarAssist"]);
-					EnableAddOn('IskarAssist');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
-		},
-		IskarAssistConfigFrame = {
-			order = 61,
-			type = 'execute',
-			name = L['Toggle IskarAssist Frame'],
-			disabled = function() return not IsAddOnLoaded('IskarAssist'); end,
-			func = function()
-				if E:IsConfigurableAddOn('IskarAssist') then
-					SlashCmdList.IskarAssist('');
-					E:ToggleConfig();
-				end
-			end,
-		},
-		IskarAssistResetFrame = {
-			order = 62,
-			type = 'execute',
-			name = L['Reset IskarAssist Frame'],
-			disabled = function() return not IsAddOnLoaded('IskarAssist'); end,
-			func = function()
-				if E:IsConfigurableAddOn('IskarAssist') then
-					SlashCmdList.IskarAssist('resetpos');
-					E:ToggleConfig();
-				end
-			end,
 		},
 		MapsterHeader = {
 			order = 67,
@@ -574,18 +408,6 @@ E.Options.args.singleFunc = {
 			name = L["Mapster"],
 			desc = L["Enable/Disable"]..L["Mapster"],
 			disabled = function() return not E:IsConfigurableAddOn('Mapster'); end,
-			get = function() return IsAddOnLoaded("Mapster"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["Mapster"]);
-					DisableAddOn('Mapster');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["Mapster"]);
-					EnableAddOn('Mapster');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
 		},
 		ShowMapsterFrame = {
 			order = 69,
@@ -612,122 +434,40 @@ E.Options.args.singleFunc = {
 				end
 			end,
 		},
-		OutfitterHeader = {
-			order = 71,
-			type = "header",
-			name = L['Outfitter'],
-		},
-		Outfitter = {
-			order = 72,
-			type = 'toggle',
-			name = L["Outfitter"],
-			desc = L["Enable/Disable"]..L["Outfitter"],
-			disabled = function() return not E:IsConfigurableAddOn('Outfitter'); end,
-			get = function() return IsAddOnLoaded("Outfitter"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["Outfitter"]);
-					DisableAddOn('Outfitter');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["Outfitter"]);
-					EnableAddOn('Outfitter');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
-		},
-		OutfitterConfigFrame = {
-			order = 73,
-			type = 'execute',
-			name = L['Toggle Outfitter Frame'],
-			disabled = function() return not IsAddOnLoaded('Outfitter'); end,
-			func = function()
-				if E:IsConfigurableAddOn('Outfitter') then
-					Outfitter:ToggleUI(true)
-					E:ToggleConfig();
-				end
-			end,
-		},
-		TDDpsHeader = {
-			order = 74,
-			type = "header",
-			name = L['TDDps'],
-		},
-		TDDps = {
+		WorldQuestTrackerHeader = {
 			order = 75,
-			type = 'toggle',
-			name = L["TDDps"],
-			desc = L["Enable/Disable"]..L["TDDps"],
-			disabled = function() return not E:IsConfigurableAddOn('TDDps'); end,
-			get = function() return IsAddOnLoaded("TDDps"); end,
-			set = function(info, value)
-				if value then
-					E:Print(L['Disabled']..L["TDDps"]);
-					DisableAddOn('TDDps');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["TDDps"]);
-					EnableAddOn('TDDps');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
-			end,
-		},
-		TDDpsConfigFrame = {
-			order = 76,
-			type = 'execute',
-			name = L['Toggle TDDps Frame'],
-			disabled = function() return not IsAddOnLoaded('TDDps'); end,
-			func = function()
-				if E:IsConfigurableAddOn('TDDps') then
-					InterfaceOptionsFrame_OpenToCategory(TDDps_Temp.optionFrame)
-					InterfaceOptionsFrame_OpenToCategory(TDDps_Temp.optionFrame)
-					E:ToggleConfig();
-				end
-			end,
-		},
---[[		OregorgerTrackerHeader = {
-			order = 62,
 			type = "header",
-			name = L['OregorgerTracker'],
+			name = L['WorldQuestTracker'],
+		},		
+		WorldQuestTracker = {
+			order = 76,
+			type = 'toggle',
+			name = L["WorldQuestTracker"],
+			desc = L["Enable/Disable"]..L["WorldQuestTracker"],
+			disabled = function() return not E:IsConfigurableAddOn('WorldQuestTracker'); end,
 		},
-		OregorgerTracker = {
-			order = 63,
+		GottaGoFastHeader = {
+			order = 77,
+			type = "header",
+			name = L['GottaGoFast'],
+		},		
+		GottaGoFast = {
+			order = 78,
+			type = 'toggle',
+			name = L["GottaGoFast"],
+			desc = L["Enable/Disable"]..L["GottaGoFast"],
+			disabled = function() return not E:IsConfigurableAddOn('GottaGoFast'); end,
+		},
+		GottaGoFastConfig = {
+			order = 79,
 			type = 'execute',
-			name = L["Enable/Disable"]..L["OregorgerTracker"],
-			func = function() 
-				if E:IsConfigurableAddOn('OregorgerTracker') then
-					E:Print(L['Disabled']..L["OregorgerTracker"]);
-					DisableAddOn('OregorgerTracker');
-					E:StaticPopup_Show("CONFIG_RL");
-				else
-					E:Print(L["Enabled"]..L["OregorgerTracker"]);
-					EnableAddOn('OregorgerTracker');
-					E:StaticPopup_Show("CONFIG_RL");
-				end
+			name = L['Show GottaGoFast Option'],
+			disabled = function() return not IsAddOnLoaded('GottaGoFast'); end,
+			func = function()
+				InterfaceOptionsFrame_OpenToCategory(GottaGoFast.optionsFrame);
+				InterfaceOptionsFrame_OpenToCategory(GottaGoFast.optionsFrame);
+				E:ToggleConfig();
 			end,
 		},
-		OregorgerTrackerUnlock = {
-			order = 64,
-			type = 'execute',
-			name = L['Unlock OregorgerTracker'],
-			disabled = function() return not IsAddOnLoaded('OregorgerTracker'); end,
-			func = function()
-				if E:IsConfigurableAddOn('OregorgerTracker') then
-					SlashCmdList["OREGORGERTRACKER"]('lock')
-					E:Print(L["Drag arrow to move OregorgerTracker frame postion."])
-				end
-			end,
-		},	
-		OregorgerTrackerLock = {
-			order = 65,
-			type = 'execute',
-			name = L['Lock OregorgerTracker'],
-			disabled = function() return not IsAddOnLoaded('OregorgerTracker'); end,
-			func = function()
-				if E:IsConfigurableAddOn('OregorgerTracker') then
-					SlashCmdList["OREGORGERTRACKER"]('lock')
-				end
-			end,
-		},		]]
 	},
 }

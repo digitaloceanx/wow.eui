@@ -1,6 +1,6 @@
 --[[
 
-Learning Aid is copyright © 2008-2015 Jamash (Kil'jaeden US Horde)
+Learning Aid is copyright Â© 2008-2016 Jamash (Kil'jaeden US Horde)
 Email: jamashkj@gmail.com
 
 SpellButton.lua is part of Learning Aid.
@@ -312,7 +312,7 @@ function LA:UpdateButton(button)
     spellName = item.SpecName
     subSpellName = item.SpecSubName
     local start, duration, enable = GetSpellCooldown(id)
-    CooldownFrame_SetTimer(cooldown, start, duration, enable)
+    -- CooldownFrame_SetTimer(cooldown, start, duration, enable)
     cooldown.start = start
     cooldown.duration = duration
     cooldown.enable = enable
@@ -337,7 +337,7 @@ function LA:UpdateButton(button)
 
   iconTexture:SetTexture(texture)
   spellString:SetText(spellName)
-  subSpellString:SetText(spellSubName)
+  subSpellString:SetText(subSpellName)
   if ( spellSubName ~= "" ) then
     spellString:SetPoint("LEFT", button, "RIGHT", 4, 4)
   else

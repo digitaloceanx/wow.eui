@@ -13,15 +13,6 @@ panel.sortInfo = {
 	{ "Interface\\Icons\\Icon_UpgradeStone_Beast_Uncommon", L["Type"] }, -- 4=type
 }
 
--- text to explain why the queue is paused (index is settings.QueuePaused value)
-panel.pauseReasons = {
-	user = L["Queue paused."],
-	combat = L["Queue paused while in combat."],
-	battle = L["Queue paused while in a pet battle."],
-	pvp = L["Queue paused while queued for pet pvp."],
-}
-
-
 rematch:InitModule(function()
 	rematch.QueuePanel = panel
 	settings = RematchSettings
@@ -48,7 +39,8 @@ rematch:InitModule(function()
 
 	settings.QueueSortOrder = settings.QueueSortOrder or 1
 
-	scrollFrame.Help:SetText(L["Drag pets you want to level here.\n\nWhen a team is saved with one of these pets, the current leveling pet will take its place when the team is loaded.\n\nWhen a pet reaches level 25 (gratz!) it will leave the queue and the next pet in the queue will become the current leveling pet.\n\nSlots with a \124cffffd200gold\124r border are controlled by the leveling queue."])
+	local queueHelp = L["This is the leveling queue. Drag pets you want to level here.\n\nRight click any of the three battle pet slots and choose 'Put Leveling Pet Here' to mark it as a leveling slot you want controlled by the queue.\n\nWhile a leveling slot is active, the queue will fill the slot with the top-most pet in the queue. When this pet reaches level 25 (gratz!) it will leave the queue and the next pet in the queue will take its place.\n\nTeams saved with a leveling slot will reserve that slot for future leveling pets."]
+	scrollFrame.Help:SetText(queueHelp)
 
 	rematch:RegisterMenu("QueueMenu", { -- menu for Queue button in topright of panel
 		{ text=L["Sort by:"], highlight=true, disabled=true },
@@ -60,13 +52,14 @@ rematch:InitModule(function()
 		{ text=L["Active Sort"], check=true, value=panel.GetActiveSort, func=panel.SetActiveSort, tooltipBody=L["The queue will stay sorted in the order chosen. The order of pets may automatically change as they gain xp or get added/removed from the queue.\n\nYou cannot manually change the order of pets while the queue is actively sorted."] },
 		{ text=L["Pause Preferences"], check=true, value=panel.GetQueueNoPreferences, func=panel.SetQueueNoPreferences, tooltipBody=L["Suspend all preferred loading of pets from the queue, except for pets that can't load."] },
 		{ spacer=true },
-		{ text=L["Fill Queue"], disabled=panel.IsQueuePaused, func=function() panel:ShowFillQueueDialog() end, tooltipBody=L["Fill the leveling queue with one of each version of a pet that can level from the filtered pet list, and for which you don't have a level 25 or one in the queue already."] },
-		{ text=L["Fill Queue More"], disabled=panel.IsQueuePaused, func=function() panel:ShowFillQueueDialog(true) end, tooltipBody=L["Fill the leveling queue with one of each version of a pet that can level from the filtered pet list, regardless whether you have any at level 25 or one in the queue already."] },
-		{ text=L["Empty Queue"], disabled=panel.IsQueuePaused, tooltipBody=L["Remove all leveling pets from the queue."], func=function()
+		{ text=L["Fill Queue"], func=function() panel:ShowFillQueueDialog() end, tooltipBody=L["Fill the leveling queue with one of each version of a pet that can level from the filtered pet list, and for which you don't have a level 25 or one in the queue already."] },
+		{ text=L["Fill Queue More"], func=function() panel:ShowFillQueueDialog(true) end, tooltipBody=L["Fill the leveling queue with one of each version of a pet that can level from the filtered pet list, regardless whether you have any at level 25 or one in the queue already."] },
+		{ text=L["Empty Queue"], tooltipBody=L["Remove all leveling pets from the queue."], func=function()
 				local dialog = rematch:ShowDialog("EmptyQueue",300,116,L["Empty Queue"],nil,YES,panel.EmptyQueue,NO)
 				dialog:ShowText(L["Are you sure you want to remove all pets from the leveling queue?"],220,40,"TOP",0,-36)
 			end },
 		{ spacer=true },
+		{ text=L["Help"], stay=true, hidden=function() return settings.HideMenuHelp end, icon="Interface\\Common\\help-i", iconCoords={0.15,0.85,0.15,0.85}, tooltipTitle=L["Leveling Queue"], tooltipBody=queueHelp },
 		{ text=OKAY },
 	},rematch.UpdateQueue)
 
@@ -244,7 +237,6 @@ function panel:SetQueueSort()
 	rematch:SortQueue()
 end
 function panel:EmptyQueue() wipe(queue) rematch:UpdateQueue() end
-function panel:IsQueuePaused() return settings.QueuePaused and true end
 function panel:GetQueueNoPreferences() return settings.QueueNoPreferences end
 function panel:SetQueueNoPreferences(_,checked) settings.QueueNoPreferences = not checked end
 
@@ -340,15 +332,9 @@ function panel:UpdateTop()
 	panel.Top.Count:SetText(format(L["Leveling Pets: %s%s"],rematch.hexWhite,#queue))
 	local anchorTo = panel.Top -- what further components (Status, Preferences, List) anchor to
 
-	if settings.QueuePaused or settings.QueueActiveSort then
+	if settings.QueueActiveSort then
 		panel.Status:Show()
-		if settings.QueuePaused then
-			panel.Status.Text:SetText(panel.pauseReasons[settings.QueuePaused] or "")
-			panel.Status.Text:SetTextColor(1,0.25,0.25)
-			panel.Status.Icon:Hide()
-			panel.Status.Sort:Hide()
-			panel.Status.Clear:Hide()
-		elseif settings.QueueActiveSort and panel.sortInfo[settings.QueueSortOrder] then
+		if settings.QueueActiveSort and panel.sortInfo[settings.QueueSortOrder] then
 			panel.Status.Text:SetText(L["Active Sort:"])
 			panel.Status.Text:SetTextColor(1,0.82,0)
 			panel.Status.Icon:SetTexture(panel.sortInfo[settings.QueueSortOrder][1])

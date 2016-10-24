@@ -1,14 +1,15 @@
 --[[--------------------------------------------------------------------
-LibResInfo-1.0
-Library to provide information about resurrections in your group.
-Copyright (c) 2012-2014 Phanx. All rights reserved.
-https://github.com/Phanx/LibResInfo
-http://wow.curseforge.com/addons/libresinfo/
-http://www.wowinterface.com/downloads/info21467-LibResInfo-1.0.html
+	LibResInfo-1.0
+	Library to provide information about resurrections in your group.
+	https://github.com/Phanx/LibResInfo
+
+	Copyright (c) 2012-2016 Phanx. All rights reserved.
+	Redistribution as an unmodified embedded library is permitted.
+	Redistribution with modificatons, or standalone, is forbidden.
 ------------------------------------------------------------------------
-TODO:
-* Handle Reincarnation with some guesswork?
-* Clear data when releasing spirit
+	TODO:
+	* Handle Reincarnation with some guesswork?
+	* Clear data when releasing spirit
 ----------------------------------------------------------------------]]
 
 local DEBUG_LEVEL = GetAddOnMetadata("LibResInfo-1.0", "Version") and 1 or 0
@@ -16,9 +17,9 @@ local DEBUG_FRAME = ChatFrame3
 
 ------------------------------------------------------------------------
 
-local MAJOR, MINOR = "LibResInfo-1.0", 22
+local MAJOR, MINOR = "LibResInfo-1.0", 24
 assert(LibStub, MAJOR.." requires LibStub")
-assert(LibStub("CallbackHandler-1.0"), MAJOR.." requires CallbackHandler-1.0")
+assert(LibStub("CallbackHandler-1.0", true), MAJOR.." requires CallbackHandler-1.0")
 local lib, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 if not lib then return end
 
@@ -62,25 +63,34 @@ local RESURRECT_PENDING_TIME = 60
 local RELEASE_PENDING_TIME = 360
 local SOULSTONE = GetSpellInfo(20707)
 
-local resSpells = {
-	[2008]   = GetSpellInfo(2008),   -- Ancestral Spirit (shaman)
-	[8342]   = GetSpellInfo(8342),   -- Defibrillate (item: Goblin Jumper Cables)
-	[22999]  = GetSpellInfo(22999),  -- Defibrillate (item: Goblin Jumper Cables XL)
-	[54732]  = GetSpellInfo(54732),  -- Defibrillate (item: Gnomish Army Knife)
-	[164729]  = GetSpellInfo(164729), -- Defibrillate (item: Ultimate Gnomish Army Knife)
-	[126393] = GetSpellInfo(126393), -- Eternal Guardian (hunter pet: quilien)
-	[61999]  = GetSpellInfo(61999),  -- Raise Ally (death knight)
-	[20484]  = GetSpellInfo(20484),  -- Rebirth (druid)
-	[7328]   = GetSpellInfo(7328),   -- Redemption (paladin)
-	[2006]   = GetSpellInfo(2006),   -- Resurrection (priest)
-	[115178] = GetSpellInfo(115178), -- Resuscitate (monk)
-	[50769]  = GetSpellInfo(50769),  -- Revive (druid)
-	[982]    = GetSpellInfo(982),    -- Revive Pet (hunter)
-	[20707]  = GetSpellInfo(20707),  -- Soulstone (warlock)
-	[212036]  = GetSpellInfo(212036),  -- Mass Resurrection
-	[212040] = GetSpellInfo(212040), -- Revitalize
-	[212051]  = GetSpellInfo(212051), -- Reawaken
-	[212056]  = GetSpellInfo(212056), -- Absolution
+local singleSpells = {
+	-- Class Abilities
+	[2008]   = GetSpellInfo(2008),   -- Ancestral Spirit (Shaman)
+	[61999]  = GetSpellInfo(61999),  -- Raise Ally (Death Knight)
+	[20484]  = GetSpellInfo(20484),  -- Rebirth (Druid)
+	[7328]   = GetSpellInfo(7328),   -- Redemption (Paladin)
+	[2006]   = GetSpellInfo(2006),   -- Resurrection (Priest)
+	[115178] = GetSpellInfo(115178), -- Resuscitate (Monk)
+	[50769]  = GetSpellInfo(50769),  -- Revive (Druid)
+	[982]    = GetSpellInfo(982),    -- Revive Pet (Hunter)
+	[20707]  = GetSpellInfo(20707),  -- Soulstone (Warlock)
+	-- Hunter Pet Abilities
+	[126393] = GetSpellInfo(126393), -- Eternal Guardian (Quilien)
+	-- Items
+	[8342]   = GetSpellInfo(8342),   -- Defibrillate (Goblin Jumper Cables)
+	[22999]  = GetSpellInfo(22999),  -- Defibrillate (Goblin Jumper Cables XL)
+	[54732]  = GetSpellInfo(54732),  -- Defibrillate (Gnomish Army Knife)
+	[164729] = GetSpellInfo(164729), -- Defibrillate (Ultimate Gnomish Army Knife)
+	[199119] = GetSpellInfo(199119), -- Failure Detection Aura (Failure Detection Pylon) -- NEEDS CHECK
+	[187777] = GetSpellInfo(187777), -- Reawaken (Brazier of Awakening)
+}
+
+local massSpells = {
+	[212056] = GetSpellInfo(212056), -- Absolution (Holy Paladin)
+	[212048] = GetSpellInfo(212048), -- Ancestral Vision (Restoration Shaman)
+	[212036] = GetSpellInfo(212036), -- Mass Resurrection (Discipline/Holy Priest)
+	[212051] = GetSpellInfo(212051), -- Reawaken (Mistweaver Monk)
+	[212040] = GetSpellInfo(212040), -- Revitalize (Restoration Druid)
 }
 
 ------------------------------------------------------------------------
@@ -142,7 +152,7 @@ function callbacks:OnUsed(lib, callback)
 		eventFrame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 		eventFrame:RegisterEvent("UNIT_AURA")
 		eventFrame:RegisterEvent("UNIT_CONNECTION")
-		eventFrame:RegisterEvent("UNIT_HEALTH")
+		eventFrame:RegisterEvent("UNIT_FLAGS")
 		eventFrame:GROUP_ROSTER_UPDATE("OnUsed")
 	end
 	lib.callbacksInUse[callback] = true
@@ -196,7 +206,7 @@ end
 --   - SELFRES if the unit has a Soulstone or other self-res ability available,
 --   - PENDING if the unit already has a res available to accept, or
 --	  - CASTING if a res is being cast on the unit.
---	* caster and casterGUID are nil if the unit is being Mass Ressed.
+--	* caster and casterGUID are nil if the unit is being mass-ressed.
 ------------------------------------------------------------------------
 
 function lib:UnitHasIncomingRes(unit)
@@ -230,7 +240,7 @@ function lib:UnitHasIncomingRes(unit)
 		if not firstEnd or endTime < firstEnd then
 			state, firstCaster, firstEnd = "MASSRES", caster, endTime
 		end
-	end	
+	end
 	if state and firstCaster and firstEnd then
 		debug(2, "UnitHasIncomingRes", nameFromGUID[guid], state, nameFromGUID[firstCaster])
 		return state, firstEnd, unitFromGUID[firstCaster], firstCaster
@@ -243,7 +253,7 @@ end
 --	Arguments: unit (unitID or GUID)
 --	Returns: endTime (number), target (unitID), targetGUID (guid), isFirst (boolean)
 --	* all returns are nil if the unit is not casting a res
---	* target and targetGUID are nil if the unit is casting Mass Res
+--	* target and targetGUID are nil if the unit is casting a mass res
 ------------------------------------------------------------------------
 
 function lib:UnitIsCastingRes(unit)
@@ -260,7 +270,20 @@ function lib:UnitIsCastingRes(unit)
 		return
 	end
 
-	local casting = castingSingle[guid]
+	local casting = castingMass[guid]
+	if casting then
+		local endTime, isFirst = casting, true
+		for caster, endTime2 in pairs(castingMass) do
+			if endTime2 < endTime then
+				isFirst = false
+				break
+			end
+		end
+		debug(2, "UnitIsCastingRes", nameFromGUID[guid], "casting mass res", isFirst and "(first)" or "(duplicate)")
+		return endTime, nil, nil, isFirst
+	end
+
+	casting = castingSingle[guid]
 	if casting then
 		local endTime, target, isFirst = casting.endTime, casting.target, true
 		-- TODO: Handle edge case where this function is called in between the cast start and the target identification?
@@ -272,19 +295,6 @@ function lib:UnitIsCastingRes(unit)
 		end
 		debug(2, "UnitIsCastingRes", nameFromGUID[guid], "casting on", nameFromGUID[casting.target], isFirst and "(first)" or "(duplicate)")
 		return endTime, unitFromGUID[casting.target], casting.target, isFirst
-	end
-
-	casting = castingMass[guid]
-	if casting then
-		local endTime, isFirst = casting, true
-		for caster, endTime2 in pairs(castingMass) do
-			if endTime2 < endTime then
-				isFirst = false
-				break
-			end
-		end
-		debug(2, "UnitIsCastingRes", nameFromGUID[guid], "casting Mass Res", isFirst and "(first)" or "(duplicate)")
-		return endTime, nil, nil, isFirst
 	end
 
 	--debug(3, "UnitIsCastingRes", nameFromGUID[guid], "nil")
@@ -435,51 +445,52 @@ end
 ------------------------------------------------------------------------
 
 function eventFrame:UNIT_SPELLCAST_START(event, unit, spellName, _, _, spellID)
-	if not resSpells[spellID] then return end
+	local resType = massSpells[spellID] and "mass" or singleSpells[spellID] and "single"
+	if not resType then return end
+
 	local guid = guidFromUnit[unit]
 	if not guid then return end
 	debug(3, event, nameFromGUID[guid], "casting", spellName)
 
 	local _, _, _, _, startTime, endTime = UnitCastingInfo(unit)
-
-	if spellID == 83968 then -- Mass Resurrection
+	if resType == "mass" then
 		castingMass[guid] = endTime / 1000
 		debug(1, ">> MassResStarted", nameFromGUID[guid])
 		callbacks:Fire("LibResInfo_MassResStarted", unit, guid, endTime / 1000)
 		return
+	else
+		local data = newTable()
+		data.startTime = startTime / 1000
+		data.endTime = endTime / 1000
+		castingSingle[guid] = data
 	end
-
-	local data = newTable()
-	data.startTime = startTime / 1000
-	data.endTime = endTime / 1000
-	castingSingle[guid] = data
 end
 
 function eventFrame:UNIT_SPELLCAST_SUCCEEDED(event, unit, spellName, _, _, spellID)
-	if not resSpells[spellID] then return end
+	local resType = massSpells[spellID] and "mass" or singleSpells[spellID] and "single"
+	if not resType then return end
+
 	local guid = guidFromUnit[unit]
 	if not guid then return end
 
 	debug(3, event, nameFromGUID[guid], "finished", spellName)
 
-	if spellID == 83968 then -- Mass Resurrection
+	if resType == "mass" then
 		castingMass[guid] = nil
 		debug(1, ">> MassResFinished", nameFromGUID[guid])
 		callbacks:Fire("LibResInfo_MassResFinished", unit, guid)
-		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-		return
-	end
-
-	local data = castingSingle[guid]
-	if data then -- No START event for instant cast spells.
-		local target = data.target
-		if not target then
-			-- Probably Soulstone precast on a live target.
-			return
+	else
+		local data = castingSingle[guid]
+		if data then -- No START event for instant cast spells.
+			local target = data.target
+			if not target then
+				-- Probably Soulstone precast on a live target.
+				return
+			end
+			data.finished = true -- Flag so STOP can ignore this.
+			debug(1, ">> ResCastFinished", "on", nameFromGUID[target], "by", nameFromGUID[guid], "in", event)
+			callbacks:Fire("LibResInfo_ResCastFinished", unitFromGUID[target], target, unit, guid)
 		end
-		data.finished = true -- Flag so STOP can ignore this.
-		debug(1, ">> ResCastFinished", "on", nameFromGUID[target], "by", nameFromGUID[guid], "in", event)
-		callbacks:Fire("LibResInfo_ResCastFinished", unitFromGUID[target], target, unit, guid)
 	end
 
 	debug(3, "Registering CLEU")
@@ -487,13 +498,15 @@ function eventFrame:UNIT_SPELLCAST_SUCCEEDED(event, unit, spellName, _, _, spell
 end
 
 function eventFrame:UNIT_SPELLCAST_STOP(event, unit, spellName, _, _, spellID)
-	if not resSpells[spellID] then return end
+	local resType = massSpells[spellID] and "mass" or singleSpells[spellID] and "single"
+	if not resType then return end
+
 	local guid = guidFromUnit[unit]
 	if not guid then return end
 
 	debug(3, event, nameFromGUID[guid], "stopped", spellName)
 
-	if spellID == 83968 then -- Mass Resurrection
+	if resType == "mass" then
 		if not castingMass[guid] then return end -- already SUCCEEDED
 		castingMass[guid] = nil
 		debug(1, ">> MassResCancelled", nameFromGUID[guid])
@@ -556,8 +569,7 @@ end
 function eventFrame:UNIT_AURA(event, unit)
 	local guid = guidFromUnit[unit]
 	if not guid then return end
-	debug(5, event, unit)
-
+	--debug(5, event, unit)
 	if not isDead[guid] then
 		local stoned = UnitAura(unit, SOULSTONE)
 		if stoned ~= hasSoulstone[guid] then
@@ -567,26 +579,13 @@ function eventFrame:UNIT_AURA(event, unit)
 			hasSoulstone[guid] = stoned
 			debug(2, nameFromGUID[guid], stoned and "gained" or "lost", SOULSTONE)
 		end
-		return
-	end
-
-	if UnitIsGhost(unit) and not isGhost[guid] then
-		isGhost[guid] = true
-		if hasPending[guid] then
-			hasPending[guid] = nil
-			debug(1, ">> ResExpired", nameFromGUID[guid], "(released)")
-			callbacks:Fire("LibResInfo_ResExpired", unit, guid)
-		end
-		-- No need to check next(castingMass) and fire a UnitUpdate here
-		-- since Mass Resurrection will still hit units who released.
 	end
 end
 
 function eventFrame:UNIT_CONNECTION(event, unit)
 	local guid = guidFromUnit[unit]
 	if not guid then return end
-	debug(4, event, unit)
-
+	--debug(4, event, unit)
 	if hasPending[unit] and not UnitIsConnected(unit) then
 		hasPending[guid] = nil
 		debug(1, ">> ResExpired", nameFromGUID[guid], "(offline)")
@@ -602,14 +601,31 @@ function eventFrame:UNIT_CONNECTION(event, unit)
 	end
 end
 
-function eventFrame:UNIT_HEALTH(event, unit)
+function eventFrame:UNIT_FLAGS(event, unit)
 	local guid = guidFromUnit[unit]
 	if not guid then return end
-	debug(5, event, unit)
-
+	--debug(5, event, unit)
 	local dead = UnitIsDead(unit)
-
-	if dead and not isDead[guid] then
+	if not dead then
+		if isDead[guid] then
+			debug(2, nameFromGUID[guid], "is now alive")
+			isDead[guid] = nil
+			if hasPending[guid] then
+				isGhost[guid] = nil
+				hasPending[guid] = nil
+				debug(1, ">> ResUsed", nameFromGUID[guid])
+				callbacks:Fire("LibResInfo_ResUsed", unit, guid)
+			elseif next(castingMass) then
+				for caster, data in pairs(castingSingle) do
+					if data.target == guid then
+						return
+					end
+				end
+				debug(1, ">> UnitUpdate", nameFromGUID[guid], "(alive)")
+				callbacks:Fire("LibResInfo_UnitUpdate", unit, guid)
+			end
+		end
+	elseif not isDead[guid] then
 		debug(2, nameFromGUID[guid], "is now dead")
 		isDead[guid] = true
 		if hasSoulstone[guid] then
@@ -621,24 +637,15 @@ function eventFrame:UNIT_HEALTH(event, unit)
 			debug(1, ">> UnitUpdate", nameFromGUID[guid], "(dead)")
 			callbacks:Fire("LibResInfo_UnitUpdate", unit, guid)
 		end
-
-	elseif isDead[guid] and not dead then
-		debug(2, nameFromGUID[guid], "is now alive")
-		isDead[guid] = nil
+	elseif not isGhost[guid] and UnitIsGhost(unit) then
+		isGhost[guid] = true
 		if hasPending[guid] then
-			isGhost[guid] = nil
 			hasPending[guid] = nil
-			debug(1, ">> ResUsed", nameFromGUID[guid])
-			callbacks:Fire("LibResInfo_ResUsed", unit, guid)
-		elseif next(castingMass) then
-			for caster, data in pairs(castingSingle) do
-				if data.target == guid then
-					return
-				end
-			end
-			debug(1, ">> UnitUpdate", nameFromGUID[guid], "(alive)")
-			callbacks:Fire("LibResInfo_UnitUpdate", unit, guid)
+			debug(1, ">> ResExpired", nameFromGUID[guid], "(released)")
+			callbacks:Fire("LibResInfo_ResExpired", unit, guid)
 		end
+		-- No need to check next(castingMass) and fire a UnitUpdate here
+		-- since Mass Resurrection will still hit units who released.
 	end
 end
 
@@ -650,7 +657,7 @@ local timer, INTERVAL = 0, 0.5
 eventFrame:SetScript("OnUpdate", function(self, elapsed)
 	timer = timer + elapsed
 	if timer >= INTERVAL then
-		debug(6, "Timer update")
+		--debug(6, "Timer update")
 		if not next(hasPending) then
 			debug(4, "Nobody pending, stop timer")
 			return self:Hide()
@@ -669,11 +676,11 @@ eventFrame:SetScript("OnUpdate", function(self, elapsed)
 end)
 
 eventFrame:SetScript("OnShow", function()
-	debug(4, "Timer start")
+	--debug(4, "Timer start")
 end)
 
 eventFrame:SetScript("OnHide", function()
-	debug(4, "Timer stop")
+	--debug(4, "Timer stop")
 	timer = 0
 end)
 

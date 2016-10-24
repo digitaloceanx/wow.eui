@@ -13,7 +13,7 @@ local function SR_Update(self)
 	
 	for i = 1, numFactions, 1 do
 		local name, _, standingID, barMin, barMax, barValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild = GetFactionInfo(i);
-		if (not isHeader) or (hasRep) then
+		if name and (not isHeader) or (hasRep) then
 			if not rep[name] then
 				rep[name] = barValue;
 			end

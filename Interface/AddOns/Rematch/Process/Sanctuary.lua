@@ -234,7 +234,9 @@ end
 function rematch:FindTemporaryPetID(speciesID,teammate1,teammate2,teammate3)
 	if speciesID then
 		local count = C_PetJournal.GetNumCollectedInfo(speciesID)
-		if count==1 then -- only one of this species, return sole petID owned
+		if not count then
+			return -- this speciesID probably isn't valid
+		elseif count==1 then -- only one of this species, return sole petID owned
 			return select(2,C_PetJournal.FindPetIDByName((C_PetJournal.GetPetInfoBySpeciesID(speciesID))))
 		elseif count>1 then
 			-- there's more than one of this speciesID, go through all owned pets
@@ -256,21 +258,3 @@ function rematch:FindTemporaryPetID(speciesID,teammate1,teammate2,teammate3)
 	end
 end
 
--- for ProcessQueue, a petID with no level is invalid. Look in the sanctuary and
--- return the new petID (and its level+xp/maxXp) if found and it can still level.
-function rematch:FindReplacementQueuePet(oldPetID)
-	local oldInfo = sanctuary[oldPetID]
-	if not oldInfo then
-		return -- this pet doesn't exist in the sanctuary
-	end
-	for petID in rematch.Roster:AllOwnedPets() do
-		local speciesID,_,level,xp,maxXp,_,_,_,_,_,_,_,_,_,canBattle = C_PetJournal.GetPetInfoByPetID(petID)
-		if canBattle and level<25 and speciesID==oldInfo[3] and level==oldInfo[4] then
-			local _, maxHealth, power, speed, rarity = C_PetJournal.GetPetStats(petID)
-			-- if stats match, and petID is not already in the queue
-			if maxHealth==oldInfo[5] and power==oldInfo[6] and speed==oldInfo[7] and rarity==oldInfo[8] and not tContains(settings.LevelingQueue,petID) then
-				return petID,level+(xp/maxXp) -- then this is replacement
-			end
-		end
-	end
-end

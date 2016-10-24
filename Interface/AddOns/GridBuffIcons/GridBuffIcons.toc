@@ -1,0 +1,14 @@
+## Interface: 70000
+## Title: GridBuffIcons
+
+## Author: Warbaby @ 网易有爱
+## Grid Author: Pastamancer & Maia
+## Dependencies: Grid
+
+localization.zhCN.lua
+localization.zhTW.lua
+GridBuffIcons.lua
+
+## Title: |cffEEEE00[Warbaby]|r Grid状态图标
+## X-Vendor: NetEase
+## X-163UI-Version: 20160819115109

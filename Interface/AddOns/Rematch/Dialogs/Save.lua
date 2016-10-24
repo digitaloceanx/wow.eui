@@ -53,43 +53,8 @@ function rematch:UpdateSaveAsDialog()
 		height = height + 28
 		yoff = yoff - 28
 	end
-	local hasLeveling
-	for i=1,3 do
-		hasLeveling = hasLeveling or (rematch:IsPetLeveling(team[i][1]) or team[i][1]==0)
-	end
-	if hasLeveling and rematch:GetSidelineContext("loadout") then
-		dialog.SaveAs.Themselves:SetPoint("TOPLEFT",dialog.SaveAs.Target,"BOTTOMLEFT",-32,yoff)
-		dialog.SaveAs.Themselves.text:SetText(L["Save Without Leveling Slots"])
-		dialog.SaveAs.Themselves.text:SetFontObject(GameFontNormal)
-		dialog.SaveAs.Themselves:Show()
-		dialog.SaveAs.Themselves:SetChecked(rematch:GetSidelineContext("asThemselves") and true)
-		dialog.SaveAs.Themselves:SetScript("OnClick",dialog.SaveAs.Themselves.OnClick)
-		height = height + 28
-	end
 	dialog.SaveAs:SetHeight(height)
 	rematch:SaveAsUpdateWarning()
-end
-
-function dialog.SaveAs.Themselves.OnClick(self)
-	local asThemselves = self:GetChecked()
-	local team = rematch:GetSideline()
-	rematch:SetSidelineContext("asThemselves",asThemselves)
-	for i=1,3 do
-		local petID,ab1,ab2,ab3 = C_PetJournal.GetPetLoadOutInfo(i)
-		if team[i][1]==0 and petID and asThemselves then
-			team[i][1] = petID
-			team[i][2] = ab1
-			team[i][3] = ab2
-			team[i][4] = ab3
-			team[i][5] = C_PetJournal.GetPetInfoByPetID(petID) -- speciesID
-		elseif rematch:IsPetLeveling(petID) and not asThemselves then
-			for j=1,4 do
-				team[i][j] = 0
-			end
-			team[i][5] = nil
-		end
-	end
-	dialog:FillTeam(dialog.SaveAs.Team,team)
 end
 
 function rematch:SaveAsUpdateWarning()

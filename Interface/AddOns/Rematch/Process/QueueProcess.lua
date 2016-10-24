@@ -5,9 +5,9 @@ local _,L = ...
 local rematch = Rematch
 local settings
 local queue -- the actual leveling queue (settings.LevelingQueue)
+local levelingSlots -- indexed 1,2,3; true if the slot should be under queue control (settings.LevelingSlots)
 
 local levelingPets = {} -- indexed by petID, lookup table of leveling pets (created in ProcessQueue)
-local levelingLoadouts = {} -- slots occupied with a leveling pet (that's not manually slotted)
 
 rematch.topPicks = {} -- list of petIDs in the order they should be slotted
 rematch.skippedPicks = {} -- list of petIDs skipped due to preferences (for queue panel update)
@@ -15,6 +15,7 @@ rematch.skippedPicks = {} -- list of petIDs skipped due to preferences (for queu
 rematch:InitModule(function()
 	settings = RematchSettings
 	queue = settings.LevelingQueue
+	levelingSlots = settings.LevelingSlots
 end)
 
 -- returns true (and the precise level) of a petID if it can level
@@ -66,40 +67,24 @@ end
 -- NOTE: all places that used to call ProcessQueue directly should now call UpdateQueue!!
 function rematch:ProcessQueue()
 
-	if Rematch5 then -- prevent two queues from fighting
-		rematch.queueNeedsProcessed = nil
-		return
-	end
-
 	-- if pets not loaded, come back in half a second to try again
 	local numPets,owned = C_PetJournal.GetNumPets()
-	if numPets==0 or owned==0 then
+	local petLoaded = C_PetJournal.GetPetLoadOutInfo(1)
+	if owned==0 or not petLoaded then
 		return -- if pets aren't loaded, then don't do anything yet
 	end
-	-- can't swap pets; queue on hold while in combat/battle/queued for pvp
-	if settings.QueuePaused or InCombatLockdown() or C_PetBattles.IsInBattle() or C_PetBattles.GetPVPMatchmakingInfo() then
-		rematch.queueNeedsProcessed = true
-		return
-	end
+
 	rematch.queueNeedsProcessed = nil
 
 	local oldTopPetID = rematch.topPicks[1] -- note top-most pet in queue
 
-	-- fill levelingLoadouts with the petIDs in the slots they're currently loaded (if any)
-	-- this is later used to verify the proper leveling petIDs are loaded (or to load new ones to these slots)
-	for i=1,3 do
-		levelingLoadouts[i] = rematch:IsSlotQueueControlled(i,rematch.outgoingQueuedPetID,true)
-	end
-	rematch.outgoingQueuedPetID = nil -- we can stop caring about any pets leaving queue
-
 	-- remove any pets that can't level (missing or level 25) and fill levelingPets with those that can
 	wipe(levelingPets)
 	for i=#queue,1,-1 do
-		local canLevel, level = rematch:ValidateQueuedPet(i)
 		local petID = queue[i]
-		if canLevel and level and not levelingPets[petID] then
+		local canLevel,level = rematch:PetCanLevel(petID)
+		if canLevel and not levelingPets[petID] then
 			levelingPets[petID] = level
-			rematch:AddToSanctuary(petID,true) -- add pet to sanctuary if it wasn't there or update its stats
 		else
 			tremove(queue,i) -- remove pets that can't level (or that are already in queue)
 		end
@@ -136,70 +121,35 @@ function rematch:ProcessQueue()
 
 	local levelingPetSlotted -- will become true if new leveling pets are loaded
 
-	-- if petIDs in levelingLoadouts don't match topPicks, load them
-	local pickIndex = 1
-	for i=1,3 do
-		local petID = levelingLoadouts[i]
-		if petID then
-			local pickID = rematch.topPicks[pickIndex]
-			if pickID and pickID~=petID then
-				levelingPetSlotted = true
-				rematch:SlotPet(i,pickID)
+	-- if we can swap pets, swap if any needed
+	if not (InCombatLockdown() or C_PetBattles.IsInBattle() or C_PetBattles.GetPVPMatchmakingInfo()) then
+		-- load the top picks into the levelingSlots
+		local pickIndex = 1
+		for i=1,3 do
+			if levelingSlots[i] then
+				local petID = C_PetJournal.GetPetLoadOutInfo(i)
+				if petID then -- going to not attempt to slot empty slots
+					local pickID = rematch.topPicks[pickIndex]
+					if pickID and pickID~=petID then
+						levelingPetSlotted = true
+						rematch:SlotPet(i,pickID)
+					end
+					pickIndex = pickIndex + 1
+				end
 			end
-			pickIndex = pickIndex + 1
 		end
+	else -- if we can't swap pets, that's ok, re-process queue when we can
+		rematch.queueNeedsProcessed = true
 	end
 
 	-- toast leveling pet if it changed and toast passed
-	if oldTopPetID and levelingPetSlotted and rematch.topPicks[1]~=oldTopPetID then
+	if oldTopPetID and rematch.topPicks[1]~=oldTopPetID then
 		rematch:ToastNextLevelingPet(rematch.topPicks[1])
 	end
 
 	if rematch.Roster:GetFilter("Other","Leveling") or rematch.Roster:GetFilter("Other","NotLeveling") then
 		-- if pets are filtered for leveling pets, update the list with every ProcessQueue
 		rematch.Roster.needsUpdated = true
-	end
-end
-
--- this returns whether the indexed pet in the queue can level and its level+xp/maxXP
--- it will look in the sanctuary for a replacement if petID is not valid
-function rematch:ValidateQueuedPet(index)
-	local petID = queue[index]
-	local _,_,level,xp,maxXp,_,_,_,_,_,_,_,_,_,canBattle = C_PetJournal.GetPetInfoByPetID(petID)
-	if level then -- petID is valid
-		if level<25 and canBattle then
-			return true,level+(xp/maxXp) -- pet can level (include its partial level)
-		end
-	else -- petID is not valid, pet is caged/released or its petID changed
-		local newPetID,level = rematch:FindReplacementQueuePet(petID)
-		if newPetID and level then
-			queue[index] = newPetID -- replace queued petID with new one
-			return true,level -- and return that it can level as if nothing happened
-		end
-	end
-end
-
--- returns nil if the pet loaded in a loadoutslot (1-3) is not under queue control
--- returns the petID of the loaded pet if the slot should be under queue control
--- returns true if passed outgoingPetID leveling pet is in the slot
--- forProcessQueue is true when this is for the start of a ProcessQueue
-function rematch:IsSlotQueueControlled(slot,outgoingPetID,forProcessQueue)
-	local loadedTeam = RematchSaved[settings.loadedTeam]
-	local petID = C_PetJournal.GetPetLoadOutInfo(slot)
-	if not petID then
-		return -- no pet loaded in this slot
-	elseif loadedTeam and (loadedTeam[1][1]==petID or loadedTeam[2][1]==petID or loadedTeam[3][1]==petID) then
-		return -- pets are saved as themselves in this slot, don't replace it (do nothing)
-	elseif settings.ManuallySlotted[petID] then
-		return -- pet was manually slotted, leave it alone
-	elseif petID==outgoingPetID then
-		return true -- special case for outgoing pet (it's not in queue) to replace
-	elseif forProcessQueue and tContains(queue,petID) then
-		-- otherwise if pet is in the queue, send back petID to mark it for replacement
-		-- (need to tContains since new pets can be added to levelingPets table before this runs)
-		return petID
-	elseif levelingPets[petID] then
-		return true -- if not for ProcessQueue then a quick lookup is preferred over tContains
 	end
 end
 
@@ -288,9 +238,6 @@ function rematch:InsertPetToQueue(index,petID)
 			tremove(queue,i) -- and remove where it existed before (if it existed before)
 		end
 	end
-	if index==1 and settings.ManuallySlotted[petID] then
-		settings.ManuallySlotted[petID] = nil -- if manually slotted pet is being sent to the start of the queue, remove its manually slotted status
-	end
 	if isNew and oldQueueSize<3 then -- queue was near empty, see if this new pet should be slotted for ProcessQueue to control
 		rematch:MaybeSlotNewLevelingPet(petID)
 	end
@@ -345,43 +292,13 @@ function rematch:MaybeSlotNewLevelingPet(...)
 	end
 end
 
--- pauses the queue for "user" (clicked pause button), "combat", "battle" or "pvp"
-function rematch:PauseQueue(reason)
-	if settings.QueuePaused=="user" then
-		settings.userPausedQueue = true
-	end
-	settings.QueuePaused = reason
-	rematch:UpdateUI()
-end
-
--- to prevent timing issues, any resume request delays half a second to let transitions happen
-function rematch:ResumeQueue(updateUI)
-	rematch:StartTimer("ResumeQueue",0.5,updateUI and rematch.ResumeQueueWithUpdateUI or rematch.ResumeQueueBasic)
-end
-
--- this is called just to clear/set the QueuePaused status without updating the UI
--- this is called after login (in case they logged out in battle on one character and logged in out of battle on another)
-function rematch:ResumeQueueBasic()
-	local reason
-	if rematch.pvpProposalAccepted then return end
-	if InCombatLockdown() then
-		reason = "combat"
-	elseif C_PetBattles.IsInBattle() then
-		reason = "battle"
-	elseif C_PetBattles.GetPVPMatchmakingInfo() then
-		reason = "pvp"
-	end
-	settings.QueuePaused = reason
-end
-
-function rematch:ResumeQueueWithUpdateUI()
-	rematch:ResumeQueueBasic()
-	rematch:UpdateUI()
-end
-
 -- called in ProcessQueue for ActiveSort and from queue menu, performs a sort
 function rematch:SortQueue()
+	local newTopPetID = queue[1] -- note top-most pet in case we want to move it back to top
 	table.sort(queue,rematch.SortQueueTable)
+	if settings.KeepCurrentOnSort and petID then
+		rematch:InsertPetToQueue(1,petID) -- move old leveling pet back to top if KeepCurrentOnSort enabled
+	end
 end
 
 -- table.sort where e1 and e2 are petIDs
@@ -485,4 +402,53 @@ function rematch:ToastNextLevelingPet(petID)
 		rematch.LevelingToastSystem = AlertFrame:AddQueuedAlertFrameSubSystem("RematchLevelingToastTemplate", toastSetup, 2, 0)
 	end
 	rematch.LevelingToastSystem:AddAlert(petID)
+end
+
+--[[
+	Marking a loadout slot as a leveling slot is done by:
+	- The right-click menu of the slot: "Put Leveling Pet Here"
+	- Loading a team that has leveling slots saved.
+	- If the option "Allow Manually Slotted Pets" is unchecked (default), dragging any pet
+		in the queue to the desired loadout slot.
+
+	Revoking the queue's control of a slot is done by:
+	- The right-click menu of the slot: "Stop Leveling This Slot"
+	- Loading a team that does not have a leveling pet in the slot.
+	- Unloading the currently loaded team.
+	- If the option "Allow Manually Slotted Pets" is checked, dragging any pet in the queue
+		to desired loadout slot.
+
+	Additionally:
+	- It will now be possible to mark leveling slots if no pets are in the queue.
+	- In the above situation, or if there are not enough pets in the queue to fill all leveling slots,
+		the gold border will turn grey/silver for slots without a leveling pet.
+]]
+
+-- to be called after a team is loaded or unloaded or the start of a session;
+-- marks each of the three slots true if they should be controlled by the queue
+function rematch:AssignLevelingSlots()
+	local settings = RematchSettings
+	if not levelingSlots then -- if this is called during InitSavedVars
+		levelingSlots = settings.LevelingSlots
+	end
+	wipe(levelingSlots)
+	local loadedTeam = settings.loadedTeam
+	local team = loadedTeam and RematchSaved[loadedTeam]
+	if team then
+		for i=1,3 do
+			if team[i][1]==0 then
+				rematch:SetLevelingSlot(i,true)
+			end
+		end
+	end
+end
+
+-- use this to set whether a slot will be controlled by the queue
+function rematch:SetLevelingSlot(slot,state)
+	levelingSlots[slot] = state and true or nil
+end
+
+-- returns whether the give slot is under queue control
+function rematch:IsSlotQueueControlled(slot)
+	return levelingSlots[slot]
 end

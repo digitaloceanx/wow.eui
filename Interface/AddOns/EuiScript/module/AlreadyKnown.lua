@@ -157,38 +157,3 @@ local function _ShowColorPicker(r, g, b, a, changedCallback)
 	ColorPickerFrame:Hide() -- Need to run the OnShow handler.
 	ColorPickerFrame:Show()
 end
-
-SLASH_ALREADYKNOWN1 = "/alreadyknown"
-SLASH_ALREADYKNOWN2 = "/ak"
-
-SlashCmdList.ALREADYKNOWN = function(...)
-	if (...) == "green" then
-		db.r = 0; db.g = 1; db.b = 0
-	elseif (...) == "blue" then
-		db.r = 0; db.g = 0; db.b = 1
-	elseif (...) == "yellow" then
-		db.r = 1; db.g = 1; db.b = 0
-	elseif (...) == "cyan" then
-		db.r = 0; db.g = 1; db.b = 1
-	elseif (...) == "purple" then
-		db.r = 1; db.g = 0; db.b = 1
-	elseif (...) == "gray" then
-		db.r = 0.5; db.g = 0.5; db.b = 0.5
-	elseif (...) == "custom" then
-		_ShowColorPicker(db.r, db.g, db.b, false, _changedCallback)
-	elseif (...) == "monochrome" then
-		db.monochrome = not db.monochrome
-	else
-		DEFAULT_CHAT_FRAME:AddMessage("|cffffcc00".. ADDON_NAME ..":|r /alreadyknown (green|blue|yellow|cyan|purple|gray|custom|monochrome)")
-	end
-
-	if (...) == "monochrome" then
-		DEFAULT_CHAT_FRAME:AddMessage("|cffffcc00".. ADDON_NAME ..":|r monochrome ".. (db.monochrome and "|cff00ff00true|r" or "|cffff0000false|r"))
-	elseif (...) ~= "" and (...) ~= "custom" then
-		DEFAULT_CHAT_FRAME:AddMessage("|cffffcc00".. ADDON_NAME ..":|r |cff".._RGBToHex(db.r*255, db.g*255, db.b*255)..(...).."|r monochrome ".. (db.monochrome and "|cff00ff00true|r" or "|cffff0000false|r"))
-	end
-
-	if ColorPickerFrame:IsShown() and (...) ~= "custom" then
-		_ShowColorPicker(db.r, db.g, db.b, false, _changedCallback)
-	end
-end

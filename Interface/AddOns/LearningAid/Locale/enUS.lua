@@ -13,11 +13,11 @@ LA.strings.enUS = {
   lockWindowHelp = "Locks the Learning Aid window so it cannot by moved by accident.",
   restoreActions = "Restore Actions",
   restoreActionsHelp = "When re-learning talent-based abilities, restore their position on your action bars.",
-  showLearnSpam = "Show Learn / Unlearn Messages",
-  showLearnSpamHelp = 'Show All: Blizzard default.  Summarize: Reduce the messages to a one or two line compact form.  Show None: Do not display any learn/unlearn messages in the chat log.',
-  showAll = "Show All",
-  summarize = "Summarize",
-  showNone = "Show None",
+  --showLearnSpam = "Show Learn / Unlearn Messages",
+  --showLearnSpamHelp = 'Show All: Blizzard default.  Summarize: Reduce the messages to a one or two line compact form.  Show None: Do not display any learn/unlearn messages in the chat log.',
+  --showAll = "Show All",
+  --summarize = "Summarize",
+  --showNone = "Show None",
   debugOutput = "Debug Output",
   debugOutputHelp = "Enables / disables printing debugging information to the chat window.",
   resetPosition = "Reset Position",
@@ -52,5 +52,8 @@ LA.strings.enUS = {
   trainAllPopup = "Train all available skills for",
   frameStrata = "Frame Strata",
   frameStrataHelp = "Adjust what frames Learning Aid appears above and below.  Only change this if you have problems with frames overlapping each other.",
-  advanced = "Advanced settings"
+  advanced = "Advanced settings",
+  -- Strings added in 1.12
+  findAutoAttack = "Find Auto Attack",
+  findAutoAttackHelp = "If enabled, Find Missing Abilities will search for Auto Attack, Auto Shot and Shoot."
 }

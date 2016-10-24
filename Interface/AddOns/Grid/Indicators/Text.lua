@@ -1,3 +1,14 @@
+--[[--------------------------------------------------------------------
+	Grid
+	Compact party and raid unit frames.
+	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+	All rights reserved. See the accompanying LICENSE file for details.
+	https://github.com/Phanx/Grid
+	https://mods.curse.com/addons/wow/grid
+	http://www.wowinterface.com/downloads/info5747-Grid.html
+----------------------------------------------------------------------]]
+
 local _, Grid = ...
 local GridFrame = Grid:GetModule("GridFrame")
 local Media = LibStub("LibSharedMedia-3.0")
@@ -71,7 +82,7 @@ local function Reset(self)
 			self:SetJustifyV("CENTER")
 			self:SetPoint("BOTTOMLEFT", 2, -2)
 			self:SetPoint("BOTTOMRIGHT", -2, -2)
-			self:SetPoint("TOP", bar, "CENTER")
+			self:SetPoint("TOP", bar, "CENTER", 0, 2)
 		end
 	end
 end
@@ -84,7 +95,13 @@ local function SetStatus(self, color, text, value, maxValue, texture, texCoords,
 		return self:SetText("")
 	end
 
-	self:SetText(strsub(text, 1, profile.textlength))
+    local c = strbyte(text, 1)
+   	if(c and c >= 224 and text.utf8sub) then
+        self:SetText(text:utf8sub(1, math.floor(GridFrame.db.profile.textlength / 2)));
+   	else
+        self:SetText(strsub(text, 1, profile.textlength))
+   	end
+
 
 	if color then
 		if profile.invertBarColor and profile.invertTextColor then

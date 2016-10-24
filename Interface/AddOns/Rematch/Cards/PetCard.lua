@@ -96,7 +96,7 @@ function rematch:ShowPetCard(parent,petID,force)
 		end
 	end
 
-	if not speciesID and not leveling then
+	if (not speciesID or not petType) and not leveling then
 		return
 	end
 
@@ -368,7 +368,7 @@ function rematch:ShowPetCard(parent,petID,force)
 	local backHeight = 0 -- measuring height of back of card too in case lore needs more room
 	if not leveling then -- leveling pets have no back of card
 		-- shrink font if source text is very long (some pets like spiders list nearly every zone in the game!)
-		local sourceLength = sourceText:len()
+		local sourceLength = (sourceText or ""):len()
 		if sourceLength>300 then
 			card.Back.Source.Text:SetFontObject("GameFontHighlightSmall")
 			if sourceLength>500 then -- if text is really really long, cut it short
@@ -414,7 +414,9 @@ function rematch:ShowPetCard(parent,petID,force)
 
 	-- adjust abilities for pets with only 3 abilities (unobtainable ones, but not always)
 	-- example: Manos/Fatos/Hanos have 3 abilities each; Erris' Sprouts/Runts/Prince Charming have 6
-	local bothColumns = #rematch.abilityList>3
+	-- however some opponent pets have weird abilitylists: Kiazor the Destroyer has 1,2,5; Scuttles has 1,2,4!
+	-- so both columns will show if there's any ability in the 4th, 5th or 6th slot
+	local bothColumns = (rematch.abilityList[4] or rematch.abilityList[5] or rematch.abilityList[6]) and true
 	for i=1,3 do
 		local abilityOffset = bothColumns and 7 or 54
 		local abilityWidth = bothColumns and 114 or 140

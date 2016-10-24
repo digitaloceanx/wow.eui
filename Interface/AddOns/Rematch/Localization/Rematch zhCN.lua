@@ -1,18 +1,27 @@
 ﻿-- Rematch zhCN.lua
--- v4.4.8
--- 2016-07-21
+-- v4.5.0
+-- 2016-08-11
 -- Translator: 四点十分@深渊之巢-CN
--- 基于 Rematch zhTW.lua 制作 / based on Rematch zhTW.lua
+-- 部分基于 Rematch zhTW.lua
+-- 首发于 http://bbs.nga.cn/read.php?tid=9484459
 
 local _,L = ...
 
 if GetLocale()=="zhCN" then
 
--- Additional strings to Template.lua
-	L["Cage this pet?"] = "把这个宠物放入笼中?" -- Menus\PetMenus.lua
-	L["Species ID"] = "物种ID" --Cards\PetCard.lua
-	L["All versions of this pet share this unique \"species\" number."] = "此宠物的所有品种共享这个唯一的\"物种\"编号." --Cards\PetCard.lua
-	L["You are in combat. Try again when out of combat."] = "正在战斗中，请脱离战斗后重试。" -- Frames\Frame.lua & Frames\Journal.lua
+-- New strings in 4.5.0
+	L["This is the leveling queue. Drag pets you want to level here.\n\nRight click any of the three battle pet slots and choose 'Put Leveling Pet Here' to mark it as a leveling slot you want controlled by the queue.\n\nWhile a leveling slot is active, the queue will fill the slot with the top-most pet in the queue. When this pet reaches level 25 (gratz!) it will leave the queue and the next pet in the queue will take its place.\n\nTeams saved with a leveling slot will reserve that slot for future leveling pets."] = "这里是升级队列。把想要升级的宠物拖放到这里。\n\n右键点击三个战斗宠物栏位中的任意一个，选择 “将要升级的宠物放在这个栏位”，将该栏位设置为升级栏位，设置后的升级栏位将由升级队列控制。\n\n当一个升级栏位被激活后，升级队列会用位于队列最顶端的宠物填充这个栏位。当宠物升至25级(赞！)，它就会离开升级队列，队列中的下一个宠物会取代它的位置。\n\n队伍保存时包含升级栏位的，这个栏位会被预留，用于升级其它宠物。"
+	L["Don't show a popup offering to backup teams every once in a while. Generally, the popup appears sometime after the number of teams increases by 50."] = "不要在备份队伍时弹出提示。一般情况下，队伍数量每增加50个，备份时就会弹出提示。"
+	L["Backup All Rematch Teams?"] = "备份所有队伍？"
+	L["Don't Remind About Backups"] = "备份时不提示"
+	L["Choosing Yes will export all teams to copy and paste in an email to yourself or someplace safe.\n\nYou can also do this at any time from the Teams button at the top of the Teams panel of Rematch."] = "选择 “是” 将会导出所有队伍，以便复制粘贴到电子邮件里发给自己，或其它安全的地方。\n\n用队伍界面顶端的“队伍”按钮，你可以随时导出你的队伍。"
+	L["Leveling Queue"] = "升级队列"
+	L["You have %s%d\124r Rematch teams.\n\nWould you like to back them up?"] = "你有 %s%d\124r 个队伍。\n\n要备份它们吗？"
+	L["Confirmation Options"] = "确认选项"
+	L["Stop Leveling This Slot"] = "取消这个升级栏位"
+
+-- New strings in 4.4.9
+	L["Stats Search"] = "指标搜索"
 
 -- New strings in 4.4.7
 	L["Don't Sort By Relevance"] = "禁用相关性排序"
@@ -121,7 +130,8 @@ if GetLocale()=="zhCN" then
 	L["Edit Team"] = "编辑队伍"
 	L["Change Name Or Target"] = "重命名队伍或改变目标"
 	L["Set Notes"] = "设定备注"
-	L["Set Preferences"] = "设定偏好"
+	-- L["Set Preferences"] = "设定偏好"
+	L["Leveling Preferences"] = "升级偏好设定"
 	L["Move To"] = "移动至"
 	L["Move To Top"] = "移至最上方"
 	L["Move Up"] = "上移"
@@ -130,7 +140,7 @@ if GetLocale()=="zhCN" then
 	L["Share"] = "共享"
 	L["Delete this team?"] = "是否要删除这个队伍?"
 	L["Unload Team"] = "取消加载队伍"
-	L["Put Leveling Pet Here"] = "将要升级的宠物放在这里"
+	L["Put Leveling Pet Here"] = "将要升级的宠物放在这个栏位"
 	L["Add a leveling pet to this team?"] = "是否要在这个队伍中加入等候升级的宠物?"
 	L["Export As Plain Text"] = "导出为纯文字"
 	L["Export this team in plain text that you can copy elsewhere, such as forums or emails.\n\nThe plain text format is best for sharing a team with others that may not use Rematch.\n\nOther Rematch users can paste this team into their Rematch via Import Team."] = "将队伍导出成纯文字，以便复制到其它地方，例如论坛或电子邮件。\n\n纯文字是和其它尚未使用宠物战队插件的玩家，共享队伍最佳的方式。\n\n已经使用宠物战队插件的玩家可以使用导入队伍功能，粘贴导入这个队伍"
@@ -185,6 +195,7 @@ if GetLocale()=="zhCN" then
 	L["Once released, this pet is gone forever!"] = "一旦释放，宠物将会永远消失!"
 	L["Slotted pets cannot be caged."] = "位于队伍栏位中的宠物不能被放入笼中"
 	L["Injured pets cannot be caged."] = "受伤的宠物不能被放入笼中"
+	L["Cage this pet?"] = "把这个宠物放入笼中?"
 	L["Start Leveling"] = "开始升级"
 	L["Add To Leveling Queue"] = "加入升级队列"
 	L["Stop Leveling"] = "停止升级"
@@ -270,13 +281,15 @@ if GetLocale()=="zhCN" then
 	L["This pet is marked as a Favorite from its right-click menu."] = "这个宠物已被设为偏好"
 	L["This pet is in Rematch's leveling queue."] = "这个宠物在宠物战队插件的升级队列中"
 	L["Determines how stats are distributed.  All breed data is pulled from your installed %s%s\124r addon."] = "决定属性分布， 所有品种数据皆取自于你所安装的插件 %s%s\124r"
+	L["Species ID"] = "物种ID"
+	L["All versions of this pet share this unique \"species\" number."] = "此宠物的所有品种共享这个唯一的\"物种\"编号."
 	L["%d Teams"] = "%d 组队伍"
 	L["Teams"] = "队伍"
 	L["%s Click to search for all teams that include this pet."] = "点击搜索所有包含这只宠物的队伍"
 	L["%s Click to search for all versions of this pet."] = "点击搜索这只宠物的所有品种"
 	L["When this team loads, your current leveling pet will go in this spot."] = "加载这个队伍时，当前正在升级的宠物会被放在这个栏位"
 	L["This is an opponent pet."] = "这是敌对的宠物"
-	L["All breed data pulled from %s%s\124r."] = "所有品种数据皆取自于插件 %s%s\124r"
+	L["All breed data pulled from %s%s\124r."] = "品种数据取自 %s%s\124r"
 	L["Stats At Level 25 \124cff0070ddRare"] = "25级\124cff0070dd精良\124r品质属性"
 	L["No known breeds :("] = "未知的品种 :("
 
@@ -571,31 +584,31 @@ if GetLocale()=="zhCN" then
 	L["A team named %s%s\124r already exists.\n\nTeams without a target must have a unique name."] = "%s%s\124r 队伍名已经存在，\n\n如果队伍没有对应的目标，那么它的队伍名必须是唯一的"
 
 -- Dialogs\Preferences.lua
-	L["Minimum Health"] = "最低血量值"
-	L["This is the minimum health preferred for a leveling pet.\n\nThe queue will prefer leveling pets with at least this much health (adjusted by expected damage taken if any chosen)."] = "升级宠物的最低血量偏好设定，\n\n升级队列升级的宠物血量至少必须达到最低标准 (能适应选取目标的预期伤害)"
+	L["Minimum Health"] = "最低血量"
+	L["This is the minimum health preferred for a leveling pet.\n\nThe queue will prefer leveling pets with at least this much health (adjusted by expected damage taken if any chosen)."] = "要升级的小宠的最低血量，\n\n升级队列会优先选择满足这个最低血量设置的宠物 (最低血量值会根据预期受到的伤害进行调整)"
 	L["Minimum Level"] = "最低等级"
-	L["This is the minimum level preferred for a leveling pet.\n\nLevels can be partial amounts. Level 4.33 is level 4 with 33% xp towards level 5."] = "升级宠物的最低等级偏好设定，\n\n等级可以有小数点，等级 4.33 代表等级 4 和 33% 经验值到等级 5"
-	L["Maximum Health"] = "最高血量值"
-	L["This is the maximum health preferred for a leveling pet."] = "升级宠物的最高血量偏好设定"
+	L["This is the minimum level preferred for a leveling pet.\n\nLevels can be partial amounts. Level 4.33 is level 4 with 33% xp towards level 5."] = "要升级的小宠的最低等级\n\n等级可以有小数点，等级 4.33 表示4级，还需要33%的经验值升到5级"
+	L["Maximum Health"] = "最高血量"
+	L["This is the maximum health preferred for a leveling pet."] = "要升级的小宠的最高血量"
 	L["Maximum Level"] = "最高等级"
-	L["This is the maximum level preferred for a leveling pet.\n\nLevels can be partial amounts. Level 23.45 is level 23 with 45% xp towards level 24."] = "升级宠物的最高等级偏好设定，\n\n等级可以有小数点，等级 23.45 代表等级 23 和 45% 经验值到等级 24"
+	L["This is the maximum level preferred for a leveling pet.\n\nLevels can be partial amounts. Level 23.45 is level 23 with 45% xp towards level 24."] = "要升级的小宠的最高等级\n\n等级可以有小数点，等级 23.45 表示23级，还需要45%的经验值到24级"
 	L["Or any"] = "或任何"
-	L["Allow low-health Magic and Mechanical pets to ignore the Minimum Health, since their racials allow them to often survive a hit that would ordinarily kill them."] = "允许低血量的魔法和机械宠物忽略最低血量值，因为种族技能让它们在受到致命一击后常常还能生存下来"
+	L["Allow low-health Magic and Mechanical pets to ignore the Minimum Health, since their racials allow them to often survive a hit that would ordinarily kill them."] = "允许低血量的魔法和机械宠物忽略最低血量设置，因为种族技能让它们在受到致命一击后常常还能生存下来"
 	L["Expected Damage Taken"] = "预期受到的伤害"
 	L["Tab"] = "标签页"
-	L["Leveling Preferences"] = "升级偏好设定"
-	L["Team Preferences"] = "队伍偏好设定"
-	L["Tab Preferences"] = "标签页偏好设定"
-	L["  For %s pets: %s%d%s"] = " - %s 宠物: %s%d%s"
-	L["%s %sTab Preferences"] = "%s %s标签页偏好设定"
-	L["%s%s Preferences Paused"] = "已暂停 %s%s 偏好设定"
-	L["%s Resume Preferences"] = "%s 恢复偏好设定"
-	L["%s Pause Preferences"] = "%s 暂停偏好设定"
-	L["Leveling Preferences For %s:"] = "%s 的升级偏好设定:"
+	L["Leveling Preferences"] = "升级设定"
+	L["Team Preferences"] = "队伍设定"
+	L["Tab Preferences"] = "标签页设定"
+	L["  For %s pets: %s%d%s"] = "%s 宠物最低血量: %s%d%s"
+	L["%s %sTab Preferences"] = "%s %s标签页设定"
+	L["%s%s Preferences Paused"] = "已暂停 %s%s 设定"
+	L["%s Resume Preferences"] = "%s 恢复设定"
+	L["%s Pause Preferences"] = "%s 暂停设定"
+	L["Leveling Preferences For %s:"] = "%s 的升级设定:"
 	L["Expected damage taken"] = "预期受到的伤害"
-	L["The minimum health of pets can be adjusted by the type of damage they are expected to receive."] = "根据预期受到的伤害类型，宠物所能适应的最低血量值"
-	L["Damage expected"] = "预期伤害"
-	L["  For %s pets: \124cffffd200%d"] = " - %s 宠物: \124cffffd200%d"
+	L["The minimum health of pets can be adjusted by the type of damage they are expected to receive."] = "宠物的最低血量会根据预期受到的伤害类型调整"
+	L["Damage expected"] = "预期受到的伤害"
+	L["  For %s pets: \124cffffd200%d"] = "%s 宠物最低血量: \124cffffd200%d"
 
 -- Dialogs\Sideline.lua
 	L["New Team"] = "新增队伍"
@@ -604,7 +617,7 @@ if GetLocale()=="zhCN" then
 	L["^(.-)%(.-NPC#(%d+)%)"] = nil
 	L[":([^\n]-)[%(%[]*([12]).([12]).([12])[%)%]]*.-[\n]*"] = nil
 	L[":([^\n]+)"] = nil
-	L["\n%s*Preferred leveling pets: ([^\n]+)%."] = "\n%s*偏好的升级中的宠物: ([^\n]+)%."
+	L["\n%s*Preferred leveling pets: ([^\n]+)%."] = "\n%s*偏好的要升级的小宠: ([^\n]+)%."
 	L["at least (%d+) health"] = "最少(%d+)血"
 	L["or any Magic/Mechanical"] = "或者任意的魔法/机械宠物"
 	L[".+[,%(](.-)damage expected%)"] = ".+[,%(](.-)伤害预计%)"
@@ -617,7 +630,7 @@ if GetLocale()=="zhCN" then
 	L["%s (%s NPC#%d)"] = nil
 	L["%d: %s"] = nil
 	L["%d: %s (%d,%d,%d)"] = nil
-	L["Preferred leveling pets: %s."] = "偏好的升级中的宠物: %s."
+	L["Preferred leveling pets: %s."] = "偏好的要升级的小宠: %s."
 	L["at least %d health"] = "最少%d血"
 	L["at least %d health (or any Magic/Mechanical)"] = "最少%d血（或者任意的魔法/机械宠物）"
 	L["at least %d health (%s damage expected)"] = "最少%d血 （%s伤害预计）"
@@ -708,6 +721,7 @@ if GetLocale()=="zhCN" then
 	L["Options"] = "选项"
 	L["Toggle Single Panel Mode"] = "开启/关闭单一窗口模式"
 	L["Toggle between one panel or two panels side by side."] = "在单一面板和双面板之间作切换"
+	L["You are in combat. Try again when out of combat."] = "正在战斗中，请脱离战斗后重试。"
 
 -- Frames\Configure.lua
 

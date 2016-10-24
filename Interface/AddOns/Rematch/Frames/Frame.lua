@@ -64,8 +64,13 @@ function frame:OnHide()
 	rematch:HideWidgets()
 	rematch:HideDialog()
 	rematch:SetESCable("RematchFrame",false)
+	-- when frame hides due to entering battle, we may not actually be in battle yet; this will wait
 	if not C_PetBattles.IsInBattle() then
 		C_Timer.After(0.75,frame.CheckIfHidingForBattle)
+		-- while here, if we're not in combat or pvp, check if backup reminder should happen
+		if not InCombatLockdown() and not C_PetBattles.GetPVPMatchmakingInfo() then
+			rematch:CheckForBackupReminder()
+		end
 	end
 end
 

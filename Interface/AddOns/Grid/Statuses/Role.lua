@@ -1,12 +1,12 @@
 --[[--------------------------------------------------------------------
 	Grid
 	Compact party and raid unit frames.
-	Copyright (c) 2006-2014 Kyle Smith (Pastamancer), Phanx
-	All rights reserved.
-	See the accompanying README and LICENSE files for more information.
+	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+	All rights reserved. See the accompanying LICENSE file for details.
+	https://github.com/Phanx/Grid
+	https://mods.curse.com/addons/wow/grid
 	http://www.wowinterface.com/downloads/info5747-Grid.html
-	http://www.curse.com/addons/wow/grid
-	http://www.wowace.com/addons/grid/
 ------------------------------------------------------------------------
 	Role.lua
 	Grid status module for tank/healer/damager roles.
@@ -51,6 +51,19 @@ local ROLE_TEXCOORDS = {
 	HEALER  = { left = 49/64, right = 63/64, top = 1/16, bottom = 15/16 },
 	DAMAGER = { left = 17/64, right = 31/64, top = 1/16, bottom = 15/16 },
 }
+
+--163ui
+local darkness, alpha = 0.6, 0.9
+for _, v in pairs(ROLE_TEXCOORDS) do
+    v.left = v.left - 1/64
+    v.right = v.right + 1/64
+    v.top = v.top - 1/64
+    v.bottom = v.bottom + 1/64
+    v.r = darkness
+    v.g = darkness
+    v.b = darkness
+    v.a = alpha
+end
 
 function GridStatusRole:PostInitialize()
 	self:Debug("PostInitialize")

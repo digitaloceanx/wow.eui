@@ -1,18 +1,32 @@
 local addon_name, addon_env = ...
 
 -- [AUTOLOCAL START]
-local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS
-local GetItemInfo = GetItemInfo
+local C_Garrison = C_Garrison
 local CastSpellOnFollower = C_Garrison.CastSpellOnFollower
-local FollowerTab = GarrisonMissionFrame.FollowerTab
+local CreateFrame = CreateFrame
+local GARRISON_FOLLOWER_MAX_LEVEL = GARRISON_FOLLOWER_MAX_LEVEL
+local GarrisonMissionFrame = GarrisonMissionFrame
+local GetFollowerAbilities = C_Garrison.GetFollowerAbilities
 local GetFollowerInfo = C_Garrison.GetFollowerInfo
 local GetFollowerItems = C_Garrison.GetFollowerItems
-local GetFollowerAbilities = C_Garrison.GetFollowerAbilities
+local GetItemInfo = GetItemInfo
+local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS
+local LE_FOLLOWER_TYPE_GARRISON_6_0 = LE_FOLLOWER_TYPE_GARRISON_6_0
+local pairs = pairs
+local tinsert = table.insert
+local type = type
 -- [AUTOLOCAL END]
+
+local MissionPage = GarrisonMissionFrame.MissionTab.MissionPage
+local MissionPageFollowers = MissionPage.Followers
+local FollowerTab = GarrisonMissionFrame.FollowerTab
 
 local Widget = addon_env.Widget
 local event_frame = addon_env.event_frame
 local event_handlers = addon_env.event_handlers
+local gmm_frames = addon_env.gmm_frames
+
+local tts = LibStub:GetLibrary("LibTTScan-1.0", true)
 
 hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, rewards, numRewards)
    local index = 1
@@ -21,10 +35,17 @@ hooksecurefunc("GarrisonMissionButton_SetRewards", function(self, rewards, numRe
       local button = Rewards[index]
       local item_id = reward.itemID
       if item_id and reward.quantity == 1 then
-         local _, _, itemRarity, itemLevel = GetItemInfo(item_id)
+         local _, link, itemRarity, itemLevel = GetItemInfo(item_id)
+         local text
          if itemRarity and itemLevel and itemLevel >= 500 then
+            text = ITEM_QUALITY_COLORS[itemRarity].hex .. itemLevel
+         end
+         if not text and tts then
+            text = tts.GetItemArtifactPower(item_id)
+         end
+         if text then
             local Quantity = button.Quantity
-            Quantity:SetText(ITEM_QUALITY_COLORS[itemRarity].hex .. itemLevel)
+            Quantity:SetText(text)
             Quantity:Show()
          end
       end
@@ -121,11 +142,9 @@ local function UpdateUpgradeItemStates(frame, followerID, followerInfo)
          else
             upgrade_item_quantity[item_id]:SetText(nil)
             local texture = upgrade_item_normal_textures[item_id]
-            if texture then -- by eui.cc
-				texture:SetDesaturated(true)
-            	texture:SetAlpha(0.3)
-            	texture:SetVertexColor(1, 1, 1)
-			end
+            texture:SetDesaturated(true)
+            texture:SetAlpha(0.3)
+            texture:SetVertexColor(1, 1, 1)
          end
       end
    end
@@ -134,6 +153,19 @@ end
 local mechanic_id = {}
 for idx, data in pairs (C_Garrison.GetAllEncounterThreats(LE_FOLLOWER_TYPE_GARRISON_6_0)) do
    tinsert(mechanic_id, data.id)
+end
+
+local function DrawAbilityCounters(frame, followerID, followerInfo)
+   local self = FollowerTab
+   local abilities = followerInfo.abilities or GetFollowerAbilities(followerID)
+
+   for i=1, #abilities do
+      local ability = abilities[i]
+
+      local abilityFrame = self.AbilitiesFrame.Abilities[i]
+
+      abilityFrame.Name:SetText(ability.name .. '!')
+   end
 end
 
 hooksecurefunc(GarrisonMissionFrame.FollowerList, "ShowFollower", function(self)
@@ -207,3 +239,33 @@ for item_type = 1, #upgrade_items do
       prev = u
    end
 end
+
+local function MissionPage_WarningInit()
+   for idx = 1, #MissionPageFollowers do
+      local follower_frame = MissionPageFollowers[idx]
+      -- TODO: inherit from name?
+      local warning = follower_frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+      warning:SetWidth(185)
+      warning:SetHeight(1)
+      warning:SetPoint("BOTTOM", follower_frame, "TOP", 0, -68)
+      gmm_frames["MissionPageFollowerWarning" .. idx] = warning
+
+      gmm_frames["MissionPageFollowerXP" .. idx]          = Widget{type = "Texture", parent = follower_frame, SubLayer = 3, Width = 104, Height = 4, BOTTOMLEFT = {55, 2}, Color = { 0.212, 0, 0.337 }, Hide = true }
+      gmm_frames["MissionPageFollowerXPGainBase" .. idx]  = Widget{type = "Texture", parent = follower_frame, SubLayer = 2, Width = 104, Height = 4, BOTTOMLEFT = {55, 2}, Color = { 0.6, 1, 0 }, Hide = true }
+      gmm_frames["MissionPageFollowerXPGainBonus" .. idx] = Widget{type = "Texture", parent = follower_frame, SubLayer = 1, Width = 104, Height = 4, BOTTOMLEFT = {55, 2}, Color = { 0, 0.75, 1 }, Hide = true }
+   end
+end
+
+addon_env.MissionPage_ButtonsInit("MissionPage", MissionPage)
+MissionPage_WarningInit()
+addon_env.mission_page_button_prefix_for_type_id[LE_FOLLOWER_TYPE_GARRISON_6_0] = "MissionPage"
+hooksecurefunc(GarrisonMissionFrame, "ShowMission", addon_env.ShowMission_More)
+
+addon_env.MissionList_ButtonsInit(GarrisonMissionFrame.MissionTab.MissionList, "GarnisonMissionList")
+local MissionList_Update_More = addon_env.MissionList_Update_More
+local function GarrisonMissionFrame_MissionList_Update_More()
+   MissionList_Update_More(GarrisonMissionFrame.MissionTab.MissionList, GarrisonMissionFrame_MissionList_Update_More, "GarnisonMissionList", LE_FOLLOWER_TYPE_GARRISON_6_0, GARRISON_CURRENCY)
+end
+
+hooksecurefunc(GarrisonMissionFrame.MissionTab.MissionList,            "Update", GarrisonMissionFrame_MissionList_Update_More)
+hooksecurefunc(GarrisonMissionFrame.MissionTab.MissionList.listScroll, "update", GarrisonMissionFrame_MissionList_Update_More)

@@ -955,12 +955,12 @@ end
 
 -- does a backup of all teams across all tabs
 function rematch:ShowBackupDialog()
-	local dialog = rematch:ShowDialog("BackupTeams",340,420,L["Backup All Teams"],nil,nil,nil,OKAY,share.FinishBackup)
+	local dialog = rematch:ShowDialog("BackupTeams",340,430,L["Backup All Teams"],nil,nil,nil,OKAY,share.FinishBackup)
 	dialog:ShowText(L["Please Wait..."],300,100,"TOP",0,-32)
 	dialog.MultiLine:SetSize(280,150)
 	dialog.MultiLine:SetPoint("TOP",dialog.Text,"BOTTOM",0,-8)
 	dialog.MultiLine:Show()
-	dialog.SmallText:SetSize(280,80)
+	dialog.SmallText:SetSize(280,100)
 	dialog.SmallText:SetPoint("TOP",dialog.MultiLine,"BOTTOM",0,-8)
 	dialog.SmallText:SetText(L["Note: These are just your teams and their notes and preferences. Tab information, sort orders, win records, specific breeds and other settings are not included.\n\nFor the most complete backup of all your addon data, please backup your Word of Warcraft\\WTF folder."])
 	dialog.SmallText:Show()
@@ -1025,4 +1025,25 @@ function share:FinishBackup()
 	settings.DontIncludePreferences = dialog:GetContext("backupDontIncludePreferences")
 	settings.DontIncludeNotes = dialog:GetContext("backupDontIncludeNotes")
 	rematch:StopTimer("BackupTeams")
+	settings.BackupCount = rematch:GetNumTeams()
+end
+
+function rematch:CheckForBackupReminder()
+	if not settings.NoBackupReminder then
+		settings.BackupCount = settings.BackupCount or 0
+		local numTeams = rematch:GetNumTeams()
+		if numTeams>=(settings.BackupCount+50) then
+			settings.BackupCount = numTeams -- if they declined, don't ask again until another 50 teams
+			local dialog = rematch:ShowDialog("BackupReminder",300,220,L["Backup All Rematch Teams?"],nil,YES,rematch.ShowBackupDialog,NO)
+			dialog:ShowText(format(L["You have %s%d\124r Rematch teams.\n\nWould you like to back them up?"],rematch.hexWhite,numTeams),260,48,"TOP",0,-32)
+			dialog.SmallText:SetSize(260,72)
+			dialog.SmallText:SetPoint("TOP",dialog.Text,"BOTTOM",0,-2)
+			dialog.SmallText:SetText(L["Choosing Yes will export all teams to copy and paste in an email to yourself or someplace safe.\n\nYou can also do this at any time from the Teams button at the top of the Teams panel of Rematch."])
+			dialog.SmallText:Show()
+			dialog.CheckButton:SetPoint("TOPLEFT",dialog.SmallText,"BOTTOMLEFT",24,-2)
+			dialog.CheckButton.text:SetText(L["Don't Remind About Backups"])
+			dialog.CheckButton:Show()
+			dialog.CheckButton:SetScript("OnClick",function(self) settings.NoBackupReminder = self:GetChecked() end)
+		end
+	end
 end

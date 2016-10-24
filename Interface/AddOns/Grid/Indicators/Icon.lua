@@ -1,3 +1,14 @@
+--[[--------------------------------------------------------------------
+	Grid
+	Compact party and raid unit frames.
+	Copyright (c) 2006-2009 Kyle Smith (Pastamancer)
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>
+	All rights reserved. See the accompanying LICENSE file for details.
+	https://github.com/Phanx/Grid
+	https://mods.curse.com/addons/wow/grid
+	http://www.wowinterface.com/downloads/info5747-Grid.html
+----------------------------------------------------------------------]]
+
 local _, Grid = ...
 local GridFrame = Grid:GetModule("GridFrame")
 local Media = LibStub("LibSharedMedia-3.0")
@@ -64,7 +75,7 @@ GridFrame:RegisterIndicator("icon", L["Center Icon"],
 		BACKDROP.insets.top = iconBorderSize
 		BACKDROP.insets.bottom = iconBorderSize
 
-		self:SetBackdrop(BACKDROP)
+        self:SetBackdrop(iconBorderSize ~= 0 and BACKDROP or nil)
 		self:SetBackdropBorderColor(r, g, b, a)
 
 		self.texture:SetPoint("BOTTOMLEFT", iconBorderSize, iconBorderSize)

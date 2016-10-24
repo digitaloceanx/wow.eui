@@ -1,0 +1,15 @@
+## Interface: 70000
+## Title: GridStatusEnemyTarget
+
+## Dependencies: Grid
+## OptionalDeps: Ace3
+## X-Curse-Packaged-Version: 1.04.29
+## X-Curse-Project-Name: GridStatusBanzai
+## X-Curse-Project-ID: gridstatusbanzai
+## X-Curse-Repository-ID: wow/gridstatusbanzai/mainline
+
+GridStatusEnemyTarget.lua
+
+## Title: |cffEEEE00[Warbaby]|r Grid敌方施法目标
+## X-Vendor: NetEase
+## X-163UI-Version: 20160721161429
